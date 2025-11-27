@@ -72,31 +72,45 @@ xterm*|rxvt*)
     ;;
 esac
 
+# added becuase pulseaudio doesn't start right
+export $(dbus-launch)
+
+# ERF: add to start nvim
+export PATH="$PATH:/opt/nvim-linux64/bin"
+
 # enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+# if [ -x /usr/bin/dircolors ]; then
+#     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+#     alias ls='ls --color=auto'
+#     #alias dir='dir --color=auto'
+#     #alias vdir='vdir --color=auto'
+# 
+#     alias grep='grep --color=auto'
+#     alias fgrep='fgrep --color=auto'
+#     alias egrep='egrep --color=auto'
+# fi
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# colored GCC warnings and errors
+# colored GCC warnings and errors -- ERF not sure where this command is from
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -halF'
-alias la='ls -A'
-alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
+# some ls aliases
+# alias ll='ls -halF'
+# alias la='ls -A'
+# alias l='ls -CF'
+# Addtional aliases
+# alias AVE="source ~/Python/.venv/bin/activate" # activate virtual environment
+# alias sbash='source ~/.bashrc'
+# alias 3off="xrandr --output HDMI-1 --off"
+# alias XI="xrdb -merge ~/.Xresources"
+# alias dis="export DISPLAY=:0"
+# alias 2s="sudo sh /home/blueaz/.screenlayout/2screens.sh"
+# alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
+# alias 4s="sudo sh /home/blueaz/.screenlayout/4screens.sh"
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
@@ -118,6 +132,33 @@ fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/blueaz/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/blueaz/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/blueaz/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/blueaz/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# Add CUDA to PATH
+export CUDA_HOME=/usr/local/cuda-12
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Set nvim as default editor
+export EDITOR=nvim
+export VISUAL=nvim
+
+# Enable vi mode for command-line editing
+set -o vi
+
+# TennisAgent CLI shortcuts
+export PATH="$PATH:$HOME/Python/project-phoenix"
