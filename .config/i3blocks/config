@@ -1,0 +1,33 @@
+# i3blocks config
+
+separator=true
+separator_block_width=15
+
+[disk]
+command=df -h / | awk 'NR==2 {print $4 " free"}'
+label=DISK
+interval=30
+
+[memory]
+command=free -h | awk '/Mem:/ {print $3 "/" $2}'
+label=MEM
+interval=10
+
+[cpu]
+command=top -bn1 | grep "Cpu(s)" | awk '{print 100 - $8 "%"}'
+label=CPU
+interval=5
+
+[load]
+command=uptime | awk -F'load average:' '{print $2}' | cut -d, -f1
+label=LOAD
+interval=10
+
+[network]
+command=ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1
+label=IP
+interval=60
+
+[time]
+command=date '+%Y-%m-%d %H:%M:%S'
+interval=1
