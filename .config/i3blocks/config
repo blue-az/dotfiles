@@ -19,6 +19,11 @@ command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); if [ 
 label=CPU
 interval=5
 
+[gpu]
+command=GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits); TEMP=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits); if [ $TEMP -gt 80 ]; then echo "<span color='#ff5555'> $GPU% $TEMP°</span>"; elif [ $TEMP -gt 65 ]; then echo "<span color='#f1fa8c'> $GPU% $TEMP°</span>"; else echo "<span color='#50fa7b'> $GPU% $TEMP°</span>"; fi
+label=GPU
+interval=5
+
 [network]
 command=IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1); if [ -n "$IP" ]; then echo "<span color='#50fa7b'> $IP</span>"; else echo "<span color='#ff5555'> disconnected</span>"; fi
 label=IP
