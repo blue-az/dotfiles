@@ -151,9 +151,12 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# i3-resurrect: save and restore workspace layouts
+# i3-resurrect: save and restore layouts
 bindsym $mod+Ctrl+s exec i3-resurrect save -w $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name')
 bindsym $mod+Ctrl+n exec i3-resurrect restore -w $(i3-msg -t get_workspaces | jq -r '.[] | select(.focused).name')
+# Full session save/restore
+bindsym $mod+Ctrl+Shift+s exec ~/.config/i3/scripts/save-session.sh
+bindsym $mod+Ctrl+Shift+n exec ~/.config/i3/scripts/restore-session.sh
 
 # Start i3bar to display a workspace bar
 bar {
