@@ -17,9 +17,9 @@ min_width=MEM 00.0Gi/00Gi
 interval=10
 
 [cpu]
-command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); TEMP=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/[^0-9.]/, "", $3); printf "%.0f", $3}'); if [ $TEMP -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $CPU)% $(printf '%2d' $TEMP)°</span>"; elif [ $TEMP -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $CPU)% $(printf '%2d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $CPU)% $(printf '%2d' $TEMP)°</span>"; fi
+command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); TEMPC=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/[^0-9.]/, "", $3); printf "%.0f", $3}'); TEMP=$((TEMPC * 9 / 5 + 32)); if [ $TEMPC -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; elif [ $TEMPC -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; fi
 label=CPU
-min_width=CPU 100% 00°
+min_width=CPU 100% 000°
 interval=5
 
 [cpu_tdp]
@@ -29,9 +29,9 @@ min_width=CPU-W 000W
 interval=5
 
 [gpu]
-command=GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits); TEMP=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits); if [ $TEMP -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $GPU)% $(printf '%2d' $TEMP)°</span>"; elif [ $TEMP -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $GPU)% $(printf '%2d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $GPU)% $(printf '%2d' $TEMP)°</span>"; fi
+command=GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits); TEMPC=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits); TEMP=$((TEMPC * 9 / 5 + 32)); if [ $TEMPC -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; elif [ $TEMPC -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; fi
 label=GPU
-min_width=GPU 100% 00°
+min_width=GPU 100% 000°
 interval=5
 
 [tdp]
