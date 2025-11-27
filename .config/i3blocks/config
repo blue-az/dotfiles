@@ -5,9 +5,9 @@ separator_block_width=15
 markup=pango
 
 [disk]
-command=DISK=$(df -h / | awk 'NR==2 {print $3 "/" $2}'); PCT=$(df / | awk 'NR==2 {print $5}' | tr -d '%'); if [ $PCT -gt 90 ]; then echo "<span color='#ff5555'> $DISK</span>"; elif [ $PCT -gt 70 ]; then echo "<span color='#f1fa8c'> $DISK</span>"; else echo "<span color='#50fa7b'> $DISK</span>"; fi
+command=FREE=$(df -h / | awk 'NR==2 {print $4}'); PCT=$(df / | awk 'NR==2 {print $5}' | tr -d '%'); if [ $PCT -gt 90 ]; then echo "<span color='#ff5555'> $FREE</span>"; elif [ $PCT -gt 70 ]; then echo "<span color='#f1fa8c'> $FREE</span>"; else echo "<span color='#50fa7b'> $FREE</span>"; fi
 label=DISK
-min_width=DISK 000G/000G
+min_width=DISK 000G
 interval=30
 
 [memory]
