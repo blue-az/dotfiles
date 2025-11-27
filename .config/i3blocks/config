@@ -5,22 +5,22 @@ separator_block_width=15
 markup=pango
 
 [disk]
-command=FREE=$(df -h / | awk 'NR==2 {print $4}'); PCT=$(df / | awk 'NR==2 {print $5}' | tr -d '%'); if [ $PCT -gt 90 ]; then echo "<span color='#ff5555'>$FREE</span>"; elif [ $PCT -gt 70 ]; then echo "<span color='#f1fa8c'>$FREE</span>"; else echo "<span color='#50fa7b'>$FREE</span>"; fi
+command=FREE=$(df -h / | awk 'NR==2 {print $4}'); PCT=$(df / | awk 'NR==2 {print $5}' | tr -d '%'); if [ $PCT -gt 90 ]; then echo "<span color='#ff5555'> $FREE</span>"; elif [ $PCT -gt 70 ]; then echo "<span color='#f1fa8c'> $FREE</span>"; else echo "<span color='#50fa7b'> $FREE</span>"; fi
 label=DISK
 interval=30
 
 [memory]
-command=USED=$(free | awk '/Mem:/ {printf "%.0f", $3/$2*100}'); MEM=$(free -h | awk '/Mem:/ {print $3 "/" $2}'); if [ $USED -gt 80 ]; then echo "<span color='#ff5555'>$MEM</span>"; elif [ $USED -gt 60 ]; then echo "<span color='#f1fa8c'>$MEM</span>"; else echo "<span color='#50fa7b'>$MEM</span>"; fi
+command=USED=$(free | awk '/Mem:/ {printf "%.0f", $3/$2*100}'); MEM=$(free -h | awk '/Mem:/ {print $3 "/" $2}'); if [ $USED -gt 80 ]; then echo "<span color='#ff5555'> $MEM</span>"; elif [ $USED -gt 60 ]; then echo "<span color='#f1fa8c'> $MEM</span>"; else echo "<span color='#50fa7b'> $MEM</span>"; fi
 label=MEM
 interval=10
 
 [cpu]
-command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); if [ $CPU -gt 80 ]; then echo "<span color='#ff5555'>$CPU%</span>"; elif [ $CPU -gt 50 ]; then echo "<span color='#f1fa8c'>$CPU%</span>"; else echo "<span color='#50fa7b'>$CPU%</span>"; fi
+command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); if [ $CPU -gt 80 ]; then echo "<span color='#ff5555'> $CPU%</span>"; elif [ $CPU -gt 50 ]; then echo "<span color='#f1fa8c'> $CPU%</span>"; else echo "<span color='#50fa7b'> $CPU%</span>"; fi
 label=CPU
 interval=5
 
 [network]
-command=IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1); if [ -n "$IP" ]; then echo "<span color='#50fa7b'>$IP</span>"; else echo "<span color='#ff5555'>disconnected</span>"; fi
+command=IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1); if [ -n "$IP" ]; then echo "<span color='#50fa7b'> $IP</span>"; else echo "<span color='#ff5555'> disconnected</span>"; fi
 label=IP
 interval=60
 
