@@ -17,6 +17,9 @@ exec --no-startup-id sh -c 'if [ "$(hostname)" = "desktop" ]; then ~/.screenlayo
 # Wallpaper
 exec --no-startup-id ~/.fehbg
 
+# Conky system monitor
+exec --no-startup-id conky
+
 # Start on workspaces 1 and 2
 exec --no-startup-id i3-msg 'workspace 2; workspace 1'
 
