@@ -14,7 +14,8 @@ exec --no-startup-id xmodmap ~/.Xmodmap
 # Screen layout (desktop=multi-screen, others=single)
 exec --no-startup-id sh -c 'if [ "$(hostname)" = "desktop" ]; then ~/.screenlayout/2s.sh; else ~/.screenlayout/1screen.sh; fi'
 
-# Conky desktop (replaces wallpaper)
+# Background color + Conky overlay
+exec --no-startup-id xsetroot -solid '#0d0d0d'
 exec --no-startup-id conky
 
 # Start on workspaces 1 and 2
