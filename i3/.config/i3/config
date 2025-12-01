@@ -18,6 +18,9 @@ exec --no-startup-id sh -c 'if [ "$(hostname)" = "desktop" ]; then ~/.screenlayo
 exec --no-startup-id ~/.fehbg
 exec --no-startup-id conky
 
+# Compositor (eliminates screen tearing, smooth scrolling)
+exec --no-startup-id picom --backend glx --vsync
+
 # Start on workspaces 1 and 2
 exec --no-startup-id i3-msg 'workspace 2; workspace 1'
 
@@ -31,10 +34,10 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec --no-startup-id dmenu_run
 
 # Cycle through audio sources (headphones/earbuds/monitor)
-bindsym Mod1+Shift+F11 exec --no-startup-id ~/.config/i3/scripts/cycle-audio-source.sh
+bindsym $mod+Mod1+F11 exec --no-startup-id ~/.config/i3/scripts/cycle-audio-source.sh
 
-# Cycle through video display audio (headphones/monitors/TVs)
-bindsym Mod1+Shift+F2 exec --no-startup-id ~/.config/i3/scripts/cycle-video-audio.sh
+# Cycle through video display audio (GPU HDMI outputs for LG TVs)
+bindsym $mod+Mod1+F2 exec --no-startup-id ~/.config/i3/scripts/cycle-video-audio.sh
 
 # Change focus (vim-style: h=left, j=down, k=up, l=right)
 bindsym $mod+h focus left

@@ -49,8 +49,11 @@ alias nv='nvidia-smi'
 # not used
 alias XI="xrdb -merge ~/.Xresources"
 alias dis="export DISPLAY=:0"
-alias 1s="sudo sh /home/blueaz/.screenlayout/1screen.sh"
-alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
-alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
-alias 3sp="sudo sh /home/blueaz/.screenlayout/3screensPlus.sh"
-alias 4s="sudo sh /home/blueaz/.screenlayout/4screens.sh"
+# Screen layouts (Sway/Wayland)
+alias 1s="sh ~/.screenlayout/sway-1s.sh"
+alias 2s="sh ~/.screenlayout/sway-2s.sh"
+alias 3s="sh ~/.screenlayout/sway-3s.sh"
+# X11 versions (commented out)
+# alias 1s="sudo sh /home/blueaz/.screenlayout/1screen.sh"
+# alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
+# alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
