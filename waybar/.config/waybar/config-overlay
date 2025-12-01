@@ -1,0 +1,17 @@
+{
+    "layer": "overlay",
+    "position": "top",
+    "output": "*",
+    "width": 280,
+    "margin-top": 40,
+    "margin-right": 20,
+    "modules-left": [],
+    "modules-center": ["custom/sysinfo"],
+    "modules-right": [],
+
+    "custom/sysinfo": {
+        "exec": "~/.config/waybar/sysinfo.sh",
+        "interval": 2,
+        "format": "{}"
+    }
+}

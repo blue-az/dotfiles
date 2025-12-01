@@ -161,3 +161,6 @@ bindsym $mod+r mode "resize"
 
 # Status bar (waybar)
 exec waybar
+
+# System overlay (top-right corner)
+exec waybar -c ~/.config/waybar/config-overlay -s ~/.config/waybar/style-overlay.css

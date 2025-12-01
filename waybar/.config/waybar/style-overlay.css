@@ -1,0 +1,15 @@
+* {
+    font-family: monospace;
+    font-size: 11px;
+}
+
+window#waybar {
+    background-color: rgba(26, 26, 26, 0.85);
+    color: #ffffff;
+    border: 2px solid #50fa7b;
+    border-radius: 8px;
+}
+
+#custom-sysinfo {
+    padding: 8px 12px;
+}
