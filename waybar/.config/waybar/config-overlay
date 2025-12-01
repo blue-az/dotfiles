@@ -1,17 +1,15 @@
 {
-    "layer": "overlay",
+    "layer": "bottom",
     "position": "top",
-    "output": "*",
-    "width": 280,
     "margin-top": 40,
-    "margin-right": 20,
+    "exclusive": false,
     "modules-left": [],
-    "modules-center": ["custom/sysinfo"],
-    "modules-right": [],
+    "modules-center": [],
+    "modules-right": ["custom/sysinfo"],
 
     "custom/sysinfo": {
         "exec": "~/.config/waybar/sysinfo.sh",
-        "interval": 2,
-        "format": "{}"
+        "return-type": "json",
+        "interval": 2
     }
 }

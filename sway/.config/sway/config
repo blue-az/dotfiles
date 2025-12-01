@@ -159,8 +159,11 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-# Status bar (waybar)
-exec waybar
+# Status bar
+bar {
+    status_command i3blocks
+}
 
-# System overlay (top-right corner)
+# System overlay (replaces conky)
+exec_always pkill -f "waybar.*config-overlay" || true
 exec waybar -c ~/.config/waybar/config-overlay -s ~/.config/waybar/style-overlay.css

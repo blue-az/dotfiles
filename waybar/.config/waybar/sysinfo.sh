@@ -7,7 +7,7 @@ WS=$(swaymsg -t get_workspaces 2>/dev/null | jq -r '.[] | select(.focused) | .na
 DISK=$(df -h / | awk 'NR==2 {print $4}')
 
 # RAM
-RAM=$(free -h | awk '/^Mem:/ {print $3 "/" $2}')
+RAM=$(free -h | awk '/^Mem:/ {gsub("i","",$3); gsub("i","",$2); print $3 " / " $2}')
 
 # CPU
 CPU=$(awk '/^cpu / {printf "%.0f", ($2+$4)*100/($2+$4+$5)}' /proc/stat)
@@ -27,8 +27,12 @@ GPU_W=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits 2>/dev/n
 # IP
 IP=$(ip -4 addr show eno1 2>/dev/null | awk '/inet / {print $2}' | cut -d/ -f1)
 
-# Output with Pango markup for colors
-echo "<span color='#50fa7b'>SYSTEM</span>
+# Date/time
+DT=$(date '+%Y-%m-%d %H:%M:%S')
+
+# Output with Pango markup matching conky style
+TEXT="<span font_weight='bold' color='#50fa7b'>SYSTEM</span>
+────────────────────
 <span color='#50fa7b'>DISK</span>    ${DISK} free
 <span color='#50fa7b'>RAM</span>     ${RAM}
 <span color='#50fa7b'>CPU</span>     ${CPU}%  ${CPU_TEMP}°F
@@ -36,5 +40,8 @@ echo "<span color='#50fa7b'>SYSTEM</span>
 <span color='#50fa7b'>GPU</span>     ${GPU}%  ${GPU_TEMP}°F
 <span color='#50fa7b'>GPU-W</span>   ${GPU_W}W
 <span color='#50fa7b'>IP</span>      ${IP}
-──────────────────
-<span color='#51a2da'>WORKSPACE ${WS}</span>"
+────────────────────
+        ${DT}
+<span color='#50fa7b'>SCREEN</span>  ${WS}"
+
+echo "{\"text\": \"$(echo "$TEXT" | sed ':a;N;$!ba;s/\n/\\n/g')\"}"
