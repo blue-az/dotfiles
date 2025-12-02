@@ -22,7 +22,7 @@ input type:keyboard {
 # output DP-5 pos 2560 0
 
 # Wallpaper (replaces feh)
-output * bg ~/Pictures/FedoraDark.jpg fill
+output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
 
 # ============ SCREEN LOCK ============
 # Lock screen manually
