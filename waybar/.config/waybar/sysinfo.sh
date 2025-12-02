@@ -1,14 +1,16 @@
 #!/bin/bash
 
 # Get output name where this waybar instance is displayed
-# waybar sets WAYBAR_OUTPUT_NAME environment variable
 OUTPUT=${WAYBAR_OUTPUT_NAME:-unknown}
 
 # Map output to screen number based on sway workspace assignments
+# Desktop: static mapping per monitor
+# Laptop (eDP-1): dynamic focused workspace
 case "$OUTPUT" in
     DP-2) SCREEN=1 ;;
     DP-3) SCREEN=2 ;;
     DP-1) SCREEN=3 ;;
+    eDP-1) SCREEN=$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused) | .name') ;;
     *) SCREEN="$OUTPUT" ;;
 esac
 
@@ -18,23 +20,43 @@ DISK=$(df -h / | awk 'NR==2 {print $4}')
 # RAM
 RAM=$(free -h | awk '/^Mem:/ {gsub("i","",$3); gsub("i","",$2); print $3 " / " $2}')
 
-# CPU
+# CPU temp: Intel (Core 0) or AMD (temp1 from acpitz)
 CPU=$(awk '/^cpu / {printf "%.0f", ($2+$4)*100/($2+$4+$5)}' /proc/stat)
-CPU_TEMP=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/[^0-9.]/, "", $3); printf "%.0f", $3 * 9/5 + 32}')
+CPU_TEMPC=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/[^0-9.]/, "", $3); printf "%.0f", $3; exit}')
+if [ -z "$CPU_TEMPC" ]; then
+    CPU_TEMPC=$(sensors 2>/dev/null | awk '/^temp1:/ {gsub(/[^0-9.]/, "", $2); printf "%.0f", $2; exit}')
+fi
+CPU_TEMPC=${CPU_TEMPC:-0}
+CPU_TEMP=$((CPU_TEMPC * 9 / 5 + 32))
 
-# CPU Power
-E1=$(cat /sys/class/powercap/intel-rapl:0/energy_uj 2>/dev/null)
-sleep 0.3
-E2=$(cat /sys/class/powercap/intel-rapl:0/energy_uj 2>/dev/null)
-CPU_W=$(( (E2 - E1) / 300000 ))
+# CPU Power: Intel RAPL or BAT0 power sensor
+if [ -r /sys/class/powercap/intel-rapl:0/energy_uj ]; then
+    E1=$(cat /sys/class/powercap/intel-rapl:0/energy_uj)
+    sleep 0.3
+    E2=$(cat /sys/class/powercap/intel-rapl:0/energy_uj)
+    CPU_W=$(( (E2 - E1) / 300000 ))
+else
+    CPU_W=$(sensors 2>/dev/null | awk '/^power1:/ {gsub(/[^0-9.]/, "", $2); printf "%.0f", $2; exit}')
+fi
+CPU_W=${CPU_W:-0}
 
-# GPU
-GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
-GPU_TEMP=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null | awk '{printf "%.0f", $1 * 9/5 + 32}')
-GPU_W=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits 2>/dev/null | awk '{printf "%.0f", $1}')
+# GPU: NVIDIA (nvidia-smi) or AMD (sysfs/sensors)
+if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
+    GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
+    GPU_TEMPC=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits 2>/dev/null)
+    GPU_W=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits 2>/dev/null | awk '{printf "%.0f", $1}')
+else
+    GPU=$(cat /sys/class/drm/card0/device/gpu_busy_percent 2>/dev/null || echo 0)
+    GPU_TEMPC=$(sensors 2>/dev/null | awk '/^edge:/ {gsub(/[^0-9.]/, "", $2); printf "%.0f", $2}')
+    GPU_W=$(sensors 2>/dev/null | awk '/^PPT:/ {gsub(/[^0-9.]/, "", $2); printf "%.0f", $2}')
+fi
+GPU=${GPU:-0}
+GPU_TEMPC=${GPU_TEMPC:-0}
+GPU_TEMP=$((GPU_TEMPC * 9 / 5 + 32))
+GPU_W=${GPU_W:-0}
 
-# IP
-IP=$(ip -4 addr show eno1 2>/dev/null | awk '/inet / {print $2}' | cut -d/ -f1)
+# IP (auto-detect first non-loopback)
+IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1)
 
 # Date/time
 DT=$(date '+%Y-%m-%d %I:%M:%S %p')

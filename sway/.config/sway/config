@@ -188,4 +188,4 @@ bar {
 }
 
 # System overlay (replaces conky)
-exec_always pkill -f "waybar.*config-overlay" || true; sleep 0.2; waybar -c ~/.config/waybar/config-overlay -s ~/.config/waybar/style-overlay.css &
+exec_always ~/.config/waybar/start-overlay.sh
