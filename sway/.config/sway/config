@@ -15,6 +15,12 @@ input type:keyboard {
     xkb_file /home/blueaz/.config/xkb/keymap
 }
 
+# Touchpad settings
+input type:touchpad {
+    tap enabled
+    dwt enabled
+}
+
 # ============ OUTPUTS ============
 # Output names may differ from X11 - run 'swaymsg -t get_outputs' to check
 # Commenting out for now - let Sway auto-detect
