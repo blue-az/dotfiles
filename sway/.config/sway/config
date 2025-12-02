@@ -22,13 +22,17 @@ input type:touchpad {
 }
 
 # ============ OUTPUTS ============
-# Output names may differ from X11 - run 'swaymsg -t get_outputs' to check
-# Commenting out for now - let Sway auto-detect
-# output DP-2 pos 0 0
-# output DP-5 pos 2560 0
+# Desktop: 2 screens by default (DP-2 main, DP-3 left, DP-1 TV disabled)
+output DP-1 disable
+output DP-3 pos 0 390 res 1680x1050
+output DP-2 pos 1680 0 res 2560x1440
 
 # Wallpaper (replaces feh)
 output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
+
+# Screen layout shortcuts
+bindsym $mod+F2 exec ~/.screenlayout/sway-2s.sh
+bindsym $mod+F3 exec ~/.screenlayout/sway-3s.sh
 
 # ============ SCREEN LOCK ============
 # Lock screen manually
