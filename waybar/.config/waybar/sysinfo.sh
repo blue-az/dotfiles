@@ -1,7 +1,16 @@
 #!/bin/bash
 
-# Get workspace
-WS=$(swaymsg -t get_workspaces 2>/dev/null | jq -r '.[] | select(.focused) | .name')
+# Get output name where this waybar instance is displayed
+# waybar sets WAYBAR_OUTPUT_NAME environment variable
+OUTPUT=${WAYBAR_OUTPUT_NAME:-unknown}
+
+# Map output to screen number based on sway workspace assignments
+case "$OUTPUT" in
+    DP-2) SCREEN=1 ;;
+    DP-3) SCREEN=2 ;;
+    DP-1) SCREEN=3 ;;
+    *) SCREEN="$OUTPUT" ;;
+esac
 
 # Disk
 DISK=$(df -h / | awk 'NR==2 {print $4}')
@@ -28,20 +37,18 @@ GPU_W=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits 2>/dev/n
 IP=$(ip -4 addr show eno1 2>/dev/null | awk '/inet / {print $2}' | cut -d/ -f1)
 
 # Date/time
-DT=$(date '+%Y-%m-%d %H:%M:%S')
+DT=$(date '+%Y-%m-%d %I:%M:%S %p')
 
 # Output with Pango markup matching conky style
 TEXT="<span font_weight='bold' color='#50fa7b'>SYSTEM</span>
 ────────────────────
-<span color='#50fa7b'>DISK</span>    ${DISK} free
-<span color='#50fa7b'>RAM</span>     ${RAM}
-<span color='#50fa7b'>CPU</span>     ${CPU}%  ${CPU_TEMP}°F
-<span color='#50fa7b'>CPU-W</span>   ${CPU_W}W
-<span color='#50fa7b'>GPU</span>     ${GPU}%  ${GPU_TEMP}°F
-<span color='#50fa7b'>GPU-W</span>   ${GPU_W}W
-<span color='#50fa7b'>IP</span>      ${IP}
+<span color='#50fa7b'>DISK</span>   ${DISK} free
+<span color='#50fa7b'>RAM</span>    ${RAM}
+<span color='#50fa7b'>CPU</span>    ${CPU}%  ${CPU_TEMP}°F  ${CPU_W}W
+<span color='#50fa7b'>GPU</span>    ${GPU}%  ${GPU_TEMP}°F  ${GPU_W}W
+<span color='#50fa7b'>IP</span>     ${IP}
 ────────────────────
-        ${DT}
-<span color='#50fa7b'>SCREEN</span>  ${WS}"
+       ${DT}
+<span color='#50fa7b'>SCREEN</span> ${SCREEN}"
 
 echo "{\"text\": \"$(echo "$TEXT" | sed ':a;N;$!ba;s/\n/\\n/g')\"}"

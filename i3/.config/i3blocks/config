@@ -17,27 +17,15 @@ min_width=RAM 00.0Gi/00Gi
 interval=10
 
 [cpu]
-command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); TEMPC=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/[^0-9.]/, "", $3); printf "%.0f", $3}'); TEMP=$((TEMPC * 9 / 5 + 32)); if [ $TEMPC -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; elif [ $TEMPC -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; fi
+command=CPU=$(top -bn1 | grep "Cpu(s)" | awk '{printf "%.0f", 100 - $8}'); TEMPC=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/[^0-9.]/, "", $3); printf "%.0f", $3}'); TEMP=$((TEMPC * 9 / 5 + 32)); E1=$(cat /sys/class/powercap/intel-rapl:0/energy_uj); sleep 0.5; E2=$(cat /sys/class/powercap/intel-rapl:0/energy_uj); WATTS=$(( (E2 - E1) / 500000 )); if [ $TEMPC -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)° ${WATTS}W</span>"; elif [ $TEMPC -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)° ${WATTS}W</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)° ${WATTS}W</span>"; fi
 label=CPU
-min_width=CPU 100% 000°
-interval=5
-
-[cpu_tdp]
-command=E1=$(cat /sys/class/powercap/intel-rapl:0/energy_uj); sleep 0.5; E2=$(cat /sys/class/powercap/intel-rapl:0/energy_uj); WATTS=$(( (E2 - E1) / 500000 )); if [ $WATTS -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $WATTS)W</span>"; elif [ $WATTS -gt 50 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $WATTS)W</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $WATTS)W</span>"; fi
-label=CPU-W
-min_width=CPU-W 000W
+min_width=CPU 100% 000° 000W
 interval=5
 
 [gpu]
-command=GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits); TEMPC=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits); TEMP=$((TEMPC * 9 / 5 + 32)); if [ $TEMPC -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; elif [ $TEMPC -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; fi
+command=GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits); TEMPC=$(nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits); TEMP=$((TEMPC * 9 / 5 + 32)); WATTS=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits | awk '{printf "%.0f", $1}'); if [ $TEMPC -gt 80 ]; then echo "<span color='#ff5555'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)° ${WATTS}W</span>"; elif [ $TEMPC -gt 65 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)° ${WATTS}W</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)° ${WATTS}W</span>"; fi
 label=GPU
-min_width=GPU 100% 000°
-interval=5
-
-[tdp]
-command=WATTS=$(nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits | awk '{printf "%.0f", $1}'); if [ $WATTS -gt 300 ]; then echo "<span color='#ff5555'> $(printf '%3d' $WATTS)W</span>"; elif [ $WATTS -gt 200 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $WATTS)W</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $WATTS)W</span>"; fi
-label=GPU-W
-min_width=GPU-W 000W
+min_width=GPU 100% 000° 000W
 interval=5
 
 [network]
@@ -47,6 +35,6 @@ min_width=IP 000.000.000.000
 interval=60
 
 [time]
-command=date '+%Y-%m-%d %H:%M:%S'
+command=date '+%Y-%m-%d %I:%M:%S %p'
 color=#ffffff
 interval=1
