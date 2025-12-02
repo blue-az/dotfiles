@@ -59,8 +59,8 @@ bindsym $mod+Return exec terminator
 # Kill focused window
 bindsym $mod+Shift+q kill
 
-# Start launcher (dmenu works via XWayland, or use wmenu/wofi)
-bindsym $mod+d exec dmenu_run
+# Start launcher (native Wayland)
+bindsym $mod+d exec wmenu-run
 
 # Cycle through audio sources
 bindsym $mod+Mod1+F11 exec ~/.config/i3/scripts/cycle-audio-source.sh
