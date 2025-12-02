@@ -1,0 +1,9 @@
+// Swap Caps Lock and Super keys
+partial modifier_keys
+xkb_symbols "swap_caps_super" {
+    key <CAPS> { [ Super_L ] };
+    key <LWIN> { [ Caps_Lock ] };
+    key <RWIN> { [ Caps_Lock ] };
+    modifier_map Mod4 { <CAPS> };
+    modifier_map Lock { <LWIN>, <RWIN> };
+};
