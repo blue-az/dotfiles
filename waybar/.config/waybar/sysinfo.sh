@@ -3,16 +3,13 @@
 # Get output name where this waybar instance is displayed
 OUTPUT=${WAYBAR_OUTPUT_NAME:-unknown}
 
-# Map output to screen number based on sway workspace assignments
-# Desktop: static mapping per monitor
-# Laptop (eDP-1): dynamic focused workspace
-case "$OUTPUT" in
-    DP-2) SCREEN=1 ;;
-    DP-3) SCREEN=2 ;;
-    DP-1) SCREEN=3 ;;
-    eDP-1) SCREEN=$(swaymsg -t get_workspaces | jq -r '.[] | select(.focused) | .name') ;;
-    *) SCREEN="$OUTPUT" ;;
-esac
+# Get the focused workspace on this output
+SCREEN=$(swaymsg -t get_workspaces | jq -r --arg out "$OUTPUT" '.[] | select(.output == $out and .focused) | .name' | head -1)
+# Fallback to visible workspace on this output if none focused
+if [ -z "$SCREEN" ]; then
+    SCREEN=$(swaymsg -t get_workspaces | jq -r --arg out "$OUTPUT" '.[] | select(.output == $out and .visible) | .name' | head -1)
+fi
+SCREEN=${SCREEN:-$OUTPUT}
 
 # Disk
 DISK=$(df -h / | awk 'NR==2 {print $4}')
