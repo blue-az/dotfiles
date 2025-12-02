@@ -159,6 +159,19 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+# ============ SCREENSHOTS ============
+# Full screen to file
+bindsym Print exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+
+# Select region to file
+bindsym Shift+Print exec grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+
+# Full screen to clipboard
+bindsym Ctrl+Print exec grim - | wl-copy
+
+# Select region to clipboard
+bindsym Ctrl+Shift+Print exec grim -g "$(slurp)" - | wl-copy
+
 # Status bar
 bar {
     status_command i3blocks
