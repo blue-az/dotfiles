@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Auto-rotate script for Sway - reads raw accelerometer values directly."""
+
+import subprocess
+import time
+import sys
+import os
+
+OUTPUT = "eDP-1"
+SCALE = "2"
+SENSOR_PATH = "/sys/bus/iio/devices/iio:device0"
+POLL_INTERVAL = 0.3
+THRESHOLD = 500  # Minimum value to register as dominant axis
+DEBUG = True
+LOG_FILE = "/tmp/sway-autorotate.log"
+
+def log(msg):
+    if DEBUG:
+        with open(LOG_FILE, "a") as f:
+            f.write(f"{time.strftime('%H:%M:%S')} {msg}\n")
+
+def read_accel():
+    """Read raw accelerometer values."""
+    try:
+        with open(f"{SENSOR_PATH}/in_accel_x_raw") as f:
+            x = int(f.read().strip())
+        with open(f"{SENSOR_PATH}/in_accel_y_raw") as f:
+            y = int(f.read().strip())
+        with open(f"{SENSOR_PATH}/in_accel_z_raw") as f:
+            z = int(f.read().strip())
+        return x, y, z
+    except Exception as e:
+        log(f"read_accel error: {e}")
+        return None, None, None
+
+def get_orientation(x, y, z):
+    """Determine screen orientation from accelerometer values."""
+    if x is None:
+        return None
+
+    abs_x = abs(x)
+    abs_y = abs(y)
+
+    # Determine which axis has gravity
+    if abs_y > abs_x and abs_y > THRESHOLD:
+        # Y axis dominant
+        if y < 0:
+            return "normal"
+        else:
+            return "180"
+    elif abs_x > abs_y and abs_x > THRESHOLD:
+        # X axis dominant - swapped directions
+        if x < 0:
+            return "90"
+        else:
+            return "270"
+
+    return None
+
+def rotate_screen(transform):
+    """Apply screen rotation with scale preserved."""
+    try:
+        result = subprocess.run(["swaymsg", "output", OUTPUT, "transform", transform, "scale", SCALE],
+                      capture_output=True, timeout=2)
+        log(f"rotate_screen({transform}) -> {result.returncode}")
+    except subprocess.TimeoutExpired:
+        log(f"rotate_screen({transform}) -> TIMEOUT")
+
+def main():
+    log(f"Starting, SWAYSOCK={os.environ.get('SWAYSOCK', 'NOT SET')}")
+    last_orientation = None
+    loop_count = 0
+
+    while True:
+        x, y, z = read_accel()
+        orientation = get_orientation(x, y, z)
+        loop_count += 1
+
+        if loop_count % 100 == 0:
+            log(f"loop {loop_count}: x={x} y={y} z={z} orient={orientation} last={last_orientation}")
+
+        if orientation and orientation != last_orientation:
+            log(f"Rotating: {last_orientation} -> {orientation}")
+            rotate_screen(orientation)
+            last_orientation = orientation
+
+        time.sleep(POLL_INTERVAL)
+
+if __name__ == "__main__":
+    main()

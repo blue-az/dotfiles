@@ -1,0 +1,22 @@
+#!/bin/bash
+# Restart sway-autorotate after resume from suspend
+# Called by systemd-sleep hook
+
+exec >> /tmp/sway-autorotate-resume.log 2>&1
+echo "$(date): Called with arg: $1"
+
+case "$1" in
+    post)
+        echo "$(date): Reloading accelerometer module..."
+        modprobe -r hid_sensor_accel_3d
+        sleep 1
+        modprobe hid_sensor_accel_3d
+        echo "$(date): Module reload exit code: $?"
+        sleep 2
+        echo "$(date): Restarting sway-autorotate..."
+        sudo -u blueaz XDG_RUNTIME_DIR=/run/user/1000 \
+            systemctl --user restart sway-autorotate.service
+        echo "$(date): Done, exit code: $?"
+        ;;
+esac
+exit 0
