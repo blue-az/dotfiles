@@ -38,3 +38,11 @@ interval=60
 command=date '+%Y-%m-%d %I:%M:%S %p'
 color=#ffffff
 interval=1
+
+[wifi]
+command=IFACE=$(iw dev | awk '$1=="Interface"{print $2}' | head -1); if [ -n "$IFACE" ]; then SSID=$(iw dev "$IFACE" link 2>/dev/null | awk '/SSID:/{print $2}'); SIGNAL=$(iw dev "$IFACE" link 2>/dev/null | awk '/signal:/{print $2}'); if [ -n "$SIGNAL" ]; then SIG=${SIGNAL%.*}; if [ $SIG -ge -50 ]; then BARS="▁▂▃▄▅"; COLOR="#50fa7b"; elif [ $SIG -ge -60 ]; then BARS="▁▂▃▄ "; COLOR="#50fa7b"; elif [ $SIG -ge -70 ]; then BARS="▁▂▃  "; COLOR="#f1fa8c"; elif [ $SIG -ge -80 ]; then BARS="▁▂   "; COLOR="#f1fa8c"; else BARS="▁    "; COLOR="#ff5555"; fi; echo "<span color='$COLOR'>$BARS ${SIG}dBm</span>"; else echo "<span color='#ff5555'>      no wifi</span>"; fi; else echo "<span color='#ff5555'>      no wifi</span>"; fi
+interval=10
+
+[battery]
+command=CAP=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null || echo 0); STATUS=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null || echo "Unknown"); if [ "$STATUS" = "Charging" ]; then ICON=""; COLOR="#50fa7b"; elif [ "$STATUS" = "Full" ]; then ICON=""; COLOR="#50fa7b"; elif [ $CAP -le 10 ]; then ICON=""; COLOR="#ff5555"; elif [ $CAP -le 25 ]; then ICON=""; COLOR="#ff5555"; elif [ $CAP -le 50 ]; then ICON=""; COLOR="#f1fa8c"; elif [ $CAP -le 75 ]; then ICON=""; COLOR="#f1fa8c"; else ICON=""; COLOR="#50fa7b"; fi; echo "<span color='$COLOR'>$ICON ${CAP}%</span>"
+interval=30
