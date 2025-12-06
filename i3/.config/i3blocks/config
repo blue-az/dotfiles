@@ -47,7 +47,7 @@ color=#ffffff
 interval=1
 
 [wifi]
-command=[ ! -d /sys/class/power_supply/BAT0 ] && exit 0; IFACE=$(iw dev | awk '$1=="Interface"{print $2}' | head -1); if [ -n "$IFACE" ]; then SSID=$(iw dev "$IFACE" link 2>/dev/null | awk '/SSID:/{print $2}'); SIGNAL=$(iw dev "$IFACE" link 2>/dev/null | awk '/signal:/{print $2}'); if [ -n "$SIGNAL" ]; then SIG=${SIGNAL%.*}; if [ $SIG -ge -50 ]; then BARS="▁▂▃▄▅"; COLOR="#50fa7b"; elif [ $SIG -ge -60 ]; then BARS="▁▂▃▄ "; COLOR="#50fa7b"; elif [ $SIG -ge -70 ]; then BARS="▁▂▃  "; COLOR="#f1fa8c"; elif [ $SIG -ge -80 ]; then BARS="▁▂   "; COLOR="#f1fa8c"; else BARS="▁    "; COLOR="#ff5555"; fi; echo "<span color='$COLOR'>$BARS ${SIG}dBm</span>"; else echo "<span color='#ff5555'>      no wifi</span>"; fi; else echo "<span color='#ff5555'>      no wifi</span>"; fi
+command=[ ! -d /sys/class/power_supply/BAT0 ] && exit 0; IFACE=$(iw dev | awk '$1=="Interface"{print $2}' | head -1); if [ -n "$IFACE" ]; then SSID=$(iw dev "$IFACE" link 2>/dev/null | awk '/SSID:/{$1=""; print substr($0,2)}'); SIGNAL=$(iw dev "$IFACE" link 2>/dev/null | awk '/signal:/{print $2}'); if [ -n "$SIGNAL" ]; then SIG=${SIGNAL%.*}; if [ $SIG -ge -50 ]; then BARS="▁▂▃▄▅"; COLOR="#50fa7b"; elif [ $SIG -ge -60 ]; then BARS="▁▂▃▄ "; COLOR="#50fa7b"; elif [ $SIG -ge -70 ]; then BARS="▁▂▃  "; COLOR="#f1fa8c"; elif [ $SIG -ge -80 ]; then BARS="▁▂   "; COLOR="#f1fa8c"; else BARS="▁    "; COLOR="#ff5555"; fi; echo "<span color='$COLOR'>$SSID $BARS ${SIG}dBm</span>"; else echo "<span color='#ff5555'>      no wifi</span>"; fi; else echo "<span color='#ff5555'>      no wifi</span>"; fi
 interval=10
 
 [battery]

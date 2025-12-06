@@ -1,0 +1,2 @@
+# Machine-specific configs (use templates instead)
+sway/.config/sway/config.d/outputs.conf

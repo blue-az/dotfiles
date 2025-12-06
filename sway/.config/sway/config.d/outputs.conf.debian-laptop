@@ -1,0 +1,12 @@
+# Debian Laptop
+# Copy to outputs.conf on this machine
+# TODO: Update with actual output names (run: swaymsg -t get_outputs)
+
+# Internal display
+output eDP-1 scale 1.0
+
+# Workspace assignments (single display)
+# All workspaces default to eDP-1
+
+# External display (if used)
+# output HDMI-A-1 pos 1920 0 res 1920x1080

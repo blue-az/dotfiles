@@ -22,17 +22,12 @@ input type:touchpad {
 }
 
 # ============ OUTPUTS ============
-# Desktop: 2 screens by default (DP-2 main, DP-3 left, DP-1 TV disabled)
-output DP-1 disable
-output DP-3 pos 0 390 res 1680x1050
-output DP-2 pos 1680 0 res 2560x1440
+# Machine-specific output config (not in git)
+# Templates in config.d/outputs.conf.*
+include ~/.config/sway/config.d/outputs.conf
 
 # Wallpaper (replaces feh)
 output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
-
-# Screen layout shortcuts
-bindsym $mod+F2 exec ~/.screenlayout/sway-2s.sh
-bindsym $mod+F3 exec ~/.screenlayout/sway-3s.sh
 
 # ============ SCREEN LOCK ============
 # Lock screen manually
@@ -53,8 +48,9 @@ exec dunst
 exec swaymsg 'workspace 2; workspace 1'
 
 # ============ KEYBINDINGS ============
-# Start a terminal
-bindsym $mod+Return exec terminator
+# Start a terminal (foot on laptop, terminator on desktop)
+set $term_cmd sh -c 'if grep -q "ROG Flow Z13" /sys/class/dmi/id/product_name 2>/dev/null; then foot; else terminator; fi'
+bindsym $mod+Return exec $term_cmd
 
 # Kill focused window
 bindsym $mod+Shift+q kill
@@ -119,11 +115,7 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# Assign workspaces to outputs
-workspace $ws1 output DP-2
-workspace $ws2 output DP-3
-workspace $ws3 output DP-1
-workspace $ws4 output DP-1
+# Workspace-to-output assignments are in config.d/outputs.conf
 
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
@@ -181,6 +173,12 @@ bindsym Ctrl+Print exec grim - | wl-copy
 
 # Select region to clipboard
 bindsym Ctrl+Shift+Print exec grim -g "$(slurp)" - | wl-copy
+
+# ============ VIRTUAL DISPLAY (for Deskreen extend) ============
+# Create virtual output for Chromebook as second monitor
+bindsym $mod+F7 exec swaymsg create_output && swaymsg output HEADLESS-1 enable resolution 1920x1080 position 1280 0
+# Destroy virtual output
+bindsym $mod+Shift+F7 exec swaymsg output HEADLESS-1 disable
 
 # Status bar
 bar {

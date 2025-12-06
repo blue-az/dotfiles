@@ -1,0 +1,11 @@
+# ROG Flow Z13 (GZ302EA) - Fedora Laptop
+# Copy to outputs.conf on this machine
+
+# Internal display - HiDPI scaled
+output eDP-1 scale 2.0 res 2560x1600
+
+# Workspace assignments (single display)
+# All workspaces default to eDP-1
+
+# Screen layout shortcuts (laptop-specific)
+# bindsym $mod+F2 exec ~/.screenlayout/sway-external.sh
