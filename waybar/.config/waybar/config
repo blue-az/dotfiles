@@ -1,14 +1,28 @@
 {
     "layer": "top",
-    "position": "top",
-    "height": 30,
+    "position": "bottom",
+    "height": 24,
+    "spacing": 0,
+
     "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-center": ["clock"],
-    "modules-right": ["custom/cpu-temp", "cpu", "custom/cpu-watt", "custom/gpu", "custom/gpu-watt", "memory", "disk", "network", "tray"],
+    "modules-center": [],
+    "modules-right": [
+        "custom/audio",
+        "disk",
+        "memory",
+        "custom/cpu",
+        "custom/gpu",
+        "network",
+        "clock",
+        "custom/wifi",
+        "custom/battery",
+        "tray"
+    ],
 
     "sway/workspaces": {
         "format": "{name}",
-        "disable-scroll": true
+        "disable-scroll": true,
+        "all-outputs": false
     },
 
     "sway/mode": {
@@ -16,56 +30,63 @@
     },
 
     "clock": {
-        "format": "{:%Y-%m-%d %H:%M:%S}",
+        "format": "{:%Y-%m-%d %I:%M:%S %p}",
         "interval": 1
     },
 
-    "cpu": {
-        "format": "CPU {usage}%",
-        "interval": 2
-    },
-
-    "custom/cpu-temp": {
-        "exec": "sensors | awk '/^Core 0:/ {gsub(/[^0-9.]/, \"\", $3); printf \"%.0f°F\", $3 * 9/5 + 32}'",
-        "interval": 5,
-        "format": "{}"
-    },
-
-    "custom/cpu-watt": {
-        "exec": "E1=$(cat /sys/class/powercap/intel-rapl:0/energy_uj); sleep 0.5; E2=$(cat /sys/class/powercap/intel-rapl:0/energy_uj); echo $(( (E2 - E1) / 500000 ))W",
-        "interval": 5,
-        "format": "{}"
-    },
-
-    "custom/gpu": {
-        "exec": "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits | awk -F', ' '{printf \"GPU %s%% %d°F\", $1, $2 * 9/5 + 32}'",
-        "interval": 5,
-        "format": "{}"
-    },
-
-    "custom/gpu-watt": {
-        "exec": "nvidia-smi --query-gpu=power.draw --format=csv,noheader,nounits | awk '{printf \"%.0fW\", $1}'",
-        "interval": 5,
-        "format": "{}"
-    },
-
-    "memory": {
-        "format": "RAM {used:0.1f}G/{total:0.1f}G",
-        "interval": 2
+    "custom/audio": {
+        "exec": "~/.config/waybar/scripts/audio.sh",
+        "interval": 1,
+        "return-type": "json",
+        "on-click": "pavucontrol"
     },
 
     "disk": {
-        "format": "DISK {free}",
-        "path": "/"
+        "format": "<span color=\"#ffffff\">DISK</span> <span color=\"#50fa7b\"> {free}</span>",
+        "path": "/",
+        "interval": 30
+    },
+
+    "memory": {
+        "format": "<span color=\"#ffffff\">RAM</span> <span color=\"#50fa7b\"> {used:0.1f}G/{total:0.1f}G</span>",
+        "interval": 10
+    },
+
+    "custom/cpu": {
+        "exec": "~/.config/waybar/scripts/cpu.sh",
+        "interval": 5,
+        "return-type": "json"
+    },
+
+    "custom/gpu": {
+        "exec": "~/.config/waybar/scripts/gpu.sh",
+        "interval": 5,
+        "return-type": "json"
     },
 
     "network": {
-        "interface": "eno1",
-        "format-ethernet": "IP {ipaddr}",
-        "format-disconnected": "IP --"
+        "format-wifi": "<span color=\"#ffffff\">IP</span> <span color=\"#50fa7b\"> {ipaddr}</span>",
+        "format-ethernet": "<span color=\"#ffffff\">IP</span> <span color=\"#50fa7b\"> {ipaddr}</span>",
+        "format-disconnected": "<span color=\"#ffffff\">IP</span> <span color=\"#ff5555\"> disconnected</span>",
+        "tooltip-format": "{ifname}: {ipaddr}",
+        "on-click": "nm-connection-editor"
+    },
+
+    "custom/wifi": {
+        "exec": "~/.config/waybar/scripts/wifi.sh",
+        "interval": 10,
+        "return-type": "json",
+        "on-click": "nm-connection-editor"
+    },
+
+    "custom/battery": {
+        "exec": "~/.config/waybar/scripts/battery.sh",
+        "interval": 30,
+        "return-type": "json"
     },
 
     "tray": {
-        "spacing": 10
+        "icon-size": 16,
+        "spacing": 8
     }
 }
