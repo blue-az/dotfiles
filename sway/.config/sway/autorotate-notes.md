@@ -72,6 +72,20 @@ systemctl --user enable sway-autorotate
 - `swaymsg output eDP-1 transform 90` reset scale to 1.0
 - Fixed by adding `scale 2` to each rotation command
 
+## Suspend/Resume
+
+The script survives suspend/resume without needing a restart. Key factors:
+- SWAYSOCK is looked up dynamically on each rotation (via `glob.glob`)
+- Direct sysfs reads continue working after resume
+- `time.sleep()` pauses during suspend and resumes normally
+- THRESHOLD=300 (lowered from 500) to detect orientation at various angles
+
+**If rotation stops working after suspend**, run:
+```bash
+pkill -f sway-autorotate
+systemctl --user restart sway-autorotate
+```
+
 ## Known Issues
 
 - After reboot, `iio-sensor-proxy` may need a restart for the accelerometer to work:

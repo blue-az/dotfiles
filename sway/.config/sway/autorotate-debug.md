@@ -155,18 +155,45 @@ systemctl --user start sway-autorotate
 
 **Root cause hypothesis:** The script holds file handles to the sysfs accelerometer files. After suspend, these handles become stale/blocking. Killing the script releases them, and the new instance gets fresh handles.
 
-## FINAL FIX (2025-12-02 19:35)
+## FINAL FIX (2025-12-02 19:35) - UPDATED 2025-12-06
 
+### The Problem
+The resume service was killing itself because `pkill -9 -f sway-autorotate` matches its own bash process.
+
+### Manual Fix (when auto-rotate stops working)
+```bash
+pkill -9 -f sway-autorotate
+systemctl --user start sway-autorotate
+```
+
+### Automatic Fix (resume service)
 Updated `/etc/systemd/system/sway-autorotate-resume.service`:
 ```
-ExecStart=/bin/bash -c 'sleep 2; pkill -9 -f sway-autorotate; sleep 1; sudo -u blueaz XDG_RUNTIME_DIR=/run/user/1000 systemctl --user start sway-autorotate.service'
+[Unit]
+Description=Restart sway-autorotate after resume
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'sleep 2; pkill -9 python.*sway-autorotate || true; sleep 1; sudo -u blueaz XDG_RUNTIME_DIR=/run/user/1000 systemctl --user start sway-autorotate.service'
+
+[Install]
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 ```
 
 Then: `sudo systemctl daemon-reload`
+
+**Key change:** Use `pkill -9 python.*sway-autorotate` instead of `pkill -9 -f sway-autorotate` to only match the Python process, not the bash script running pkill.
 
 **Why it works:**
 - `systemctl restart` wasn't enough - the stale file handles persisted
 - `pkill -9` forcefully kills the process and releases the stale handles
 - New process starts with fresh handles that work
+- The `|| true` prevents the service from failing if no process is found
 
-**Tested:** Suspend/resume now automatically restores rotation.
+### Loop Instance 4 (2025-12-06 ~04:30)
+**After suspend:** Screen won't rotate
+**Diagnosis:** Resume service was failing - killing itself with its own pkill command
+**Fix:** `pkill -9 -f sway-autorotate && systemctl --user start sway-autorotate`
+**Result:** Rotation works
+**Permanent fix:** Updated resume service to use `python.*sway-autorotate` pattern
