@@ -1,0 +1,160 @@
+* {
+    font-family: monospace;
+    font-size: 10px;
+}
+
+window#waybar {
+    background-color: rgba(26, 26, 26, 0.9);
+    color: #ffffff;
+    border-bottom: 2px solid #50fa7b;
+}
+
+#workspaces button {
+    padding: 0 8px;
+    color: #ffffff;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+}
+
+#workspaces button:hover {
+    background-color: rgba(68, 71, 90, 0.5);
+}
+
+#workspaces button.focused {
+    color: #ffffff;
+    background-color: #2a5a8a;
+    border: 1px solid #ffffff;
+}
+
+#workspaces button.urgent {
+    background-color: #ff5555;
+}
+
+#mode {
+    color: #ff5555;
+    font-weight: bold;
+}
+
+#clock,
+#cpu,
+#memory,
+#disk,
+#network,
+#tray,
+#pulseaudio,
+#battery,
+#custom-cpu,
+#custom-gpu,
+#custom-wifi,
+#custom-audio,
+#custom-battery {
+    padding: 0 10px;
+    border-left: 1px solid #44475a;
+}
+
+#clock {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#pulseaudio {
+    color: #50fa7b;
+}
+
+#pulseaudio.muted {
+    color: #ff5555;
+}
+
+#custom-audio {
+    color: #50fa7b;
+}
+
+#custom-audio.muted {
+    color: #ff5555;
+}
+
+#custom-audio.warning {
+    color: #f1fa8c;
+}
+
+#disk {
+    color: #50fa7b;
+}
+
+#memory {
+    color: #50fa7b;
+}
+
+#custom-cpu {
+    color: #50fa7b;
+}
+
+#custom-cpu.warning {
+    color: #f1fa8c;
+}
+
+#custom-cpu.critical {
+    color: #ff5555;
+}
+
+#custom-gpu {
+    color: #50fa7b;
+}
+
+#custom-gpu.warning {
+    color: #f1fa8c;
+}
+
+#custom-gpu.critical {
+    color: #ff5555;
+}
+
+#network {
+    color: #50fa7b;
+}
+
+#network.disconnected {
+    color: #ff5555;
+}
+
+#custom-wifi {
+    color: #50fa7b;
+}
+
+#custom-wifi.warning {
+    color: #f1fa8c;
+}
+
+#custom-wifi.critical {
+    color: #ff5555;
+}
+
+#battery {
+    color: #50fa7b;
+}
+
+#battery.warning {
+    color: #f1fa8c;
+}
+
+#battery.critical {
+    color: #ff5555;
+}
+
+#battery.charging {
+    color: #50fa7b;
+}
+
+#tray {
+    padding: 0 10px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #ff5555;
+}

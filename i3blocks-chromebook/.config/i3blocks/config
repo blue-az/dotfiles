@@ -1,0 +1,48 @@
+# i3blocks config for Chromebook (Rockchip/Mali GPU)
+
+separator=true
+separator_block_width=15
+markup=pango
+
+[disk]
+command=FREE=$(df -h / | awk 'NR==2 {print $4}'); PCT=$(df / | awk 'NR==2 {print $5}' | tr -d '%'); if [ $PCT -gt 90 ]; then echo "<span color='#ff5555'> $FREE</span>"; elif [ $PCT -gt 70 ]; then echo "<span color='#f1fa8c'> $FREE</span>"; else echo "<span color='#50fa7b'> $FREE</span>"; fi
+label=DISK
+min_width=DISK 000G
+interval=30
+
+[memory]
+command=USED=$(free | awk '/Mem:/ {printf "%.0f", $3/$2*100}'); MEM=$(free -h | awk '/Mem:/ {print $3 "/" $2}'); if [ $USED -gt 80 ]; then echo "<span color='#ff5555'> $MEM</span>"; elif [ $USED -gt 60 ]; then echo "<span color='#f1fa8c'> $MEM</span>"; else echo "<span color='#50fa7b'> $MEM</span>"; fi
+label=RAM
+min_width=RAM 00.0Gi/00Gi
+interval=10
+
+[cpu]
+command=CPU=$(awk '/^cpu / {printf "%.0f", ($2+$4)*100/($2+$4+$5)}' /proc/stat); TEMPC=$(awk '{printf "%.0f", $1/1000}' /sys/class/thermal/thermal_zone0/temp 2>/dev/null); TEMPC=${TEMPC:-0}; TEMP=$((TEMPC * 9 / 5 + 32)); if [ $TEMPC -gt 70 ]; then echo "<span color='#ff5555'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; elif [ $TEMPC -gt 55 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $CPU)% $(printf '%3d' $TEMP)°</span>"; fi
+label=CPU
+min_width=CPU 100% 000°
+interval=5
+
+[gpu]
+command=CUR=$(cat /sys/class/devfreq/ff9a0000.gpu/cur_freq 2>/dev/null || echo 0); MAX=800000000; GPU=$((CUR * 100 / MAX)); TEMPC=$(awk '{printf "%.0f", $1/1000}' /sys/class/thermal/thermal_zone1/temp 2>/dev/null); TEMPC=${TEMPC:-0}; TEMP=$((TEMPC * 9 / 5 + 32)); if [ $TEMPC -gt 70 ]; then echo "<span color='#ff5555'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; elif [ $TEMPC -gt 55 ]; then echo "<span color='#f1fa8c'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; else echo "<span color='#50fa7b'> $(printf '%3d' $GPU)% $(printf '%3d' $TEMP)°</span>"; fi
+label=GPU
+min_width=GPU 100% 000°
+interval=5
+
+[network]
+command=IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1); if [ -n "$IP" ]; then echo "<span color='#50fa7b'> $IP</span>"; else echo "<span color='#ff5555'> disconnected</span>"; fi
+label=IP
+min_width=IP 000.000.000.000
+interval=60
+
+[time]
+command=date '+%Y-%m-%d %I:%M:%S %p'
+color=#ffffff
+interval=1
+
+[wifi]
+command=SSID=$(nmcli -t -f active,ssid dev wifi 2>/dev/null | grep '^yes' | cut -d: -f2); SIG=$(awk 'NR==3 {print int($3)}' /proc/net/wireless 2>/dev/null); if [ -n "$SSID" ]; then if [ -n "$SIG" ] && [ "$SIG" -gt 0 ]; then SIG=$((SIG - 256)); fi; if [ -n "$SIG" ] && [ "$SIG" -ge -50 ]; then COLOR="#50fa7b"; elif [ -n "$SIG" ] && [ "$SIG" -ge -70 ]; then COLOR="#f1fa8c"; else COLOR="#f1fa8c"; fi; if [ -n "$SIG" ]; then echo "<span color='$COLOR'>$SSID ${SIG}dBm</span>"; else echo "<span color='$COLOR'>$SSID</span>"; fi; else echo "<span color='#ff5555'>no wifi</span>"; fi
+interval=10
+
+[battery]
+command=BAT="/sys/class/power_supply/sbs-9-000b"; [ ! -d "$BAT" ] && exit 0; CAP=$(cat "$BAT/capacity" 2>/dev/null || echo 0); STATUS=$(cat "$BAT/status" 2>/dev/null || echo "Unknown"); if [ "$STATUS" = "Charging" ]; then COLOR="#50fa7b"; elif [ "$STATUS" = "Full" ]; then COLOR="#50fa7b"; elif [ $CAP -le 10 ]; then COLOR="#ff5555"; elif [ $CAP -le 25 ]; then COLOR="#ff5555"; elif [ $CAP -le 50 ]; then COLOR="#f1fa8c"; else COLOR="#50fa7b"; fi; echo "<span color='$COLOR'>${CAP}%</span>"
+interval=30
