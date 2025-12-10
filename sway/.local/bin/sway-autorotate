@@ -3,14 +3,14 @@
 
 import subprocess
 import time
-import sys
 import os
+import glob
 
 OUTPUT = "eDP-1"
 SCALE = "2"
 SENSOR_PATH = "/sys/bus/iio/devices/iio:device0"
 POLL_INTERVAL = 0.3
-THRESHOLD = 500  # Minimum value to register as dominant axis
+THRESHOLD = 300  # Minimum value to register as dominant axis
 DEBUG = True
 LOG_FILE = "/tmp/sway-autorotate.log"
 
@@ -57,11 +57,23 @@ def get_orientation(x, y, z):
 
     return None
 
+def get_swaysock():
+    """Find current Sway socket dynamically."""
+    socks = glob.glob("/run/user/1000/sway-ipc.*.sock")
+    return socks[0] if socks else None
+
 def rotate_screen(transform):
     """Apply screen rotation with scale preserved."""
     try:
+        # Get fresh socket path each time (survives suspend)
+        sock = get_swaysock()
+        if not sock:
+            log(f"rotate_screen({transform}) -> NO SOCKET")
+            return
+        env = os.environ.copy()
+        env["SWAYSOCK"] = sock
         result = subprocess.run(["swaymsg", "output", OUTPUT, "transform", transform, "scale", SCALE],
-                      capture_output=True, timeout=2)
+                      capture_output=True, timeout=2, env=env)
         log(f"rotate_screen({transform}) -> {result.returncode}")
     except subprocess.TimeoutExpired:
         log(f"rotate_screen({transform}) -> TIMEOUT")
@@ -76,7 +88,7 @@ def main():
         orientation = get_orientation(x, y, z)
         loop_count += 1
 
-        if loop_count % 100 == 0:
+        if loop_count % 30 == 0:
             log(f"loop {loop_count}: x={x} y={y} z={z} orient={orientation} last={last_orientation}")
 
         if orientation and orientation != last_orientation:

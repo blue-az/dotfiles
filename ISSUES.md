@@ -41,3 +41,9 @@ asusd shows model not in database but uses defaults:
 - Linux asusd can then read/write via `/sys/class/leds/asus::kbd_backlight/brightness`
 - The ~30s input block on boot may be asusd probing the HID devices
 - Cold boot directly to Linux still doesn't work - needs Windows boot first
+
+#### Update 2025-12-10
+Direct Linux boot now works - backlight visible without Windows boot first. Survived reboot.
+- Never manually ran Armoury Crate - likely auto-installed/updated via Windows Update
+- Windows background services may have updated EC firmware or LED defaults
+- Testing full shutdown next to confirm fix is permanent
