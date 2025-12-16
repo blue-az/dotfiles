@@ -45,6 +45,16 @@ alias sr="streamlit run streamlit_app.py"
 # libreoffice calc
 alias lc="libreoffice --calc"
 
+# Wifi client
+alias SF="sudo systemctl stop firewalld"
+alias sH="nmcli device wifi hotspot ssid 'LinuxDisplay' password 'Erf123123!'"
+alias SH="nmcli device disconnect wlp194s0"
+
+alias sF="sudo systemctl start firewalld"
+alias RW="nmcli device wifi connect 'da4e9a_5G'"
+
+alias Cc="nmcli device wifi connect 'LinuxDisplay' password 'Erf123123!'"
+
 # additional aliases
 alias sbash='source ~/.bashrc'
 alias 3off="xrandr --output HDMI-1 --off"
