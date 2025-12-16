@@ -41,6 +41,10 @@ exec swayidle -w \
     before-sleep 'swaylock -f -c 000000'
 
 # ============ STARTUP ============
+# Export environment to systemd for portals (file dialogs, etc.)
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+
 # Notification daemon
 exec dunst
 

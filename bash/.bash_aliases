@@ -26,6 +26,9 @@ alias 313="source ~/.venv313/bin/activate" # activate virtual environment
 alias CE="conda activate optiver_gpu"
 alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=host --gpus all -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:cuda"
 
+# Obsidian
+alias Ob="flatpak run md.obsidian.Obsidian"
+
 # Jupyter notebooks
 alias jn="jupyter notebook"
 

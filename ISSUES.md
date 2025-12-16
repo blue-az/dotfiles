@@ -4,6 +4,32 @@ Hardware and software issues for ROG Flow Z13 (GZ302EA) - 2025 model.
 
 ## Open Issues
 
+### File Picker Dialogs Not Working in Sway
+- **Status:** Testing fix
+- **Submitted:** 2025-12-16
+
+#### Problem
+GTK file picker dialogs don't appear in applications (e.g., Obsidian "Open folder as vault"). This affects any app that uses xdg-desktop-portal for file dialogs.
+
+#### Cause
+`xdg-desktop-portal-gtk` service fails with `cannot open display:` because Sway wasn't exporting `WAYLAND_DISPLAY` to systemd user services.
+
+#### Fix Applied
+Added to `~/.config/sway/config` in STARTUP section:
+```
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+```
+
+#### Testing
+- Manual fix worked (portal started successfully after env import)
+- Sway reload doesn't apply `exec` commands - requires logout/login or reboot
+- Waiting for reboot to confirm permanent fix
+
+#### Notes
+- Packages installed: xdg-desktop-portal, xdg-desktop-portal-gtk, xdg-desktop-portal-wlr
+- Portal config at `/usr/share/xdg-desktop-portal/sway-portals.conf` correctly routes FileChooser to gtk
+
 ## Resolved Issues
 
 ### Keyboard Backlight Not Working
