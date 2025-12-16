@@ -31,6 +31,7 @@ alias jn="jupyter notebook"
 
 # LLM
 alias g3="ollama run gemma3:27b"
+alias cl="claude"
 
 # pycharm
 alias pc="/opt/pycharm-2025.2.3/bin/pycharm"
