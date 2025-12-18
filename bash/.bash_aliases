@@ -36,6 +36,9 @@ alias jn="jupyter notebook"
 alias g3="ollama run gemma3:27b"
 alias cl="claude"
 
+# System info
+alias ff="fastfetch"
+
 # pycharm
 alias pc="/opt/pycharm-2025.2.3/bin/pycharm"
 
