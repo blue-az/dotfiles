@@ -162,10 +162,3 @@ set -o vi
 
 # TennisAgent CLI shortcuts
 export PATH="$PATH:$HOME/Python/project-phoenix"
-
-# Chromebook display aliases
-alias cbe='~/cb-link/cb-display.sh extend'
-alias cbm='~/cb-link/cb-display.sh mirror'
-alias cbs='~/cb-link/cb-display.sh stop'
-alias cbst='~/cb-link/cb-display.sh status'
-alias cbt='~/cb-link/cb-display.sh toggle'

@@ -76,3 +76,10 @@ alias 3s="sh ~/.screenlayout/sway-3s.sh"
 # alias 1s="sudo sh /home/blueaz/.screenlayout/1screen.sh"
 # alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
 # alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
+
+# Chromebook display aliases
+alias cbe='~/cb-link/cb-display.sh extend'
+alias cbm='~/cb-link/cb-display.sh mirror'
+alias cbs='~/cb-link/cb-display.sh stop'
+alias cbst='~/cb-link/cb-display.sh status'
+alias cbt='~/cb-link/cb-display.sh toggle'
