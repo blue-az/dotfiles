@@ -83,7 +83,7 @@ alias cbm='~/cb-link/cb-display.sh mirror'
 alias cbs='~/cb-link/cb-display.sh stop'
 alias cbst='~/cb-link/cb-display.sh status'
 alias cbt='~/cb-link/cb-display.sh toggle'
-alias cbh='cat ~/Documents/cb-link-cheatsheet.txt'
+alias cbh='bat ~/Documents/cb-link-cheatsheet.txt'
 
 # Chromebook display aliases (CB side - client, for CB machine only)
 alias cbv='~/cb-link/cb-connect.sh'           # Quick viewer launch
