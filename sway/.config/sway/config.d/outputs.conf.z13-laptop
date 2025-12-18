@@ -2,7 +2,7 @@
 # Copy to outputs.conf on this machine
 
 # Internal display - HiDPI scaled
-output eDP-1 scale 2.0 res 2560x1600
+output eDP-1 scale 1.9 res 2560x1600
 
 # Workspace assignments (single display)
 # All workspaces default to eDP-1

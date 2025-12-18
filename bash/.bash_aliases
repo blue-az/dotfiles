@@ -53,7 +53,12 @@ alias SH="nmcli device disconnect wlp194s0"
 alias sF="sudo systemctl start firewalld"
 alias RW="nmcli device wifi connect 'da4e9a_5G'"
 
+alias Ei="nmcli device wifi connect 'Erik’s iPhone'"
+
 alias Cc="nmcli device wifi connect 'LinuxDisplay' password 'Erf123123!'"
+
+
+alias DE="~/Downloads/deskreen-ce-3.1.17-x86_64.AppImage"
 
 # additional aliases
 alias sbash='source ~/.bashrc'
