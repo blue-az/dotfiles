@@ -77,9 +77,10 @@ alias 3s="sh ~/.screenlayout/sway-3s.sh"
 # alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
 # alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
 
-# Chromebook display aliases
-alias cbe='~/cb-link/cb-display.sh extend'
-alias cbm='~/cb-link/cb-display.sh mirror'
-alias cbs='~/cb-link/cb-display.sh stop'
-alias cbst='~/cb-link/cb-display.sh status'
-alias cbt='~/cb-link/cb-display.sh toggle'
+# Chromebook display aliases (CB side - connect to AMD)
+alias cbv='~/cb-link/cb-connect.sh'           # Quick viewer launch
+alias cbc='~/cb-link/cb-connect.sh'           # Connect to AMD
+alias cbcf='~/cb-link/cb-connect.sh f'        # Fullscreen connect
+alias cbcm='~/cb-link/cb-connect.sh m'        # Mirror mode connect
+alias cbcd='~/cb-link/cb-connect.sh d'        # Disconnect
+alias cbcs='~/cb-link/cb-connect.sh s'        # Status
