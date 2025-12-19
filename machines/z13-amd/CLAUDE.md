@@ -100,6 +100,15 @@ Uses same sway-autorotate script as Intel Z13:
 - Service: `~/.config/systemd/user/sway-autorotate.service`
 - Accelerometer: `/sys/bus/iio/devices/iio:device0/`
 
+## Aliases (notable)
+| Alias | Command |
+|-------|---------|
+| `cl` | `claude` |
+| `ff` | `fastfetch` |
+| `jn` | `jupyter notebook` |
+| `sbash` | `source ~/.bashrc` |
+| `1s/2s/3s` | Screen layouts |
+
 ## Notable Differences from Intel Z13
 | Feature | Intel Z13 | AMD Z13 |
 |---------|-----------|---------|

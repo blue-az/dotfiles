@@ -9,6 +9,8 @@ Local: ~/dotfiles
 git clone https://github.com/blue-az/dotfiles.git ~/dotfiles
 ```
 
+> **Note:** macOS uses `~/dotfiles` (no dot) instead of `~/.dotfiles` used on Linux machines.
+
 ## Fastfetch
 ```
 blueaz@Mac-mini

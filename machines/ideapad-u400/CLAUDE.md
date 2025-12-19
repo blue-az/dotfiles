@@ -1,5 +1,14 @@
 # IdeaPad U400 Setup (Debian 12)
 
+## Dotfiles Repository
+```
+Git:   https://github.com/blue-az/dotfiles.git
+Local: ~/.dotfiles
+```
+```bash
+git clone https://github.com/blue-az/dotfiles.git ~/.dotfiles
+```
+
 ## Fastfetch
 ```
 blueaz@debian

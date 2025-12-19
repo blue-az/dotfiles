@@ -41,7 +41,7 @@ Battery (4352D51): 71% [Discharging]
 - Installed: sway, waybar, swaylock, swayidle, wofi, grim, slurp, wl-clipboard, dunst, terminator, brightnessctl, pulseaudio-utils, i3blocks, jq, dbus-x11
 - Symlinked configs to ~/.config/
 
-## Config locations
+## Config Locations
 ```
 ~/.dotfiles/sway-chromebook/.config/sway/config
 ~/.dotfiles/waybar-chromebook/.config/waybar/config
@@ -64,7 +64,7 @@ Battery (4352D51): 71% [Discharging]
 - GPU stats: frequency-based % (cur_freq/max_freq from /sys/class/devfreq/ff9a0000.gpu)
 - Thermal zones: thermal_zone0 (CPU), thermal_zone1 (GPU)
 
-## Bar setup (matches desktop)
+## Bar Setup (matches desktop)
 - i3blocks: main status bar (bottom)
 - waybar: system overlay (top-right corner)
 
