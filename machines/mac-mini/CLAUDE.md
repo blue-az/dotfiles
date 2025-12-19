@@ -1,5 +1,14 @@
 # Mac Mini Setup (macOS Sequoia)
 
+## Dotfiles Repository
+```
+Git:   https://github.com/blue-az/dotfiles.git
+Local: ~/dotfiles
+```
+```bash
+git clone https://github.com/blue-az/dotfiles.git ~/dotfiles
+```
+
 ## Fastfetch
 ```
 blueaz@Mac-mini

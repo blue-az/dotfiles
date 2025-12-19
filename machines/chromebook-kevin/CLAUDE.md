@@ -1,4 +1,13 @@
-# Sway Setup on Chromebook (Debian 12)
+# Sway Setup on Chromebook Kevin (Debian 12)
+
+## Dotfiles Repository
+```
+Git:   https://github.com/blue-az/dotfiles.git
+Local: ~/.dotfiles
+```
+```bash
+git clone https://github.com/blue-az/dotfiles.git ~/.dotfiles
+```
 
 ## Fastfetch
 ```

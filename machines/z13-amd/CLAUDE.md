@@ -1,5 +1,14 @@
 # Z13 AMD Setup (Fedora 43)
 
+## Dotfiles Repository
+```
+Git:   https://github.com/blue-az/dotfiles.git
+Local: ~/.dotfiles
+```
+```bash
+git clone https://github.com/blue-az/dotfiles.git ~/.dotfiles
+```
+
 ## Fastfetch
 ```
 blueaz@fedora
