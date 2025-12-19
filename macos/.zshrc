@@ -47,6 +47,7 @@ alias ff="fastfetch"
 
 # Reload shell config
 alias szsh='source ~/.zshrc'
+alias sbash='source ~/.zshrc'  # muscle memory from Linux
 
 # fzf integration
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
