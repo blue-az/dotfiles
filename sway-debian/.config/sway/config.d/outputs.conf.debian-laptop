@@ -1,0 +1,4 @@
+# Debian Laptop (2400x1600 display)
+# Copy to outputs.conf on this machine
+
+output eDP-1 scale 1.5
