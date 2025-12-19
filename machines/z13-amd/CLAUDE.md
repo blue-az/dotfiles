@@ -1,5 +1,29 @@
 # Z13 AMD Setup (Fedora 43)
 
+## Fastfetch
+```
+blueaz@fedora
+-------------
+OS: Fedora Linux 43 (Sway) x86_64
+Host: ROG Flow Z13 GZ302EA_GZ302EA (1.0)
+Kernel: Linux 6.17.11-300.fc43.x86_64
+Uptime: 9 mins
+Packages: 1847 (rpm), 10 (flatpak)
+Shell: bash 5.3.0
+Display (TL134ADXP03): 2560x1600 @ 180 Hz (as 1348x843) in 13" [Built-in]
+WM: Sway 1.11 (Wayland)
+Cursor: Adwaita
+Terminal: claude
+CPU: AMD RYZEN AI MAX 390 (24) @ 5.06 GHz
+GPU: AMD Radeon 8050S Graphics [Integrated]
+Memory: 1.78 GiB / 27.04 GiB (7%)
+Swap: 0 B / 8.00 GiB (0%)
+Disk (/): 10.22 GiB / 300.46 GiB (3%) - btrfs
+Local IP (wlp194s0): 192.168.8.116/24
+Battery (ASUS Battery): 100% [Discharging]
+Locale: en_US.UTF-8
+```
+
 ## Hardware
 - ASUS ROG Flow Z13 (GZ302EA) - AMD version
 - AMD Ryzen AI MAX 390 w/ Radeon 8050S (24 threads)
