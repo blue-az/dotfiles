@@ -1,4 +1,41 @@
-# Mac Mini Setup
+# Mac Mini Setup (macOS Sequoia)
+
+## Fastfetch
+```
+blueaz@Mac-mini
+---------------
+OS: macOS Sequoia 15.7.2 (24G325) x86_64
+Host: Mac mini (2018) (1.0)
+Kernel: Darwin 24.6.0
+Uptime: 2 mins
+Packages: 16 (brew), 1 (brew-cask)
+Shell: zsh 5.9
+Display (XB271HU): 2560x1440 in 27", 60 Hz [External]
+WM: Quartz Compositor 278.4.7
+WM Theme: Multicolor (Dark)
+Theme: Aqua
+Font: .AppleSystemUIFont [System], Helvetica [User]
+Cursor: Fill - Black, Outline - White (32px)
+Terminal: 2.0.73
+CPU: Intel(R) Core(TM) i7-8700B (12) @ 3.20 GHz
+GPU: Intel UHD Graphics 630 [Integrated]
+Memory: 5.05 GiB / 8.00 GiB (63%)
+Swap: Disabled
+Disk (/): 83.34 GiB / 465.63 GiB (18%) - apfs [Read-only]
+Local IP (en1): 192.168.8.114/24
+Locale: en_US.UTF-8
+```
+
+## Hardware
+- Mac mini (2018)
+- Intel Core i7-8700B @ 3.20GHz (12 threads)
+- Intel UHD Graphics 630
+- 8GB RAM
+- 500GB SSD
+- External display: Acer XB271HU (2560x1440 @ 60Hz)
+
+## OS
+- macOS Sequoia 15.7.2
 
 This Mac mini is configured to behave similarly to the Fedora desktop/laptop and Debian laptop. Dotfiles are managed via stow in the `blue-az/dotfiles` repo under the `macos/` directory.
 
