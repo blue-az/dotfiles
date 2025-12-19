@@ -1,5 +1,24 @@
 # Sway Setup on Chromebook (Debian 12)
 
+## Fastfetch
+```
+OS: Debian GNU/Linux 12.12 (bookworm) aarch64
+Host: Google Kevin
+Kernel: Linux 6.1.51-stb-cbg+
+Packages: 1632 (dpkg), 5 (flatpak)
+Shell: bash 5.2.15
+Display (eDP-1): 2400x1600 @ 1.5x in 12", 60 Hz [Built-in]
+WM: Sway 1.7 (Wayland)
+Terminal: claude
+CPU: rk3399 (6) @ 2.02 GHz
+GPU: Rockchip rk3399-mali [Integrated]
+Memory: 1.01 GiB / 3.78 GiB (27%)
+Swap: 0 B / 512.00 MiB (0%)
+Disk (/): 7.97 GiB / 29.16 GiB (27%) - btrfs
+Local IP (mlan0): 192.168.8.187/24
+Battery (4352D51): 71% [Discharging]
+```
+
 ## Hardware
 - Samsung Chromebook Plus v1 ("Kevin")
 - Rockchip RK3399 SoC (ARM64)
