@@ -33,10 +33,10 @@ output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
 # Lock screen manually
 bindsym $mod+Escape exec swaylock -f -c 000000
 
-# Auto-lock after 30 min idle, turn off displays after 30.5 min
+# Auto-lock after 5 min idle, turn off displays after 5.5 min
 exec swayidle -w \
-    timeout 1800 'swaylock -f -c 000000' \
-    timeout 1830 'swaymsg "output * power off"' \
+    timeout 300 'swaylock -f -c 000000' \
+    timeout 330 'swaymsg "output * power off"' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f -c 000000'
 

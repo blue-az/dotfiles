@@ -75,6 +75,8 @@ alias dis="export DISPLAY=:0"
 alias 1s="sh ~/.screenlayout/sway-1s.sh"
 alias 2s="sh ~/.screenlayout/sway-2s.sh"
 alias 3s="sh ~/.screenlayout/sway-3s.sh"
+alias 3sp="sh ~/.screenlayout/sway-3sp.sh"
+alias 4s="sh ~/.screenlayout/sway-4s.sh"
 # X11 versions (commented out)
 # alias 1s="sudo sh /home/blueaz/.screenlayout/1screen.sh"
 # alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
