@@ -55,8 +55,9 @@ alias SH="nmcli device disconnect wlp194s0"
 
 alias sF="sudo systemctl start firewalld"
 alias RW="nmcli device wifi connect 'da4e9a_5G'"
+alias 5G="nmcli device wifi connect 'da4e9a_5G'"
 
-alias Ei="nmcli device wifi connect 'Erik’s iPhone'"
+alias Ei="nmcli device wifi rescan; sleep 1; nmcli device wifi connect \"Erik's iPhone\""
 
 alias Cc="nmcli device wifi connect 'LinuxDisplay' password 'Erf123123!'"
 
@@ -88,6 +89,7 @@ alias cbm='~/cb-link/cb-display.sh mirror'
 alias cbs='~/cb-link/cb-display.sh stop'
 alias cbst='~/cb-link/cb-display.sh status'
 alias cbt='~/cb-link/cb-display.sh toggle'
+alias zof='sudo firewall-cmd --add-port=5900/tcp'
 alias cbh='bat ~/Documents/cb-link-cheatsheet.txt'
 
 # Chromebook display aliases (CB side - client, for CB machine only)
