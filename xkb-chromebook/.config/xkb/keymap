@@ -4,8 +4,9 @@ xkb_keymap {
     xkb_compat   { include "complete" };
     xkb_symbols  {
         include "pc+us+inet(evdev)"
-        // Swap Caps Lock and Super keys (use Caps as Mod4)
-        include "custom(swap_caps_super)"
+        // Chromebook Search key is LWIN - ensure it's Super_L for Mod4
+        key <LWIN> { [ Super_L ] };
+        modifier_map Mod4 { <LWIN> };
     };
     xkb_geometry { include "pc(pc105)" };
 };

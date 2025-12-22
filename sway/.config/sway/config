@@ -188,7 +188,7 @@ bindsym $mod+F7 exec swaymsg create_output && swaymsg output HEADLESS-1 enable r
 bindsym $mod+Shift+F7 exec swaymsg output HEADLESS-1 disable
 
 # Status bar (waybar)
-exec_always pkill waybar; waybar
+exec_always sh -c 'pkill -x waybar || true; sleep 0.5; waybar'
 
 # Network Manager applet (for tray)
 exec nm-applet --indicator
