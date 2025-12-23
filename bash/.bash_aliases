@@ -57,7 +57,7 @@ alias sF="sudo systemctl start firewalld"
 alias RW="nmcli device wifi connect 'da4e9a_5G'"
 alias 5G="nmcli device wifi connect 'da4e9a_5G'"
 
-alias Ei="nmcli device wifi list > /dev/null && nmcli device wifi connect 4A:0C:55:63:B9:EF"
+alias Ei="nmcli device wifi rescan; sleep 1; nmcli device wifi connect \"Erik's iPhone\""
 alias nmlist="nmcli device wifi list"
 
 alias TA="cd /home/blueaz/Python/project-phoenix/domains/TennisAgent"
