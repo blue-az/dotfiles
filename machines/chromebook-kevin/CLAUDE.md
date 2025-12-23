@@ -51,8 +51,7 @@ Battery (4352D51): 71% [Discharging]
 ~/.dotfiles/waybar-chromebook/.config/waybar/sysinfo.sh
 ~/.dotfiles/waybar-chromebook/.config/waybar/start-overlay.sh
 ~/.dotfiles/i3blocks-chromebook/.config/i3blocks/config
-~/.dotfiles/xkb/.config/xkb/keymap (shared)
-~/.dotfiles/xkb/.config/xkb/symbols/custom (shared)
+~/.dotfiles/xkb-chromebook/.config/xkb/keymap (Chromebook-specific, Search=Mod4)
 ```
 
 ## Chromebook-specific settings
@@ -74,7 +73,7 @@ Battery (4352D51): 71% [Discharging]
 
 ## Working
 - Sway launch via lightdm
-- Keyboard layout (caps/super swap)
+- Keyboard layout (Search key = Mod4, use `stow xkb-chromebook` NOT `stow xkb`)
 - i3blocks status bar
 - Waybar overlay
 - Screenshot bindings
