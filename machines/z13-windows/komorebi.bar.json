@@ -1,0 +1,33 @@
+{
+  "$schema": "https://komorebi.lgug2z.com/bar-schema",
+  "monitor": {
+    "index": 0
+  },
+  "font_family": "Segoe UI",
+  "font_size": 13,
+  "theme": {
+    "palette": "Catppuccin",
+    "name": "Mocha",
+    "accent": "Green"
+  },
+  "left_widgets": [
+    {
+      "Komorebi": {
+        "workspaces": {
+          "enable": true,
+          "hide_empty_workspaces": true
+        },
+        "layout": {
+          "enable": true
+        }
+      }
+    }
+  ],
+  "center_widgets": [],
+  "right_widgets": [
+    { "Date": { "enable": true, "format": "DayDateMonthYear" } },
+    { "Time": { "enable": true, "format": "TwentyFourHour" } },
+    { "Memory": { "enable": true } },
+    { "Battery": { "enable": true } }
+  ]
+}

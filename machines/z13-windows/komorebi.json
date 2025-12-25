@@ -1,0 +1,43 @@
+{
+  "$schema": "https://komorebi.lgug2z.com/schema",
+  "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
+  "window_hiding_behaviour": "Cloak",
+  "cross_monitor_move_behaviour": "Insert",
+  "default_workspace_padding": 10,
+  "default_container_padding": 10,
+  "border": true,
+  "border_width": 3,
+  "border_offset": -1,
+  "border_colours": {
+    "single": "#50fa7b",
+    "stack": "#f8f8f2",
+    "monocle": "#ff79c6",
+    "unfocused": "#6272a4"
+  },
+  "stackbar": {
+    "height": 30,
+    "mode": "OnStack",
+    "tabs": {
+      "width": 200,
+      "focused_text": "#f8f8f2",
+      "unfocused_text": "#6272a4",
+      "background": "#282a36"
+    }
+  },
+  "monitors": [
+    {
+      "workspaces": [
+        { "name": "1", "layout": "BSP" },
+        { "name": "2", "layout": "BSP" },
+        { "name": "3", "layout": "BSP" },
+        { "name": "4", "layout": "BSP" },
+        { "name": "5", "layout": "BSP" },
+        { "name": "6", "layout": "BSP" },
+        { "name": "7", "layout": "BSP" },
+        { "name": "8", "layout": "BSP" },
+        { "name": "9", "layout": "BSP" },
+        { "name": "10", "layout": "BSP" }
+      ]
+    }
+  ]
+}

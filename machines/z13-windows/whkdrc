@@ -1,0 +1,68 @@
+# whkdrc - Windows Hotkey Daemon config for komorebi
+# Mod key: Alt
+# Mirrors Sway/i3 keybindings
+
+.shell powershell
+
+# Focus windows (vim-style hjkl)
+alt + h                 : komorebic focus left
+alt + j                 : komorebic focus down
+alt + k                 : komorebic focus up
+alt + l                 : komorebic focus right
+
+# Move windows
+alt + shift + h         : komorebic move left
+alt + shift + j         : komorebic move down
+alt + shift + k         : komorebic move up
+alt + shift + l         : komorebic move right
+
+# Resize windows
+alt + ctrl + h          : komorebic resize-axis horizontal decrease
+alt + ctrl + j          : komorebic resize-axis vertical increase
+alt + ctrl + k          : komorebic resize-axis vertical decrease
+alt + ctrl + l          : komorebic resize-axis horizontal increase
+
+# Workspaces (switch)
+alt + 1                 : komorebic focus-workspace 0
+alt + 2                 : komorebic focus-workspace 1
+alt + 3                 : komorebic focus-workspace 2
+alt + 4                 : komorebic focus-workspace 3
+alt + 5                 : komorebic focus-workspace 4
+alt + 6                 : komorebic focus-workspace 5
+alt + 7                 : komorebic focus-workspace 6
+alt + 8                 : komorebic focus-workspace 7
+alt + 9                 : komorebic focus-workspace 8
+alt + 0                 : komorebic focus-workspace 9
+
+# Move window to workspace
+alt + shift + 1         : komorebic move-to-workspace 0
+alt + shift + 2         : komorebic move-to-workspace 1
+alt + shift + 3         : komorebic move-to-workspace 2
+alt + shift + 4         : komorebic move-to-workspace 3
+alt + shift + 5         : komorebic move-to-workspace 4
+alt + shift + 6         : komorebic move-to-workspace 5
+alt + shift + 7         : komorebic move-to-workspace 6
+alt + shift + 8         : komorebic move-to-workspace 7
+alt + shift + 9         : komorebic move-to-workspace 8
+alt + shift + 0         : komorebic move-to-workspace 9
+
+# Layout controls
+alt + f                 : komorebic toggle-monocle
+alt + shift + space     : komorebic toggle-float
+alt + e                 : komorebic flip-layout horizontal
+alt + shift + e         : komorebic flip-layout vertical
+
+# Stack controls
+alt + s                 : komorebic toggle-tiling
+alt + left              : komorebic cycle-stack previous
+alt + right             : komorebic cycle-stack next
+
+# Window controls
+alt + shift + q         : komorebic close
+alt + shift + c         : komorebic reload-configuration
+
+# Toggle pause (disable/enable komorebi)
+alt + shift + p         : komorebic toggle-pause
+
+# Promote window to main
+alt + return            : komorebic promote
