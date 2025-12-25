@@ -36,6 +36,9 @@ alias jn="jupyter notebook"
 alias g3="ollama run gemma3:27b"
 alias cl="claude"
 
+# TennisAgent
+alias TA="cd ~/Python/project-phoenix/domains/TennisAgent"
+
 # System info
 alias ff="fastfetch"
 
