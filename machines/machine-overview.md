@@ -26,6 +26,27 @@ Local IP (eno1): 192.168.8.178/24
 
 ---
 
+## Desktop (Windows 11)
+```
+efehn@Desktop
+-------------
+OS: Windows 11 Pro (25H2) x86_64
+Host: MS-7B51 (1.0)
+Kernel: WIN32_NT 10.0.26200.7462
+Packages: 20 (choco)
+Shell: bash 5.2.37
+Display (XB271HU): 2560x1440 in 27", 60 Hz [External]
+Display (Acer AL2216W): 1680x1050 in 22", 60 Hz [External]
+WM: komorebi + whkd + komorebi-bar + masir
+CPU: Intel(R) Core(TM) i9-9900KF (16) @ 5.00 GHz
+GPU: NVIDIA GeForce RTX 3090 @ 2.12 GHz (23.76 GiB) [Discrete]
+Memory: 63.94 GiB
+Disk (C:\): 440.85 GiB - NTFS
+Local IP (Ethernet): 192.168.8.178/24
+```
+
+---
+
 ## Z13 AMD (Fedora)
 ```
 blueaz@fedora
