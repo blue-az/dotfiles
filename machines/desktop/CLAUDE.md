@@ -81,6 +81,8 @@ stow bash sway waybar i3 nvim xkb x11 wallpaper
 - NVIDIA proprietary driver
 - `nvidia-smi` for monitoring
 - CUDA available for ML workloads
+- Power limit: 332W (95% of 350W default) for Ollama use
+- Systemd service: `gpu-power-limit.service`
 
 ## Aliases (notable)
 | Alias | Command |
