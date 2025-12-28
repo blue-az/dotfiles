@@ -40,29 +40,42 @@ if [ "$HAS_GPU" -eq 0 ]; then
     exit 0
 fi
 
-# Determine color based on temperature
+# Determine color based on temperature and power
 TEMPC_NUM=${TEMPC:-0}
+WATTS_NUM=${WATTS:-0}
+
+# Start with normal
+COLOR="#50fa7b"
+CLASS="normal"
+
+# Check temperature thresholds
 if [ "$TEMPC_NUM" -gt 80 ]; then
     COLOR="#ff5555"
     CLASS="critical"
 elif [ "$TEMPC_NUM" -gt 65 ]; then
     COLOR="#f1fa8c"
     CLASS="warning"
-else
-    COLOR="#50fa7b"
-    CLASS="normal"
+fi
+
+# Check power thresholds (override if worse)
+if [ "$WATTS_NUM" -gt 320 ]; then
+    COLOR="#ff5555"
+    CLASS="critical"
+elif [ "$WATTS_NUM" -gt 280 ] && [ "$CLASS" != "critical" ]; then
+    COLOR="#f1fa8c"
+    CLASS="warning"
 fi
 
 # Build output based on available data
 if [ -n "$GPU" ] && [ -n "$TEMP" ] && [ -n "$WATTS" ]; then
     # Full data (NVIDIA or newer AMD)
-    printf '{"text": "<span color=\\"#ffffff\\">GPU</span> <span color=\\"%s\\"> %3d%% %3d° %sW</span>", "class": "%s"}\n' "$COLOR" "$GPU" "$TEMP" "$WATTS" "$CLASS"
+    printf '{"text": "GPU %3d%% %3d° %sW", "class": "%s"}\n' "$GPU" "$TEMP" "$WATTS" "$CLASS"
 elif [ -n "$GPU" ] && [ -n "$TEMP" ]; then
     # Usage and temp only
-    printf '{"text": "<span color=\\"#ffffff\\">GPU</span> <span color=\\"%s\\"> %3d%% %3d°</span>", "class": "%s"}\n' "$COLOR" "$GPU" "$TEMP" "$CLASS"
+    printf '{"text": "GPU %3d%% %3d°", "class": "%s"}\n' "$GPU" "$TEMP" "$CLASS"
 elif [ -n "$TEMP" ]; then
     # Temp only (older radeon with working temp sensor)
-    printf '{"text": "<span color=\\"#ffffff\\">GPU</span> <span color=\\"%s\\"> %3d°</span>", "class": "%s"}\n' "$COLOR" "$TEMP" "$CLASS"
+    printf '{"text": "GPU %3d°", "class": "%s"}\n' "$TEMP" "$CLASS"
 else
     # No useful data
     printf '{"text": ""}\n'
