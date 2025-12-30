@@ -80,6 +80,7 @@ Waybar modules (CPU, GPU) occasionally whiteout and become completely unreadable
 Several fixes have been attempted but none have been permanent:
 - **2025-12-29:** Removed pango markup from `cpu.sh` - switched to plain text output with CSS classes instead of inline `<span>` tags (commit ca217b4). Previously applied same fix to `gpu.sh`.
 - **2025-12-30:** Attempted `!important` on color rules - **FAILED** - GTK CSS (used by waybar) doesn't support `!important`, caused CSS parse errors and broke waybar. Reverted.
+- **2025-12-30:** Added explicit `background-color: #1a1a1a` to all CPU/GPU CSS rules. If text turns white, it will still be readable against dark background.
 
 #### Potential Causes
 - Pango markup errors in waybar scripts
