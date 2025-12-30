@@ -38,9 +38,9 @@ else
     CLASS="normal"
 fi
 
-# Output JSON for waybar with pango markup
+# Output JSON for waybar (plain text, styling via CSS classes)
 if [ -n "$WATTS" ]; then
-    printf '{"text": "<span color=\\"#ffffff\\">CPU</span> <span color=\\"%s\\"> %3d%% %3d° %sW</span>", "class": "%s"}\n' "$COLOR" "$CPU" "$TEMP" "$WATTS" "$CLASS"
+    printf '{"text": "CPU %3d%% %3d° %sW", "class": "%s"}\n' "$CPU" "$TEMP" "$WATTS" "$CLASS"
 else
-    printf '{"text": "<span color=\\"#ffffff\\">CPU</span> <span color=\\"%s\\"> %3d%% %3d°</span>", "class": "%s"}\n' "$COLOR" "$CPU" "$TEMP" "$CLASS"
+    printf '{"text": "CPU %3d%% %3d°", "class": "%s"}\n' "$CPU" "$TEMP" "$CLASS"
 fi
