@@ -8,8 +8,8 @@ MUTE=$(pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | grep -oP '(yes|no)')
 case "$SINK" in
     *EarPods*) NAME="EarPods";;
     *analog-stereo*) NAME="Built-in";;
-    *pro-output-3*) NAME="LG";;
-    *pro-output-7*) NAME="Monitor";;
+    *pro-output-3*) NAME="Monitor";;
+    *pro-output-7*) NAME="HDMI-1";;
     *pro-output-8*) NAME="HDMI-2";;
     *pro-output-9*) NAME="HDMI-3";;
     *) NAME="Unknown";;

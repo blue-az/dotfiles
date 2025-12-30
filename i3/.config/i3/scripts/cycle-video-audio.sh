@@ -4,8 +4,8 @@
 # Define sinks by stable ALSA name patterns (PCI path based, won't change)
 # These are substrings that match the pactl sink names
 sink_patterns=(
-    "pro-output-3"   # HDMI 0 - LG TV
-    "pro-output-8"   # HDMI 2 - LG TV
+    "pro-output-3"   # HDMI 0 - XB271HU Monitor
+    "pro-output-8"   # HDMI 2
     "pro-output-9"   # HDMI 3 - spare
 )
 
