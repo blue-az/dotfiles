@@ -1,0 +1,15 @@
+{
+    "layer": "bottom",
+    "position": "top",
+    "margin-top": 280,
+    "exclusive": false,
+    "modules-left": [],
+    "modules-center": [],
+    "modules-right": ["custom/monitor"],
+
+    "custom/monitor": {
+        "exec": "~/.config/waybar/scripts/monitor.sh",
+        "return-type": "json",
+        "interval": 1
+    }
+}

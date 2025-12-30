@@ -1,0 +1,28 @@
+* {
+    font-family: monospace;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    background: transparent;
+}
+
+#custom-monitor {
+    background-color: rgba(26, 26, 26, 0.78);
+    border: 2px solid #50fa7b;
+    color: #ffffff;
+    padding: 6px 12px;
+    margin-right: 20px;
+}
+
+#custom-monitor.warning {
+    border-color: #f1fa8c;
+    color: #f1fa8c;
+}
+
+#custom-monitor.critical {
+    border-color: #ff5555;
+    color: #ff5555;
+}
