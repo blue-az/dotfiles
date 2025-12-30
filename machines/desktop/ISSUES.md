@@ -63,6 +63,32 @@ sudo systemctl enable --now nvidia-hdmi-audio-fix.service
 - https://forums.developer.nvidia.com/t/audio-pass-through-via-hdmi-often-interrupted/270808
 - https://wiki.archlinux.org/title/NVIDIA/Troubleshooting
 
+### Waybar Whiteout
+- **Status:** Open
+- **Submitted:** 2025-12-30
+
+#### Problem
+Waybar modules (CPU, GPU) occasionally whiteout and become completely unreadable. Text turns white/invisible against the background.
+
+#### Symptoms
+- Started on GPU module, now occurs most frequently on CPU module
+- Most reproducible after GPU reaches 100% utilization
+- Also occurs randomly on CPU module without GPU load
+- Has occurred right before system crashes despite GPU power being capped at 95%
+
+#### Attempted Fixes
+Several fixes have been attempted but none have been permanent:
+- **2025-12-29:** Removed pango markup from `cpu.sh` - switched to plain text output with CSS classes instead of inline `<span>` tags (commit ca217b4). Previously applied same fix to `gpu.sh`.
+- **2025-12-30:** Attempted `!important` on color rules - **FAILED** - GTK CSS (used by waybar) doesn't support `!important`, caused CSS parse errors and broke waybar. Reverted.
+
+#### Potential Causes
+- Pango markup errors in waybar scripts
+- GPU memory/power state transitions affecting rendering
+- Possible correlation with GPU hitting power limits
+
+#### Related
+- GPU power limit set to 95% (332W) via `gpu-power-limit.service`
+
 ## Resolved Issues
 
 (none yet)
