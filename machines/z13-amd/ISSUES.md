@@ -30,6 +30,41 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 - Packages installed: xdg-desktop-portal, xdg-desktop-portal-gtk, xdg-desktop-portal-wlr
 - Portal config at `/usr/share/xdg-desktop-portal/sway-portals.conf` correctly routes FileChooser to gtk
 
+### Ollama Falls Back to CPU (gfx1151 Not Used)
+- **Status:** Open - upstream issue filed
+- **Submitted:** 2025-12-30
+- **Issue URL:** https://github.com/ollama/ollama/issues/13589
+
+#### Problem
+Ollama silently falls back to CPU inference on Linux even though `rocminfo` correctly detects the gfx1151 GPU. The same hardware works with GPU on Windows.
+
+```
+$ ollama ps
+NAME               ID              SIZE      PROCESSOR
+granite4:latest    4235724a127c    2.4 GB    100% CPU
+```
+
+#### Environment
+- ROCm 6.4.2 installed and detecting GPU correctly
+- Kernel 6.17.12-300.fc43.x86_64
+- Device permissions OK (/dev/kfd, /dev/dri/renderD128 world-accessible)
+
+#### What's Been Tried
+1. Built Ollama from main (post PR #13196 GTT fix) - still CPU
+2. HSA_OVERRIDE_GFX_VERSION=11.5.0 - still CPU
+3. Verified rocminfo shows gfx1151 as Agent 2 with KERNEL_DISPATCH
+
+#### Related Issues
+- #9553 - gfx1151 crashes on Windows
+- #10993 - gfx1151 crashes on Windows
+- #12062 - GTT memory fix (merged Dec 23, didn't help)
+
+#### Notes
+- Windows dual-boot uses GPU successfully
+- No error messages - just silent fallback to CPU
+- gfx1151 is listed as "supported" in Ollama docs
+- Waiting for upstream fix
+
 ## Resolved Issues
 
 ### Keyboard Backlight Not Working
