@@ -1,5 +1,15 @@
 # Z13 AMD Setup (Fedora 43)
 
+## Configuration Principle
+
+**Match desktop config as closely as possible.** Only add machine-specific differences:
+- Display outputs (scale, resolution)
+- WiFi interface name
+- Battery/power monitoring
+- GPU-specific commands (amdgpu vs nvidia)
+
+Do NOT create fundamentally different configs. Same bar setup, same keybindings, same tools.
+
 ## Dotfiles Repository
 ```
 Git:   https://github.com/blue-az/dotfiles.git
@@ -100,6 +110,10 @@ Uses same sway-autorotate script as Intel Z13:
 - Service: `~/.config/systemd/user/sway-autorotate.service`
 - Accelerometer: `/sys/bus/iio/devices/iio:device0/`
 
+## Bar Setup
+- waybar: main status bar (bottom) - matches desktop
+- waybar overlay: system monitor (top-right corner) - matches desktop
+
 ## Aliases (notable)
 | Alias | Command |
 |-------|---------|
@@ -109,11 +123,13 @@ Uses same sway-autorotate script as Intel Z13:
 | `sbash` | `source ~/.bashrc` |
 | `1s/2s/3s` | Screen layouts |
 
-## Notable Differences from Intel Z13
-| Feature | Intel Z13 | AMD Z13 |
-|---------|-----------|---------|
-| CPU | Intel Core | AMD Ryzen AI MAX 390 |
-| GPU | Intel Iris + NVIDIA | AMD Radeon 8050S |
-| RAM | Dedicated | Shared with GPU |
-| NPU | None | AMD Strix Halo NPU |
-| WiFi | Different | wlp194s0 |
+## Machine-Specific Differences from Desktop
+| Feature | Desktop | Z13 AMD |
+|---------|---------|---------|
+| CPU | Intel i9-9900KF | AMD Ryzen AI MAX 390 |
+| GPU | NVIDIA RTX 3090 | AMD Radeon 8050S (integrated) |
+| RAM | 64GB dedicated | 27GB shared with GPU |
+| Network | Ethernet (eno1) | WiFi (wlp194s0) |
+| Power | Always AC | Battery + AC |
+| Display | Triple monitor | Single 13" HiDPI |
+| GPU monitor | `nvidia-smi` | `cat /sys/class/drm/card1/device/gpu_busy_percent` |

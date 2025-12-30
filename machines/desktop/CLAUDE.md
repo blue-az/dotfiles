@@ -95,5 +95,5 @@ stow bash sway waybar i3 nvim xkb x11 wallpaper
 | `1s/2s/3s` | Screen layouts |
 
 ## Bar Setup
-- i3blocks: main status bar (bottom)
-- waybar: system overlay (top-right corner)
+- waybar: main status bar (bottom)
+- waybar overlay: system monitor (top-right corner)
