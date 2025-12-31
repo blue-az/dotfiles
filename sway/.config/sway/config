@@ -181,6 +181,11 @@ bindsym Ctrl+Print exec grim - | wl-copy
 # Select region to clipboard
 bindsym Ctrl+Shift+Print exec grim -g "$(slurp)" - | wl-copy
 
+# ============ VOLUME ============
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
 # ============ VIRTUAL DISPLAY (for Deskreen extend) ============
 # Create virtual output for Chromebook as second monitor
 bindsym $mod+F7 exec swaymsg create_output && swaymsg output HEADLESS-1 enable resolution 1920x1080 position 1280 0
