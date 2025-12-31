@@ -86,22 +86,24 @@ Despite vbmeta disabled allowing boot:
 
 ---
 
-## Next Step: Downgrade to Android 9 (Pie)
+## Android 9 Downgrade - BLOCKED
 
-**Why Android 9:**
-- Most documented successful root method
-- Garmin Connect confirmed compatible
-- Original S10e launch version - least restrictive AVB
+**Attempted:** 2025-12-31
+**Firmware:** `SAMFW.COM_SM-G970F_XTC_G970FXXS3ASJG_fac.zip` (Android 9 Pie)
+**Result:** FAILED - Anti-rollback protection
 
-**Firmware to download:**
-- Source: samfw.com
-- Model: SM-G970F
-- Look for: G970FXXU**** with Android 9 (Pie)
+Samsung's bootloader anti-rollback prevents downgrading once updated. Phone shows "unsupported version" when attempting to flash Android 9 bootloader on a device that has Android 12 bootloader.
 
-**Other options if Android 9 fails:**
-- Android 10 firmware (also has good root support)
-- KernelSU instead of Magisk
-- Flash patched AP as complete tar (not just boot partition)
+**This is a hard block** - no workaround without hardware modification.
+
+---
+
+## Remaining Options
+
+1. **KernelSU instead of Magisk** - Different root approach for Android 12
+2. **Custom ROM with root** - Find Android 12 based ROM with root built-in
+3. **Wait for new exploits** - Security research may find new methods
+4. **Different phone** - Use a device with better root support
 
 ---
 
