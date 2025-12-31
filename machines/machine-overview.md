@@ -161,3 +161,18 @@ Disk (/): 29.16 GiB - btrfs
 Local IP (mlan0): 192.168.8.187/24
 Battery: Yes
 ```
+
+---
+
+## Samsung Galaxy S10e (Android) - ROOTING FAILED
+```
+Model: Samsung Galaxy S10e (SM-G970F)
+Variant: Exynos (International)
+Codename: beyond0lte
+Firmware: G970FXXSGHWC1
+OS: Android 12 / OneUI 4
+Bootloader: UNLOCKED
+Root Status: FAILED - All methods caused boot loops
+Issue: AVB (Android Verified Boot) rejecting modified boot images
+Recovery: Flash stock AP via Odin to restore
+```
