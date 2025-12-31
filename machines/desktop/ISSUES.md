@@ -75,6 +75,8 @@ Waybar modules (CPU, GPU) occasionally whiteout and become completely unreadable
 - Most reproducible after GPU reaches 100% utilization
 - Also occurs randomly on CPU module without GPU load
 - Has occurred right before system crashes despite GPU power being capped at 95%
+- **2025-12-31:** First occurrence on audio module (not just CPU/GPU)
+- **2025-12-31:** First persistent whiteout - didn't clear after sway reload or killall waybar
 
 #### Attempted Fixes
 Several fixes have been attempted but none have been permanent:
@@ -86,9 +88,36 @@ Several fixes have been attempted but none have been permanent:
 - Pango markup errors in waybar scripts
 - GPU memory/power state transitions affecting rendering
 - Possible correlation with GPU hitting power limits
+- DDC/CI commands (ddcutil) can trigger the whiteout
 
 #### Related
 - GPU power limit set to 95% (332W) via `gpu-power-limit.service`
+
+### Keyboard Brightness Keys Not Detected
+- **Status:** Open
+- **Submitted:** 2025-12-31
+
+#### Problem
+Fn+1/2 keys intended for monitor brightness control don't generate any keycodes visible to Wayland/sway. `wev` shows no key events when pressing these combinations.
+
+#### Symptoms
+- `wev` shows only `modifiers` and `enter/leave` events, no `keycode` or `sym` output
+- Fn+4/5 (volume) reportedly work, but weren't tested with wev
+- Even plain F1/F2/F4/F5 keys showed no keysym output in wev (may be focus issue)
+
+#### Current State
+- DDC/CI brightness control is working (script + waybar module added)
+- Keybindings set up for `XF86MonBrightnessUp/Down` and `$mod+F4/F5` fallback
+- Need to identify correct keycodes or use alternative bindings
+
+#### To Investigate
+1. Test `wev` with simple key (letter 'a') to confirm wev is receiving events
+2. Identify keyboard model and check if Fn keys are hardware-only
+3. Check if keyboard software can remap Fn+1/2 to send brightness keycodes
+4. Consider alternative keybindings if hardware Fn keys can't be used
+
+#### Workaround
+Use `$mod+F4` (brightness down) and `$mod+F5` (brightness up), or click/right-click the BRT waybar module.
 
 ## Resolved Issues
 

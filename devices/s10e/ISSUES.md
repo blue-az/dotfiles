@@ -100,10 +100,39 @@ Samsung's bootloader anti-rollback prevents downgrading once updated. Phone show
 
 ## Remaining Options
 
-1. **KernelSU instead of Magisk** - Different root approach for Android 12
-2. **Custom ROM with root** - Find Android 12 based ROM with root built-in
-3. **Wait for new exploits** - Security research may find new methods
-4. **Different phone** - Use a device with better root support
+### 1. LineageOS 23.0 (Recommended)
+**Official LineageOS support exists for SM-G970F (beyond0lte)**
+
+- **Android version:** 16 (exceeds Garmin Connect's Android 9 requirement)
+- **Prerequisites you have:**
+  - Unlocked bootloader ✅
+  - Android 12 firmware ✅
+  - Heimdall experience ✅
+
+**Why this might work when stock didn't:**
+- No Knox fighting Magisk
+- Cleaner boot chain without Samsung bloat
+- Community-tested root procedures
+
+**Installation:**
+1. Download LineageOS from https://download.lineageos.org/devices/beyond0lte
+2. Flash Lineage Recovery via Heimdall (not TWRP)
+3. Sideload LineageOS ZIP via ADB
+4. Flash Magisk after LineageOS is working
+5. Should get real root (not just ADB root)
+
+**Resources:**
+- https://wiki.lineageos.org/devices/beyond0lte/
+- https://wiki.lineageos.org/devices/beyond0lte/install/
+
+### 2. KernelSU instead of Magisk
+Different root approach for Android 12 - untested on this device
+
+### 3. Wait for new exploits
+Security research may find new methods
+
+### 4. Different phone
+Use a device with better root support
 
 ---
 

@@ -18,6 +18,9 @@ Serial: 41033e03e35d214f
 ```
 
 ## Status
-- Running LineageOS custom ROM
-- Not rooted (`su` not found)
+- Running LineageOS custom ROM (userdebug build)
+- Not fully rooted (`su` binary not available to apps)
 - USB debugging enabled
+- **ADB root available** via Developer Options > Root access > ADB only
+  - ⚠️ Causes temporary device freeze, but works after recovery - see ISSUES.md
+  - Provides full root via ADB (`uid=0`, `/data/data` accessible)
