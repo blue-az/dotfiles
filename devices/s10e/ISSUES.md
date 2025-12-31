@@ -86,13 +86,22 @@ Despite vbmeta disabled allowing boot:
 
 ---
 
-## Remaining Options to Try
+## Next Step: Downgrade to Android 9 (Pie)
 
-1. **Downgrade to Android 10 or 11** - Less strict AVB, better root support
-2. **Different vbmeta patch method** - Maybe byte 123 isn't correct for this firmware
-3. **Flash patched AP as complete tar** - Not just boot partition
-4. **KernelSU instead of Magisk** - Different root approach
-5. **Check if EFS/critical partitions corrupted** - May explain inconsistent behavior
+**Why Android 9:**
+- Most documented successful root method
+- Garmin Connect confirmed compatible
+- Original S10e launch version - least restrictive AVB
+
+**Firmware to download:**
+- Source: samfw.com
+- Model: SM-G970F
+- Look for: G970FXXU**** with Android 9 (Pie)
+
+**Other options if Android 9 fails:**
+- Android 10 firmware (also has good root support)
+- KernelSU instead of Magisk
+- Flash patched AP as complete tar (not just boot partition)
 
 ---
 
