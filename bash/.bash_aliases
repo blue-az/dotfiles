@@ -80,6 +80,10 @@ alias sbash='source ~/.bashrc'
 alias 3off="xrandr --output HDMI-1 --off"
 alias nv='nvidia-smi'
 
+# Monitor refresh rate toggle (XB271HU)
+alias 144='swaymsg output DP-2 mode 2560x1440@144Hz'
+alias 60='swaymsg output DP-2 mode 2560x1440@60Hz'
+
 # not used
 alias XI="xrdb -merge ~/.Xresources"
 alias dis="export DISPLAY=:0"
