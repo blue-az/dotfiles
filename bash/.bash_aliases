@@ -39,6 +39,11 @@ alias cl="claude"
 # TennisAgent
 alias TA="cd ~/Python/project-phoenix/domains/TennisAgent"
 
+# Dotfiles directories
+alias dc="cd ~/.dotfiles/machines/desktop"
+alias zc="cd ~/.dotfiles/machines/z13-amd"
+alias zwc="cd ~/.dotfiles/machines/z13-windows"
+
 # System info
 alias ff="fastfetch"
 
