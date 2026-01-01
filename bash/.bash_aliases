@@ -68,8 +68,6 @@ alias 5G="nmcli device wifi connect 'da4e9a_5G'"
 alias Ei="nmcli device wifi rescan; sleep 1; nmcli connection up \"Erik’s iPhone\""
 alias nmlist="nmcli device wifi list"
 
-alias TA="cd /home/blueaz/Python/project-phoenix/domains/TennisAgent"
-
 alias Cc="nmcli device wifi connect 'LinuxDisplay' password 'Erf123123!'"
 
 
