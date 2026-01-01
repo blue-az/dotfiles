@@ -49,6 +49,9 @@ alias ff="fastfetch"
 alias szsh='source ~/.zshrc'
 alias sbash='source ~/.zshrc'  # muscle memory from Linux
 
+# Source shared bash aliases
+[ -f ~/.bash_aliases ] && source ~/.bash_aliases
+
 # fzf integration
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
