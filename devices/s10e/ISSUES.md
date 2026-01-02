@@ -5,7 +5,8 @@ Install LineageOS to solve data/data access issues.
 
 ## Status: RESOLVED (2026-01-02)
 
-LineageOS 21 successfully installed. Full /data/data/ access achieved via ADB root.
+LineageOS 21 successfully installed with Magisk 30.6 true root.
+Full /data/data/ access achieved. Root-requiring apps (Total Commander, etc.) work.
 
 ## Device Info
 - Model: SM-G970F (Exynos, beyond0lte)
@@ -87,7 +88,22 @@ adb pull /data/data/com.garmin.android.apps.connectmobile/ ./backup/
 - Samsung stock recovery - rejects unsigned ROMs (signature verification failed)
 - Firmware downgrade - blocked by anti-rollback protection
 - TWRP alone - boot loop without vbmeta_disabled
-- Magisk root attempts - all failed with boot loops
+- Magisk root attempts on stock Samsung - all failed with boot loops
+
+## Magisk (After LineageOS)
+
+Once LineageOS is running, Magisk installs easily:
+
+1. `adb root`
+2. `adb shell "dd if=/dev/block/sda14 of=/sdcard/boot_lineage.img"`
+3. `adb pull /sdcard/boot_lineage.img`
+4. `adb install Magisk-v30.6.apk`
+5. Open Magisk → Install → Select and Patch a File → `/sdcard/boot_lineage.img`
+6. Magisk patches and flashes directly (Direct Install via ADB root)
+7. Reboot
+
+**Key insight:** Magisk failed on stock Samsung due to AVB (Android Verified Boot).
+LineageOS has vbmeta disabled, so Magisk works without fighting the bootloader.
 
 ## Sources
 
