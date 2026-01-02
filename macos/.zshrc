@@ -52,8 +52,10 @@ alias sbash='source ~/.zshrc'  # muscle memory from Linux
 # Source shared bash aliases
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
-# fzf integration
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# fzf integration (only source once to avoid re-eval errors)
+if [ -f ~/.fzf.zsh ] && ! typeset -f fzf-history-widget > /dev/null; then
+    source ~/.fzf.zsh
+fi
 
 # Prompt - simple with git info
 autoload -Uz vcs_info
