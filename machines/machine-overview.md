@@ -24,6 +24,12 @@ Disk (/): 488.16 GiB - btrfs
 Local IP (eno1): 192.168.8.178/24
 ```
 
+**TennisAgent Role: Primary Analysis**
+- All 145 tools via `cockpit_poc/agent/`
+- Heavy Plotly visualizations (GPU-accelerated)
+- Model training with RTX 3090
+- ChatKit with Ollama (qwen2.5:14b or larger)
+
 ---
 
 ## Desktop (Windows 11)
@@ -61,6 +67,12 @@ Disk (/): 300.46 GiB - btrfs
 Local IP (wlp194s0): 192.168.8.116/24
 Battery: Yes
 ```
+
+**TennisAgent Role: Mobile Backup**
+- Same TennisAgent code as Desktop
+- ChatKit with Ollama (llama3.2:3b for lower VRAM)
+- 75% performance vs Desktop
+- Portable analysis capability
 
 ---
 
@@ -102,6 +114,13 @@ Memory: 8.00 GiB
 Disk (/): 465.63 GiB - apfs
 Local IP (en1): 192.168.8.114/24
 ```
+
+**TennisAgent Role: Data Collection**
+- MacOSTennisAgent for real-time Apple Watch integration
+- GarminAgent for FIT file parsing (bulk export workflow)
+- iPhone video extraction + ffmpeg frame extraction
+- Stroke classifier training (MPS)
+- Data sync to Desktop via USB (frames) and git (artifacts)
 
 ---
 
