@@ -1,197 +1,98 @@
 # Samsung Galaxy S10e (SM-G970F) Issues
 
-## Boot Loop & Rooting Attempts
+## Goal
+Install LineageOS to solve data/data access issues.
 
-**Status:** Partially Resolved - Phone works unrooted, root not achieved
-**Date:** 2025-12-30/31
+## Status: RESOLVED (2026-01-02)
 
-### Device Info
-- Model: SM-G970F (Exynos International)
-- Codename: beyond0lte
-- Firmware: G970FXXSGHWC1 (Android 12, OneUI 4)
+LineageOS 21 successfully installed with Magisk 30.6 true root.
+Full /data/data/ access achieved. Root-requiring apps (Total Commander, etc.) work.
+
+## Device Info
+- Model: SM-G970F (Exynos, beyond0lte)
+- Original firmware: G970FXXSGHWC1 (Android 12, OneUI 4)
 - Bootloader: UNLOCKED
+- Current OS: LineageOS 21 (Android 14)
 
-### Firmware Used
-- **Source:** SAMFW.COM
-- **File:** `SAMFW.COM_SM-G970F_XTC_G970FXXSGHWC1_fac.zip`
-- **Contains:** AP, BL, CP, CSC, HOME_CSC
+## Working Setup
 
-### Files Location
-- Firmware extracted: `~/Downloads/s10e_firmware/`
-- PIT file: `~/Downloads/s10e_firmware/s10e.pit`
-- Stock boot: `~/Downloads/s10e_firmware/boot.img`
-- Patched boot: `~/Downloads/s10e_firmware/magisk_patched-30600_0oFDr.img`
-- vbmeta disabled: `~/Downloads/s10e_firmware/vbmeta_disabled.img`
-- TWRP: `~/Downloads/twrp-beyond0lte.img`
+### Files Required
+- `lineage-21.0-20240626-recovery-Linux4-beyond0lte.img` - from https://lineage.linux4.de
+- `lineage-21.0-20240626-UNOFFICIAL-Linux4-beyond0lte.zip` - from https://lineage.linux4.de
+- `vbmeta_disabled.img` - AVB bypass
+- `MindTheGapps-14.0.0-arm64-*.zip` - for Google Play Store
 
----
+### Installation Steps
 
-## What We Learned
+1. **Create recovery tar:**
+   ```bash
+   tar -cvf lineage_recovery_vbmeta.tar recovery.img vbmeta.img
+   ```
 
-### Boot Loop Fix (Temporary)
-- **vbmeta_disabled.img** initially fixed boot loops
-- Created by patching byte 123 to 0x02: `printf '\x02' | dd of=vbmeta_disabled.img bs=1 seek=123 count=1 conv=notrunc`
-- Allowed phone to boot to factory reset screen
-- Allowed TWRP to boot (previously boot looped)
+2. **Flash stock first** (warms up Odin, makes subsequent flashes more reliable)
+   - Complete initial setup INCLUDING WiFi connection (may be relevant)
 
-### Root Attempts - ALL FAILED
-Despite vbmeta disabled allowing boot:
-1. **Patched boot via Heimdall** - Phone boots, but Magisk shows N/A, `su` not found
-2. **TWRP + Magisk.zip sideload** - Same result, no root
-3. **TWRP + multidisabler + Magisk** - Same result
-4. **Boot to TWRP first after flash** (per XDA guide) - Same result
-5. **Older Magisk v25.2** - Couldn't test, storage broke
+3. **Enter download mode via ADB:**
+   ```bash
+   adb reboot download
+   ```
+   **Critical:** Use ADB method, not button combo. Button combo causes RQT_CLOSE errors.
 
-### Storage Corruption Issue
-- TWRP "Format Data" corrupted filesystem
-- Showed as -100GB/8GB in TWRP
-- "Resize File System" didn't fix it
-- "Change File System to Ext4" didn't fix it
-- Only full firmware flash restored storage
+4. **Flash recovery via Odin:**
+   - AP slot → lineage_recovery_vbmeta.tar
+   - Options → Uncheck "Auto Reboot"
+   - Start → Wait for PASS
 
-### vbmeta Inconsistency
-- vbmeta_disabled worked initially (phone booted)
-- After TWRP/rooting attempts, vbmeta_disabled caused boot loops
-- Stock vbmeta now boots fine
-- Unclear why behavior changed
+5. **Boot to recovery immediately:**
+   - Vol Down + Power (force off)
+   - Vol Up + Bixby + Power (boot to recovery)
+   - DO NOT let it boot to system first
 
----
+6. **In LineageOS Recovery:**
+   - Factory reset
+   - Apply update → Apply from ADB
+   - `adb sideload lineage-21.0-*.zip`
+   - Reboot
 
-## Current State
-- Phone boots with **stock vbmeta**
-- Storage working (~110GB)
-- **NOT rooted** - stock firmware
-- TWRP installed to recovery partition (accessible via Vol Up + Bixby + Power)
+7. **Install GApps (optional, after first boot):**
+   - `adb reboot recovery`
+   - Apply update → Apply from ADB
+   - `adb sideload MindTheGapps-14.0.0-arm64-*.zip`
+   - Reboot
 
----
-
-## What Was Tried (Chronological)
-
-### z13-windows (Odin)
-1. Patched boot.img via Heimdall - boot loop
-2. Pre-patched AP tar - boots but no root
-3. Magisk-patched boot as tar - boot loop
-4. TWRP recovery - boot loop
-5. Repack full AP with patched boot - boot loop
-
-### Desktop (Heimdall)
-1. Full firmware flash - boot loop
-2. Flash vbmeta_disabled - **FIXED boot loop**
-3. Flash vbmeta_disabled + patched boot - boots, no root
-4. Flash TWRP to recovery - works with vbmeta disabled
-5. Sideload multidisabler + Magisk via TWRP - no root
-6. Format Data in TWRP - corrupted storage
-7. Full firmware reflash - boot loop returned
-8. Stock vbmeta - boots fine
-
----
-
-## Android 9 Downgrade - BLOCKED
-
-**Attempted:** 2025-12-31
-**Firmware:** `SAMFW.COM_SM-G970F_XTC_G970FXXS3ASJG_fac.zip` (Android 9 Pie)
-**Result:** FAILED - Anti-rollback protection
-
-Samsung's bootloader anti-rollback prevents downgrading once updated. Phone shows "unsupported version" when attempting to flash Android 9 bootloader on a device that has Android 12 bootloader.
-
-**This is a hard block** - no workaround without hardware modification.
-
----
-
-## Remaining Options
-
-### 1. LineageOS 23.0 (Recommended)
-**Official LineageOS support exists for SM-G970F (beyond0lte)**
-
-- **Android version:** 16 (exceeds Garmin Connect's Android 9 requirement)
-- **Prerequisites you have:**
-  - Unlocked bootloader ✅
-  - Android 12 firmware ✅
-  - Heimdall experience ✅
-
-**Why this might work when stock didn't:**
-- No Knox fighting Magisk
-- Cleaner boot chain without Samsung bloat
-- Community-tested root procedures
-
-**Installation:**
-1. Download LineageOS from https://download.lineageos.org/devices/beyond0lte
-2. Flash Lineage Recovery via Heimdall (not TWRP)
-3. Sideload LineageOS ZIP via ADB
-4. Flash Magisk after LineageOS is working
-5. Should get real root (not just ADB root)
-
-**Resources:**
-- https://wiki.lineageos.org/devices/beyond0lte/
-- https://wiki.lineageos.org/devices/beyond0lte/install/
-
-### 2. KernelSU instead of Magisk
-Different root approach for Android 12 - untested on this device
-
-### 3. Wait for new exploits
-Security research may find new methods
-
-### 4. Different phone
-Use a device with better root support
-
----
-
-## Key Commands
-
-### Download Mode
-```
-Vol Down + Bixby + USB plug → Vol Up to continue
-```
-
-### Recovery Mode (TWRP)
-```
-Vol Up + Bixby + Power (hold while powering on)
-```
-
-### Full Firmware Flash (Heimdall)
+### Accessing /data/data/
 ```bash
-cd ~/Downloads/s10e_firmware
-heimdall flash \
-  --BOOTLOADER sboot.bin \
-  --CM cm.bin \
-  --PARAM param.bin \
-  --UP_PARAM up_param.bin \
-  --KEYSTORAGE keystorage.bin \
-  --UH uh.bin \
-  --DTB dt.img \
-  --DTBO dtbo.img \
-  --BOOT boot.img \
-  --RECOVERY recovery.img \
-  --RADIO modem.bin \
-  --CP_DEBUG modem_debug.bin \
-  --DQMDBG dqmdbg.img \
-  --VBMETA vbmeta.img \
-  --SYSTEM system.img \
-  --VENDOR vendor.img \
-  --PRODUCT product.img \
-  --CACHE cache.img \
-  --USERDATA userdata.img
+adb root
+adb shell "ls -la /data/data/"
+adb pull /data/data/com.garmin.android.apps.connectmobile/ ./backup/
 ```
 
-### Create vbmeta_disabled
-```bash
-cp vbmeta.img vbmeta_disabled.img
-printf '\x02' | dd of=vbmeta_disabled.img bs=1 seek=123 count=1 conv=notrunc
-```
+## Key Discovery: Download Mode Entry Matters
 
----
+**Button combo method:** Power off → Vol Down + Bixby → Plug USB → Vol Up
+- Shows warning screen, requires confirmation
+- Odin flashes have FAILED with RQT_CLOSE
 
-## Use Case Status
+**ADB method:** `adb reboot download`
+- Goes directly to download mode, no warning screen
+- Different screen appearance
+- Odin flashes SUCCEED using this method
 
-**Goal:** Root phone for direct Garmin data transfer (Watch → Phone → PC)
+**Always use `adb reboot download` for flashing via Odin.**
 
-**Result:** Not achieved. Without root, Garmin Connect just syncs to cloud - no advantage over iPhone or web export.
+## What Didn't Work
+
+- Heimdall - reports success but doesn't persist writes
+- LineageOS 18.1 - boot loop on Android 12 firmware (version mismatch)
+- LineageOS 23 - TWRP can't flash ("current recovery does not support dynamic partitions")
+- Samsung stock recovery - rejects unsigned ROMs (signature verification failed)
+- Firmware downgrade - blocked by anti-rollback protection
+- TWRP alone - boot loop without vbmeta_disabled
+- Magisk root attempts on stock Samsung - all failed with boot loops
+
+## Troubleshooting History: 2026-01-01 Failed Attempts
 
 **Alternative:** Request data export from connect.garmin.com
-
----
-
-## LineageOS Installation Attempt - 2026-01-01
 
 ### Download Mode Count: 12
 
@@ -234,8 +135,23 @@ Factory reset + cache wipe from stock recovery did not help.
 - Original TWRP install used **Odin on Windows**, not Heimdall
 - Must use Odin for any future flash attempts
 
-### Next Steps
-1. Boot to Windows
-2. Use Odin to flash TWRP (wrap in .tar, flash to AP slot)
-3. If TWRP works, sideload LineageOS
-4. Do NOT touch vbmeta
+## Magisk (After LineageOS)
+
+Once LineageOS is running, Magisk installs easily:
+
+1. `adb root`
+2. `adb shell "dd if=/dev/block/sda14 of=/sdcard/boot_lineage.img"`
+3. `adb pull /sdcard/boot_lineage.img`
+4. `adb install Magisk-v30.6.apk`
+5. Open Magisk → Install → Select and Patch a File → `/sdcard/boot_lineage.img`
+6. Magisk patches and flashes directly (Direct Install via ADB root)
+7. Reboot
+
+**Key insight:** Magisk failed on stock Samsung due to AVB (Android Verified Boot).
+LineageOS has vbmeta disabled, so Magisk works without fighting the bootloader.
+
+## Sources
+
+- LineageOS 21 unofficial: https://lineage.linux4.de
+- XDA thread (confirmed working on same firmware): https://xdaforums.com/t/rom-unofficial-14-lineageos-21-for-galaxy-s10e-s10-s10-s10-5g-exynos.4640910/
+- MindTheGapps: https://github.com/MindTheGapps/14.0.0-arm64/releases

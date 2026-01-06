@@ -162,3 +162,9 @@ set -o vi
 
 # TennisAgent CLI shortcuts
 export PATH="$PATH:$HOME/Python/project-phoenix"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/path.bash.inc' ]; then . '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc' ]; then . '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc'; fi

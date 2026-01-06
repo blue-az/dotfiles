@@ -45,17 +45,15 @@ alias cl="claude"
 # System info
 alias ff="fastfetch"
 
-# Reload shell config
-alias szsh='source ~/.zshrc'
-alias sbash='source ~/.zshrc'  # muscle memory from Linux
-
 # Source shared bash aliases
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases
 
-# fzf integration (only source once to avoid re-eval errors)
-if [ -f ~/.fzf.zsh ] && ! typeset -f fzf-history-widget > /dev/null; then
-    source ~/.fzf.zsh
-fi
+# Reload shell config (AFTER bash_aliases to override its sbash)
+alias szsh='source ~/.zshrc'
+alias sbash='source ~/.zshrc'
+
+# fzf integration
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Prompt - simple with git info
 autoload -Uz vcs_info
