@@ -106,7 +106,7 @@ alias cbs='~/cb-link/cb-display.sh stop'
 alias cbst='~/cb-link/cb-display.sh status'
 alias cbt='~/cb-link/cb-display.sh toggle'
 alias zof='sudo firewall-cmd --add-port=5900/tcp'
-alias cbh='bat ~/Documents/cb-link-cheatsheet.txt'
+alias cbh='bat ~/cb-link/cb-link-cheatsheet.txt'
 
 # Chromebook display aliases (CB side - client, for CB machine only)
 alias cbv='~/cb-link/cb-connect.sh'           # Quick viewer launch
@@ -115,3 +115,6 @@ alias cbcf='~/cb-link/cb-connect.sh f'        # Fullscreen connect
 alias cbcm='~/cb-link/cb-connect.sh m'        # Mirror mode connect
 alias cbcd='~/cb-link/cb-connect.sh d'        # Disconnect
 alias cbcs='~/cb-link/cb-connect.sh s'        # Status
+
+alias cbel='HEADLESS_RES=1280x800 ~/cb-link/cb-display.sh extend'
+alias cbml='HEADLESS_RES=1280x800 ~/cb-link/cb-display.sh mirror'
