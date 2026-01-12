@@ -4,3 +4,5 @@ sway/.config/sway/config.d/outputs.conf
 openai/.config/openai/.env
 machines/desktop/*.private.asc
 .nvimlog
+gemini/
+openai/
