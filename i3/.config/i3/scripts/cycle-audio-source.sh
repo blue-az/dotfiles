@@ -1,36 +1,93 @@
 #!/bin/bash
 # Cycle through available audio sinks (outputs/speakers)
 
-# Define sink patterns to cycle between (order matters)
-# These match against node.nick or node.description from pw-cli
-sink_patterns=(
-    "EarPods"
-    "Built-in Audio"
+# Preferred order: monitor -> built-in -> earpods (if present)
+builtin_sink="alsa_output.pci-0000_00_1f.3.analog-stereo"
+
+preferred_monitor_patterns=(
     "XB271HU"
 )
 
-# Get sink IDs matching our patterns
-sinks=()
-for pattern in "${sink_patterns[@]}"; do
-    # Find Audio/Sink node ID by matching nick or description
-    id=$(timeout 2 pw-cli list-objects Node 2>/dev/null | awk -v pat="$pattern" '
-        /^[[:space:]]*id [0-9]+,/ { current_id = $2; gsub(",", "", current_id); is_sink = 0; matched = 0 }
-        /media\.class = "Audio\/Sink"/ { is_sink = 1 }
-        /node\.(nick|description) = / && index($0, pat) { matched = 1 }
-        is_sink && matched { print current_id; exit }
+find_preferred_monitor_sink() {
+    local pattern
+    local eld_file
+    local eld_index
+    local sink
+    local dev
+    mapfile -t device_map < <(pactl list sinks 2>/dev/null | awk '
+        /^Sink #/ { if (name != "") print name "|" dev; name=""; dev="" }
+        /^Name:/ { name=$2 }
+        /^[[:space:]]*alsa\.device =/ { gsub(/"/, "", $3); dev=$3 }
+        END { if (name != "") print name "|" dev }
     ')
-    if [ -n "$id" ]; then
-        sinks+=("$id")
-    fi
-done
 
-# Exit if no sinks found
+    for eld_file in /proc/asound/card1/eld#*; do
+        [ -r "$eld_file" ] || continue
+        if ! grep -q '^monitor_present[[:space:]]\+1' "$eld_file"; then
+            continue
+        fi
+        if ! grep -q '^eld_valid[[:space:]]\+1' "$eld_file"; then
+            continue
+        fi
+        name=$(awk -F '\t' '/^monitor_name/{print $2}' "$eld_file")
+        for pattern in "${preferred_monitor_patterns[@]}"; do
+            if echo "$name" | grep -qi "$pattern"; then
+                eld_index="${eld_file##*.}"
+                for entry in "${device_map[@]}"; do
+                    sink="${entry%%|*}"
+                    dev="${entry#*|}"
+                    if [ "$dev" = "$eld_index" ]; then
+                        echo "$sink"
+                        return 0
+                    fi
+                done
+            fi
+        done
+    done
+    return 1
+}
+
+# Get available sinks (names)
+all_sinks=$(pactl list sinks short 2>/dev/null | awk '{print $2}')
+if [ -z "$all_sinks" ]; then
+    exit 1
+fi
+
+find_by_desc() {
+    local pattern="$1"
+    pactl list sinks 2>/dev/null | awk -v pat="$pattern" '
+        /^Name:/ { name=$2 }
+        /^Description:/ {
+            desc=$2
+            for (i=3; i<=NF; i++) desc=desc" "$i
+            if (tolower(desc) ~ tolower(pat)) { print name; exit }
+        }
+    '
+}
+
+sinks=()
+monitor_sink=$(find_preferred_monitor_sink 2>/dev/null || true)
+if [ -z "$monitor_sink" ]; then
+    monitor_sink=$(echo "$all_sinks" | grep '^alsa_output\.pci-0000_01_00\.1\.pro-output-' | sort | head -1)
+fi
+if [ -n "$monitor_sink" ] && echo "$all_sinks" | grep -qx "$monitor_sink"; then
+    sinks+=("$monitor_sink")
+fi
+if echo "$all_sinks" | grep -qx "$builtin_sink"; then
+    sinks+=("$builtin_sink")
+fi
+
+earpods_sink=$(find_by_desc "EarPods")
+if [ -n "$earpods_sink" ]; then
+    sinks+=("$earpods_sink")
+fi
+
 if [ ${#sinks[@]} -eq 0 ]; then
     exit 1
 fi
 
 # Get current default sink
-current=$(timeout 2 wpctl status 2>/dev/null | sed -n '/Sinks:/,/Sources:/p' | grep '│.*\*' | grep -oP '^\s*│\s+\*\s*\K\d+(?=\.)')
+current=$(pactl get-default-sink 2>/dev/null)
 
 # Find current index
 current_index=-1
@@ -50,4 +107,4 @@ fi
 next_sink="${sinks[$next_index]}"
 
 # Set the new default sink
-timeout 2 wpctl set-default "$next_sink" 2>/dev/null || true
+pactl set-default-sink "$next_sink" 2>/dev/null || true

@@ -168,3 +168,12 @@ if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/path.bash.inc' ]; then .
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc' ]; then . '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc'; fi
+export TOKEN="$(cat ~/.config/openai/.env | cut -d= -f2)"
+
+# Load OpenAI API key for CLIs (Codex, etc.)
+if [ -f "$HOME/.config/openai/.env" ]; then
+  set -a
+  . "$HOME/.config/openai/.env"
+  set +a
+fi
+

@@ -1,3 +1,5 @@
 # Machine-specific configs (use templates instead)
 sway/.config/sway/config.d/outputs.conf
 .aider*
+openai/.config/openai/.env
+machines/desktop/*.private.asc

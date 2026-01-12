@@ -26,7 +26,8 @@ alias l='ls -CF'
 # Virtual Environments
 alias AVE="source ~/Python/.venv/bin/activate" # activate virtual environment
 alias 313="source ~/.venv313/bin/activate" # activate virtual environment
-alias CE="conda activate optiver_gpu"
+alias CE="conda activate aider-env"
+alias Aid="aider --model gemini/gemini-2.0-flash --subtree-only"
 alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=host --gpus all -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:cuda"
 
 # Obsidian
@@ -77,6 +78,7 @@ alias Cc="nmcli device wifi connect 'LinuxDisplay' password 'Erf123123!'"
 alias DE="~/Downloads/deskreen-ce-3.1.17-x86_64.AppImage"
 
 # additional aliases
+alias sb='source ~/.bashrc'
 alias sbash='source ~/.bashrc'
 alias 3off="xrandr --output HDMI-1 --off"
 alias nv='nvidia-smi'

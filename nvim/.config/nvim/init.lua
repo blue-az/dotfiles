@@ -1,3 +1,14 @@
+-- ERF edit - make nvim aware of openAI key
+local env = vim.fn.expand("~/.config/openai/.env")
+if vim.fn.filereadable(env) == 1 then
+  for _, line in ipairs(vim.fn.readfile(env)) do
+    local key, value = line:match("^([^=]+)=(.+)$")
+    if key and value then
+      vim.fn.setenv(key, value)
+    end
+  end
+end
+
 -- Package manager setup using plug.vim
 local Plug = vim.fn['plug#']
 
@@ -21,6 +32,11 @@ Plug('terryma/vim-multiple-cursors')
 Plug('dense-analysis/ale')
 Plug('nvie/vim-flake8')
 Plug('puremourning/vimspector')
+Plug("jackMort/ChatGPT.nvim")
+Plug("MunifTanjim/nui.nvim")
+Plug("nvim-lua/plenary.nvim")
+Plug("nvim-telescope/telescope.nvim")
+
 
 vim.call('plug#end')
 
@@ -144,3 +160,12 @@ vim.g.php_folding = 1
 vim.g.fortran_fold = 1
 vim.g.clojure_fold = 1
 vim.g.baan_fold = 1
+
+-- ERF addition
+pcall(function()
+  require("chatgpt").setup({
+    -- By default it uses OPENAI_API_KEY from env, so no key pasted here.
+    -- Optional: customize UI/behavior later.
+  })
+end)
+
