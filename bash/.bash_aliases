@@ -66,7 +66,7 @@ alias sH="nmcli device wifi hotspot ssid 'LinuxDisplay' password 'Erf123123!'"
 alias SH="nmcli device disconnect wlp194s0"
 
 alias sF="sudo systemctl start firewalld"
-alias RW="nmcli device wifi connect 'da4e9a_5G'"
+alias da4="nmcli device wifi connect 'da4e9a'"
 alias 5G="nmcli device wifi connect 'da4e9a_5G'"
 
 alias Ei="nmcli device wifi rescan; sleep 1; nmcli connection up \"Erik’s iPhone\""
@@ -101,22 +101,30 @@ alias 4s="sh ~/.screenlayout/sway-4s.sh"
 # alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
 # alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
 
+CB_LINK_HOME="${CB_LINK_HOME:-$HOME/Tools/cb-link}"
+if [ ! -d "$CB_LINK_HOME" ] && [ -d "$HOME/cb-link" ]; then
+    CB_LINK_HOME="$HOME/cb-link"
+fi
+
 # Chromebook display aliases (AMD side - server)
-alias cbe='~/cb-link/cb-display.sh extend'
-alias cbm='~/cb-link/cb-display.sh mirror'
-alias cbs='~/cb-link/cb-display.sh stop'
-alias cbst='~/cb-link/cb-display.sh status'
-alias cbt='~/cb-link/cb-display.sh toggle'
+alias cbe="$CB_LINK_HOME/cb-display.sh extend"
+alias cbm="$CB_LINK_HOME/cb-display.sh mirror"
+alias cbtog="$CB_LINK_HOME/cb-display.sh toggle"
+alias cbs="$CB_LINK_HOME/cb-display.sh stop"
+alias cbst="$CB_LINK_HOME/cb-display.sh status"
+alias cbmr="cbm && cbt"                       # Start mirror mode then push to tablet over USB
+alias cbt="$CB_LINK_HOME/cb-tablet.sh"
+alias cbts="$CB_LINK_HOME/cb-tablet.sh stop"
 alias zof='sudo firewall-cmd --add-port=5900/tcp'
-alias cbh='bat ~/cb-link/cb-link-cheatsheet.txt'
+alias cbh="bat $CB_LINK_HOME/cb-link-cheatsheet.txt"
 
 # Chromebook display aliases (CB side - client, for CB machine only)
-alias cbv='~/cb-link/cb-connect.sh'           # Quick viewer launch
-alias cbc='~/cb-link/cb-connect.sh'           # Connect to AMD
-alias cbcf='~/cb-link/cb-connect.sh f'        # Fullscreen connect
-alias cbcm='~/cb-link/cb-connect.sh m'        # Mirror mode connect
-alias cbcd='~/cb-link/cb-connect.sh d'        # Disconnect
-alias cbcs='~/cb-link/cb-connect.sh s'        # Status
+alias cbv="$CB_LINK_HOME/cb-connect.sh"           # Quick viewer launch
+alias cbc="$CB_LINK_HOME/cb-connect.sh"           # Connect to AMD
+alias cbcf="$CB_LINK_HOME/cb-connect.sh f"        # Fullscreen connect
+alias cbcm="$CB_LINK_HOME/cb-connect.sh m"        # Mirror mode connect
+alias cbcd="$CB_LINK_HOME/cb-connect.sh d"        # Disconnect
+alias cbcs="$CB_LINK_HOME/cb-connect.sh s"        # Status
 
-alias cbel='HEADLESS_RES=1280x800 ~/cb-link/cb-display.sh extend'
-alias cbml='HEADLESS_RES=1280x800 ~/cb-link/cb-display.sh mirror'
+alias cbel="HEADLESS_RES=1280x800 $CB_LINK_HOME/cb-display.sh extend"
+alias cbml="HEADLESS_RES=1280x800 $CB_LINK_HOME/cb-display.sh mirror"
