@@ -109,6 +109,7 @@ fi
 # Chromebook display aliases (AMD side - server)
 alias cbe="$CB_LINK_HOME/cb-display.sh extend"
 alias cbm="$CB_LINK_HOME/cb-display.sh mirror"
+alias cbmz="CB_LINK_OUTPUT=eDP-1 CB_LINK_MIRROR_RES=2560x1600 $CB_LINK_HOME/cb-display.sh mirror"
 alias cbtog="$CB_LINK_HOME/cb-display.sh toggle"
 alias cbs="$CB_LINK_HOME/cb-display.sh stop"
 alias cbst="$CB_LINK_HOME/cb-display.sh status"
