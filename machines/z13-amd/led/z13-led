@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+import sys
+import os
+import glob
+import argparse
+import time
+
+# ROG Flow Z13 (2025) LED Driver
+# Targeting specific HID interfaces via HID_PHYS
+
+KEYBOARD_PREFIX = "usb-0000:c6:00.0-4/"
+LIGHTBAR_SIG = "usb-0000:c6:00.0-5/input0"
+
+
+def get_hid_phys(path):
+    try:
+        with open(os.path.join(path, "device/uevent"), "r") as f:
+            for line in f:
+                if line.startswith("HID_PHYS="):
+                    return line.strip().split('=')[1]
+    except OSError:
+        pass
+    return ""
+
+
+def find_device_by_phys(target_sig):
+    paths = glob.glob("/sys/class/hidraw/hidraw*")
+    for path in paths:
+        phys = get_hid_phys(path)
+        if target_sig in phys:
+            return f"/dev/{os.path.basename(path)}"
+    return None
+
+
+def find_devices_by_prefix(prefix):
+    paths = glob.glob("/sys/class/hidraw/hidraw*")
+    matches = []
+    for path in paths:
+        phys = get_hid_phys(path)
+        if phys.startswith(prefix):
+            matches.append(f"/dev/{os.path.basename(path)}")
+    return matches
+
+
+def send_packet(device_path, packet_bytes):
+    if len(packet_bytes) < 64:
+        packet_bytes += bytearray([0] * (64 - len(packet_bytes)))
+    try:
+        with open(device_path, 'wb') as f:
+            f.write(packet_bytes)
+    except OSError as e:
+        print(f"Error writing to {device_path}: {e}")
+        sys.exit(1)
+
+
+# --- LIGHTBAR LOGIC ---
+
+def set_lightbar_power(device_path, state):
+    if state == "ON":
+        packet = bytearray([0x5D, 0xBD, 0x01, 0xAE, 0x05, 0x22, 0xFF, 0xFF])
+    else:
+        packet = bytearray([0x5D, 0xBD, 0x01, 0xAA, 0x00, 0x00, 0xFF, 0xFF])
+    send_packet(device_path, packet)
+
+
+def set_lightbar_color(device_path, r, g, b):
+    packet = bytearray([
+        0x5D, 0xB3, 0x00, 0x00,
+        r, g, b,
+        0xEB, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF,
+    ])
+    send_packet(device_path, packet)
+
+
+# --- KEYBOARD LOGIC ---
+
+def set_keyboard_color(device_path, r, g, b):
+    packet = bytearray([0x5D, 0xB3, 0x00, 0x00, r, g, b])
+    send_packet(device_path, packet)
+    send_packet(device_path, bytearray([0x5D, 0xB5, 0x00, 0x00]))
+
+
+def main():
+    parser = argparse.ArgumentParser(description="ROG Flow Z13 (2025) LED Control")
+
+    mode_group = parser.add_mutually_exclusive_group()
+    mode_group.add_argument('--keyboard', '-k', action='store_true', help="Control Keyboard")
+    mode_group.add_argument('--lightbar', '-l', action='store_true', help="Control Lightbar (Default)")
+
+    cmd_group = parser.add_mutually_exclusive_group(required=True)
+    cmd_group.add_argument('--on', action='store_true', help="Turn ON (Lightbar only)")
+    cmd_group.add_argument('--off', action='store_true', help="Turn OFF (Lightbar only)")
+    cmd_group.add_argument('--color', '-c', nargs=3, type=int, metavar=('R', 'G', 'B'), help="Set Color")
+
+    parser.add_argument('--dev', type=str, help="Override device path")
+
+    args = parser.parse_args()
+
+    device_path = args.dev
+
+    if args.keyboard:
+        target_name = "Keyboard"
+        if not device_path:
+            device_paths = find_devices_by_prefix(KEYBOARD_PREFIX)
+            if not device_paths:
+                print(f"Error: Could not find {target_name} with prefix '{KEYBOARD_PREFIX}'.")
+                print("Check: cat /sys/class/hidraw/hidraw*/device/uevent")
+                sys.exit(1)
+        else:
+            device_paths = [device_path]
+    else:
+        target_name = "Lightbar"
+        if not device_path:
+            device_path = find_device_by_phys(LIGHTBAR_SIG)
+            if not device_path:
+                print(f"Error: Could not find {target_name} with signature '{LIGHTBAR_SIG}'.")
+                print("Check: cat /sys/class/hidraw/hidraw*/device/uevent")
+                sys.exit(1)
+        device_paths = [device_path]
+
+    if args.keyboard:
+        if args.color:
+            for dev in device_paths:
+                try:
+                    set_keyboard_color(dev, *args.color)
+                    break
+                except SystemExit:
+                    continue
+        else:
+            print("Keyboard only supports --color.")
+    else:
+        if args.off:
+            set_lightbar_power(device_path, "OFF")
+        elif args.on:
+            set_lightbar_power(device_path, "ON")
+        elif args.color:
+            set_lightbar_power(device_path, "ON")
+            time.sleep(0.1)
+            set_lightbar_color(device_path, *args.color)
+
+
+if __name__ == "__main__":
+    main()

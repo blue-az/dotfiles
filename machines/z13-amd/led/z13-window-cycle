@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Cycle rear window colors on the Z13 (GZ302).
+# Usage: z13-window-cycle [delay_seconds]
+
+DELAY="${1:-0.8}"
+
+colors=(
+  "255 0 0"    # red
+  "0 255 0"    # green
+  "0 0 255"    # blue
+  "255 255 0"  # yellow
+  "255 0 255"  # magenta
+  "0 255 255"  # cyan
+  "255 255 255" # white
+)
+
+while true; do
+  for rgb in "${colors[@]}"; do
+    gz302-rgb-window --color ${rgb}
+    sleep "${DELAY}"
+  done
+done

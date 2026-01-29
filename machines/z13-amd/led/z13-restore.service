@@ -1,0 +1,13 @@
+[Unit]
+Description=Restore Z13 LED Colors
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=blueaz
+ExecStart=/home/blueaz/.local/bin/z13-led --on
+ExecStart=/home/blueaz/.local/bin/z13-led -c 0 255 0
+ExecStart=/home/blueaz/.local/bin/z13-led -k -c 0 255 0
+
+[Install]
+WantedBy=multi-user.target

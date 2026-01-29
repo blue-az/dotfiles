@@ -1,0 +1,6 @@
+# 2025 Z13 Permissions (group-scoped)
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0b05", ATTRS{idProduct}=="1a30", MODE="0660", GROUP="plugdev"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0b05", ATTRS{idProduct}=="18c6", MODE="0660", GROUP="plugdev"
+
+# Trigger restore service when lightbar connects (boot or wake)
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0b05", ATTRS{idProduct}=="18c6", TAG+="systemd", ENV{SYSTEMD_WANTS}="z13-restore.service"
