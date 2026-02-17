@@ -32,45 +32,52 @@
 
     "clock": {
         "format": "{:%Y-%m-%d %I:%M:%S %p}",
-        "interval": 1
+        "interval": 1,
+        "on-click": "~/.config/waybar/scripts/popout.sh calendar"
     },
 
     "custom/brightness": {
         "exec": "~/.config/waybar/scripts/brightness.sh",
-        "interval": 60,
+        "interval": 600,
+        "signal": 8,
         "return-type": "json",
-        "on-click": "~/.config/i3/scripts/brightness-ddc.sh up",
-        "on-click-right": "~/.config/i3/scripts/brightness-ddc.sh down"
+        "on-click": "~/.config/waybar/scripts/popout.sh brightness",
+        "on-scroll-up": "~/.config/i3/scripts/brightness-ddc.sh up",
+        "on-scroll-down": "~/.config/i3/scripts/brightness-ddc.sh down"
     },
 
     "custom/audio": {
         "exec": "~/.config/waybar/scripts/audio.sh",
         "interval": 1,
         "return-type": "json",
-        "on-click": "pavucontrol"
+        "on-click": "~/.config/waybar/scripts/popout.sh audio"
     },
 
     "disk": {
         "format": "<span color=\"#ffffff\">DISK</span> <span color=\"#50fa7b\"> {free}</span>",
         "path": "/",
-        "interval": 30
+        "interval": 30,
+        "on-click": "~/.config/waybar/scripts/popout.sh disk"
     },
 
     "memory": {
         "format": "<span color=\"#ffffff\">RAM</span> <span color=\"#50fa7b\"> {used:0.1f}G/{total:0.1f}G</span>",
-        "interval": 10
+        "interval": 10,
+        "on-click": "~/.config/waybar/scripts/popout.sh memory"
     },
 
     "custom/cpu": {
         "exec": "~/.config/waybar/scripts/cpu.sh",
         "interval": 5,
-        "return-type": "json"
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/popout.sh cpu"
     },
 
     "custom/gpu": {
         "exec": "~/.config/waybar/scripts/gpu.sh",
         "interval": 5,
-        "return-type": "json"
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/popout.sh gpu"
     },
 
     "network": {
@@ -78,20 +85,21 @@
         "format-ethernet": "<span color=\"#ffffff\">IP</span> <span color=\"#50fa7b\"> {ipaddr}</span>",
         "format-disconnected": "<span color=\"#ffffff\">IP</span> <span color=\"#ff5555\"> disconnected</span>",
         "tooltip-format": "{ifname}: {ipaddr}",
-        "on-click": "nm-connection-editor"
+        "on-click": "~/.config/waybar/scripts/popout.sh network"
     },
 
     "custom/wifi": {
         "exec": "~/.config/waybar/scripts/wifi.sh",
         "interval": 10,
         "return-type": "json",
-        "on-click": "nm-connection-editor"
+        "on-click": "~/.config/waybar/scripts/popout.sh network"
     },
 
     "custom/battery": {
         "exec": "~/.config/waybar/scripts/battery.sh",
         "interval": 30,
-        "return-type": "json"
+        "return-type": "json",
+        "on-click": "~/.config/waybar/scripts/popout.sh battery"
     },
 
     "tray": {

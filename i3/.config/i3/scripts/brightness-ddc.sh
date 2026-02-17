@@ -10,7 +10,10 @@ step="${2:-10}"
 d=2
 
 # Get current brightness (VCP 10)
-current=$(ddcutil -d "$d" getvcp 10 2>/dev/null | grep -oP 'current value =\s*\K\d+')
+current=$(
+    ddcutil -d "$d" getvcp 10 2>/dev/null \
+        | awk -F'current value =|,' 'NF>1 {gsub(/[^0-9]/, "", $2); print $2; exit}'
+)
 
 if [ -z "$current" ]; then
     exit 1
@@ -25,3 +28,11 @@ else
 fi
 
 ddcutil -d "$d" setvcp 10 "$new" 2>/dev/null
+
+# Force immediate waybar brightness module refresh.
+pkill -RTMIN+8 waybar 2>/dev/null || true
+
+# Optional feedback to avoid confusion: this adjusts monitor 2 only.
+if command -v notify-send >/dev/null 2>&1; then
+    notify-send -a "brightness-ddc" "Monitor 2 brightness" "${new}%"
+fi
