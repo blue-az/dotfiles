@@ -10,6 +10,10 @@
   - `stow bash sway waybar i3 nvim xkb wallpaper`
 - Sway outputs for this machine:
   - `ln -sf ~/.dotfiles/sway/.config/sway/config.d/outputs.conf.z13-amd ~/.config/sway/config.d/outputs.conf`
+- Machine-specific sway overrides:
+  - `ln -sf ~/.dotfiles/sway/.config/sway/config.d/machine.conf.z13-amd ~/.config/sway/config.d/machine.conf`
+- Waybar config for this machine:
+  - `ln -sf ~/.dotfiles/waybar/.config/waybar/config.z13-amd ~/.config/waybar/config`
 
 ## Display, Power, and Network
 - Built-in panel: `eDP-1` at 2560x1600 with scale 1.9.

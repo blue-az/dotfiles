@@ -26,6 +26,13 @@ input type:touchpad {
 # Templates in config.d/outputs.conf.*
 include ~/.config/sway/config.d/outputs.conf
 
+# Machine-specific overrides (symlink to config.d/machine.conf.*)
+set $term_cmd terminator
+set $launcher_cmd "wofi --show drun"
+set $swayidle_lock_timeout 1800
+set $swayidle_off_timeout 1830
+include ~/.config/sway/config.d/machine.conf
+
 # Wallpaper (replaces feh)
 output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
 
@@ -33,10 +40,10 @@ output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
 # Lock screen manually
 bindsym $mod+Escape exec swaylock -f -c 000000
 
-# Auto-lock after 5 min idle, turn off displays after 5.5 min
+# Auto-lock after 30 min idle, turn off displays after 30.5 min
 exec swayidle -w \
-    timeout 300 'swaylock -f -c 000000' \
-    timeout 330 'swaymsg "output * power off"' \
+    timeout $swayidle_lock_timeout 'swaylock -f -c 000000' \
+    timeout $swayidle_off_timeout 'swaymsg "output * power off"' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f -c 000000'
 
@@ -52,15 +59,14 @@ exec dunst
 exec swaymsg 'workspace 2; workspace 1'
 
 # ============ KEYBINDINGS ============
-# Start a terminal (foot on laptop, terminator on desktop)
-set $term_cmd sh -c 'if grep -q "ROG Flow Z13" /sys/class/dmi/id/product_name 2>/dev/null; then foot; else terminator; fi'
+# Start a terminal
 bindsym $mod+Return exec $term_cmd
 
 # Kill focused window
 bindsym $mod+Shift+q kill
 
-# Start launcher (native Wayland)
-bindsym $mod+d exec wmenu-run
+# Start launcher
+bindsym $mod+d exec $launcher_cmd
 
 # Launch Firefox
 bindsym $mod+Shift+f exec firefox
@@ -68,8 +74,6 @@ bindsym $mod+Shift+f exec firefox
 # Cycle through audio sources
 bindsym $mod+Mod1+F11 exec ~/.config/i3/scripts/cycle-audio-source.sh
 
-# Cycle keyboard backlight mode
-bindsym $mod+F11 exec asusctl -n
 bindsym $mod+Mod1+F2 exec ~/.config/i3/scripts/cycle-video-audio.sh
 
 # Change focus (vim-style)

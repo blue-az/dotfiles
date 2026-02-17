@@ -1,0 +1,16 @@
+# Z13 AMD overrides
+
+# Terminal + launcher
+set $term_cmd foot
+set $launcher_cmd "wmenu-run"
+
+# Shorter idle on laptop
+set $swayidle_lock_timeout 300
+set $swayidle_off_timeout 330
+
+# Keyboard backlight toggle
+bindsym $mod+F11 exec asusctl -n
+
+# Laptop panel brightness
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
