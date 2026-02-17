@@ -33,6 +33,14 @@ alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=h
 # Codex
 alias UC="sudo npm install -g @openai/codex" # get latest version
 
+# Z13 LED (rear lightbar)
+alias rlo="sudo ~/.dotfiles/machines/z13-amd/led/z13-led --on"
+alias rlof="sudo ~/.dotfiles/machines/z13-amd/led/z13-led --off"
+alias rlr="sudo ~/.dotfiles/machines/z13-amd/led/z13-led --color 255 0 0"
+alias rlg="sudo ~/.dotfiles/machines/z13-amd/led/z13-led --color 0 255 0"
+alias rls="sudo ~/.dotfiles/machines/z13-amd/led/z13-window-cycle"
+alias rlc="sudo ~/.dotfiles/machines/z13-amd/led/z13-window-step"
+
 # Obsidian
 alias Ob="flatpak run md.obsidian.Obsidian"
 

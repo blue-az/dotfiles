@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Step rear window colors one at a time (single step per run).
+# Usage: z13-window-step
+
+STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}"
+STATE_FILE="$STATE_DIR/z13-window-step.idx"
+
+colors=(
+  "255 0 0"    # red
+  "0 255 0"    # green
+  "0 0 255"    # blue
+  "255 255 0"  # yellow
+  "255 0 255"  # magenta
+  "0 255 255"  # cyan
+  "255 255 255" # white
+)
+
+mkdir -p "$STATE_DIR"
+
+idx=0
+if [ -f "$STATE_FILE" ]; then
+  if read -r val < "$STATE_FILE"; then
+    if [[ "$val" =~ ^[0-9]+$ ]]; then
+      idx=$val
+    fi
+  fi
+fi
+
+idx=$(( (idx + 1) % ${#colors[@]} ))
+
+echo "$idx" > "$STATE_FILE"
+
+gz302-rgb-window --color ${colors[$idx]}
