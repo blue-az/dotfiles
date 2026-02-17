@@ -30,6 +30,9 @@ alias CE="conda activate aider-env"
 alias Aid="aider --model gemini/gemini-2.0-flash --subtree-only"
 alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=host --gpus all -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:cuda"
 
+# Codex
+alias UC="sudo npm install -g @openai/codex" # get latest version
+
 # Obsidian
 alias Ob="flatpak run md.obsidian.Obsidian"
 
@@ -57,8 +60,9 @@ alias pc="/opt/pycharm-2025.2.3/bin/pycharm"
 # streamlit
 alias sr="streamlit run streamlit_app.py"
 
-# libreoffice calc
+# libreoffice
 alias lc="libreoffice --calc"
+alias lw="libreoffice --writer"
 
 # Wifi client
 alias SF="sudo systemctl stop firewalld"
