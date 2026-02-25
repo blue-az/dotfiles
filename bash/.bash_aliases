@@ -74,17 +74,17 @@ alias lw="libreoffice --writer"
 
 # Wifi client
 alias SF="sudo systemctl stop firewalld"
-alias sH="nmcli device wifi hotspot ssid 'LinuxDisplay' password 'Erf123123!'"
+alias sH="nmcli device wifi hotspot ssid 'LinuxDisplay' password ''"
 alias SH="nmcli device disconnect wlp194s0"
 
 alias sF="sudo systemctl start firewalld"
 alias da4="nmcli device wifi connect 'da4e9a'"
 alias 5G="nmcli device wifi connect 'da4e9a_5G'"
 
-alias Ei="nmcli device wifi rescan; sleep 1; nmcli connection up \"Erik’s iPhone\""
+alias Ei="nmcli device wifi rescan; sleep 1; nmcli connection up \"iPhone\""
 alias nmlist="nmcli device wifi list"
 
-alias Cc="nmcli device wifi connect 'LinuxDisplay' password 'Erf123123!'"
+alias Cc="nmcli device wifi connect 'LinuxDisplay' password ''"
 
 
 alias DE="~/Downloads/deskreen-ce-3.1.17-x86_64.AppImage"
