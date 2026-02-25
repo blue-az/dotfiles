@@ -33,7 +33,7 @@ GPU: Intel UHD Graphics 630 [Integrated]
 Memory: 5.05 GiB / 8.00 GiB (63%)
 Swap: Disabled
 Disk (/): 83.34 GiB / 465.63 GiB (18%) - apfs [Read-only]
-Local IP (en1): 192.168.8.114/24
+Local IP (en1): 192.168.x.x/24
 Locale: en_US.UTF-8
 ```
 

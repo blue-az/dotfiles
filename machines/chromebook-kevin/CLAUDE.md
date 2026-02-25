@@ -24,7 +24,7 @@ GPU: Rockchip rk3399-mali [Integrated]
 Memory: 1.01 GiB / 3.78 GiB (27%)
 Swap: 0 B / 512.00 MiB (0%)
 Disk (/): 7.97 GiB / 29.16 GiB (27%) - btrfs
-Local IP (mlan0): 192.168.8.187/24
+Local IP (mlan0): 192.168.x.x/24
 Battery (4352D51): 71% [Discharging]
 ```
 

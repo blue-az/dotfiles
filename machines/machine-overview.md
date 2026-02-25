@@ -21,7 +21,7 @@ CPU: Intel(R) Core(TM) i9-9900KF (16) @ 5.00 GHz
 GPU: NVIDIA GeForce RTX 3090 [Discrete]
 Memory: 62.72 GiB
 Disk (/): 488.16 GiB - btrfs
-Local IP (eno1): 192.168.8.178/24
+Local IP (eno1): 192.168.x.x/24
 ```
 
 **TennisAgent Role: Primary Analysis**
@@ -64,7 +64,7 @@ CPU: AMD RYZEN AI MAX 390 (24) @ 5.06 GHz
 GPU: AMD Radeon 8050S Graphics [Integrated]
 Memory: 27.04 GiB (shared with GPU)
 Disk (/): 300.46 GiB - btrfs
-Local IP (wlp194s0): 192.168.8.116/24
+Local IP (wlp194s0): 192.168.x.x/24
 Battery: Yes
 ```
 
@@ -91,7 +91,7 @@ CPU: AMD RYZEN AI MAX 390 (24) @ 5.05 GHz
 GPU: AMD Radeon(TM) 8050S Graphics (3.78 GiB) [Integrated]
 Memory: 27.65 GiB (shared with GPU)
 Disk (C:\): 620.71 GiB - NTFS
-Local IP (Wi-Fi): 192.168.8.153/24
+Local IP (Wi-Fi): 192.168.x.x/24
 Battery: Yes
 ```
 
@@ -112,7 +112,7 @@ CPU: Intel(R) Core(TM) i7-8700B (12) @ 3.20 GHz
 GPU: Intel UHD Graphics 630 [Integrated]
 Memory: 8.00 GiB
 Disk (/): 465.63 GiB - apfs
-Local IP (en1): 192.168.8.114/24
+Local IP (en1): 192.168.x.x/24
 ```
 
 **TennisAgent Role: Data Collection**
@@ -177,6 +177,6 @@ CPU: rk3399 (6) @ 2.02 GHz
 GPU: Rockchip rk3399-mali [Integrated]
 Memory: 3.78 GiB
 Disk (/): 29.16 GiB - btrfs
-Local IP (mlan0): 192.168.8.187/24
+Local IP (mlan0): 192.168.x.x/24
 Battery: Yes
 ```

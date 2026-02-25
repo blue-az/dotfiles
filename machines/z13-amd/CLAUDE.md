@@ -38,7 +38,7 @@ GPU: AMD Radeon 8050S Graphics [Integrated]
 Memory: 1.78 GiB / 27.04 GiB (7%)
 Swap: 0 B / 8.00 GiB (0%)
 Disk (/): 10.22 GiB / 300.46 GiB (3%) - btrfs
-Local IP (wlp194s0): 192.168.8.116/24
+Local IP (wlp194s0): 192.168.x.x/24
 Battery (ASUS Battery): 100% [Discharging]
 Locale: en_US.UTF-8
 ```

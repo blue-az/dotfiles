@@ -34,7 +34,7 @@ GPU: NVIDIA GeForce RTX 3090 [Discrete]
 Memory: 8.55 GiB / 62.72 GiB (14%)
 Swap: 0 B / 8.00 GiB (0%)
 Disk (/): 444.72 GiB / 488.16 GiB (91%) - btrfs
-Local IP (eno1): 192.168.8.178/24
+Local IP (eno1): 192.168.x.x/24
 Locale: en_US.UTF-8
 ```
 

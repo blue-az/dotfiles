@@ -16,7 +16,7 @@ CPU: AMD RYZEN AI MAX 390 (24) @ 5.05 GHz
 GPU: AMD Radeon(TM) 8050S Graphics (3.78 GiB) [Integrated]
 Memory: 11.84 GiB / 27.65 GiB (43%)
 Disk (C:\): 372.14 GiB / 620.71 GiB (60%) - NTFS
-Local IP (Wi-Fi): 192.168.8.153/24
+Local IP (Wi-Fi): 192.168.x.x/24
 Battery: 100% [AC Connected]
 Locale: en-US
 ```
