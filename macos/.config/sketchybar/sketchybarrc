@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Bar appearance
+sketchybar --bar height=32 \
+               blur_radius=30 \
+               position=top \
+               sticky=on \
+               padding_left=10 \
+               padding_right=10 \
+               color=0xee1e1e2e
+
+# Spaces
+sketchybar --add space 1 left
+sketchybar --add space 2 left
+sketchybar --add space 3 left
+sketchybar --add space 4 left
+sketchybar --add space 5 left
+
+sketchybar --set space.1 associated_space=1 icon=1 icon.color=0xff50fa7b
+sketchybar --set space.2 associated_space=2 icon=2 icon.color=0xff50fa7b
+sketchybar --set space.3 associated_space=3 icon=3 icon.color=0xff50fa7b
+sketchybar --set space.4 associated_space=4 icon=4 icon.color=0xff50fa7b
+sketchybar --set space.5 associated_space=5 icon=5 icon.color=0xff50fa7b
+
+# Clock
+sketchybar --add item clock right
+sketchybar --set clock update_freq=10 \
+               icon.color=0xff50fa7b \
+               script="sketchybar --set clock label=\"$(date '+%H:%M')\""
+
+# Battery
+sketchybar --add item battery right
+sketchybar --set battery update_freq=60 \
+               icon.color=0xff50fa7b \
+               script="sketchybar --set battery label=\"$(pmset -g batt | grep -o '[0-9]*%')\""
+
+sketchybar --update
