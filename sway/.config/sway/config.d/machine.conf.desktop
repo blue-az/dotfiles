@@ -1,0 +1,3 @@
+# Desktop overrides
+
+set $launcher_cmd "wmenu-run"

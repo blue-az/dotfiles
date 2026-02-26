@@ -40,7 +40,7 @@ fi
 
 # Output JSON for waybar (plain text, styling via CSS classes)
 if [ -n "$WATTS" ]; then
-    printf '{"text": "CPU %3d%% %3d° %sW", "class": "%s"}\n' "$CPU" "$TEMP" "$WATTS" "$CLASS"
+    printf '{"text": "CPU %3d%% %3d° %3sW", "class": "%s"}\n' "$CPU" "$TEMP" "$WATTS" "$CLASS"
 else
     printf '{"text": "CPU %3d%% %3d°", "class": "%s"}\n' "$CPU" "$TEMP" "$CLASS"
 fi

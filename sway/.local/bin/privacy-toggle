@@ -1,0 +1,10 @@
+#!/bin/bash
+
+FLAG=~/.config/privacy-mode
+if [ -f "$FLAG" ]; then
+    rm "$FLAG"
+else
+    touch "$FLAG"
+fi
+
+pkill -RTMIN+9 waybar

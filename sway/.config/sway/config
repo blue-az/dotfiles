@@ -68,6 +68,9 @@ bindsym $mod+Shift+q kill
 # Start launcher
 bindsym $mod+d exec $launcher_cmd
 
+# Toggle privacy mode (hides IP from bar and overlay)
+bindsym $mod+p exec ~/.local/bin/privacy-toggle
+
 # Launch Firefox
 bindsym $mod+Shift+f exec firefox
 

@@ -71,7 +71,11 @@ GPU_TEMPC=${GPU_TEMPC:-}
 GPU_W=${GPU_W:-}
 
 # IP (auto-detect first non-loopback)
-IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1)
+if [ -f ~/.config/privacy-mode ]; then
+    IP="***.***.***.***"
+else
+    IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1)
+fi
 
 # Date/time
 DT=$(date '+%Y-%m-%d %I:%M:%S %p')

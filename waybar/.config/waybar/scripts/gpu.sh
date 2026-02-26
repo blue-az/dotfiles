@@ -69,7 +69,7 @@ fi
 # Build output based on available data
 if [ -n "$GPU" ] && [ -n "$TEMP" ] && [ -n "$WATTS" ]; then
     # Full data (NVIDIA or newer AMD)
-    printf '{"text": "GPU %3d%% %3d° %sW", "class": "%s"}\n' "$GPU" "$TEMP" "$WATTS" "$CLASS"
+    printf '{"text": "GPU %3d%% %3d° %3sW", "class": "%s"}\n' "$GPU" "$TEMP" "$WATTS" "$CLASS"
 elif [ -n "$GPU" ] && [ -n "$TEMP" ]; then
     # Usage and temp only
     printf '{"text": "GPU %3d%% %3d°", "class": "%s"}\n' "$GPU" "$TEMP" "$CLASS"
