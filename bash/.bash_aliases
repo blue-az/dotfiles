@@ -71,6 +71,7 @@ alias sr="streamlit run streamlit_app.py"
 # libreoffice
 alias lc="libreoffice --calc"
 alias lw="libreoffice --writer"
+alias fm="dolphin"
 
 # Wifi client
 alias SF="sudo systemctl stop firewalld"

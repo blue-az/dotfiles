@@ -7,7 +7,7 @@
 ## Stow Packages & Linking
 - Primary packages:
   - `cd ~/.dotfiles`
-  - `stow bash sway waybar i3 nvim xkb wallpaper`
+  - `stow apps bash sway waybar i3 nvim xkb wallpaper`
 - Sway outputs for this machine:
   - `ln -sf ~/.dotfiles/sway/.config/sway/config.d/outputs.conf.z13-amd ~/.config/sway/config.d/outputs.conf`
 - Machine-specific sway overrides:

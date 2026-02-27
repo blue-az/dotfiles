@@ -68,6 +68,9 @@ bindsym $mod+Shift+q kill
 # Start launcher
 bindsym $mod+d exec $launcher_cmd
 
+# Launch Dolphin file manager
+bindsym $mod+Shift+d exec dolphin
+
 # Toggle privacy mode (hides IP from bar and overlay)
 bindsym $mod+p exec ~/.local/bin/privacy-toggle
 
