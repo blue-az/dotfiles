@@ -28,13 +28,10 @@ WATTS=${WATTS:-}
 
 # Determine color based on temperature
 if [ $TEMPC -gt 80 ]; then
-    COLOR="#ff5555"
     CLASS="critical"
 elif [ $TEMPC -gt 65 ]; then
-    COLOR="#f1fa8c"
     CLASS="warning"
 else
-    COLOR="#50fa7b"
     CLASS="normal"
 fi
 

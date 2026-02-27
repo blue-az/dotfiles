@@ -88,26 +88,32 @@ window#waybar {
 
 #custom-cpu {
     color: #50fa7b;
+    background-color: transparent;
 }
 
 #custom-cpu.warning {
     color: #f1fa8c;
+    background-color: transparent;
 }
 
 #custom-cpu.critical {
     color: #ff5555;
+    background-color: transparent;
 }
 
 #custom-gpu {
     color: #50fa7b;
+    background-color: transparent;
 }
 
 #custom-gpu.warning {
     color: #f1fa8c;
+    background-color: transparent;
 }
 
 #custom-gpu.critical {
     color: #ff5555;
+    background-color: transparent;
 }
 
 #network {
