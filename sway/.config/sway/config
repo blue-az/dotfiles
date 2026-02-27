@@ -34,7 +34,7 @@ set $swayidle_off_timeout 1830
 include ~/.config/sway/config.d/machine.conf
 
 # Wallpaper (replaces feh)
-output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
+output * bg ~/.dotfiles/wallpaper/NewDebianCB_Banner.png fill
 
 # ============ SCREEN LOCK ============
 # Lock screen manually

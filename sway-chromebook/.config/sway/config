@@ -22,7 +22,7 @@ input type:touchpad {
 output eDP-1 pos 0 0 scale 1.5
 
 # Wallpaper
-output * bg ~/.dotfiles/wallpaper/DebianDark.png fill
+output * bg ~/.dotfiles/wallpaper/NewDebianCB_Banner.png fill
 
 # ============ SCREEN LOCK ============
 bindsym $mod+Escape exec swaylock -f -c 000000
@@ -150,6 +150,10 @@ mode "resize" {
     bindsym $mod+r mode "default"
 }
 bindsym $mod+r mode "resize"
+
+# ============ PRIVACY MODE ============
+# Toggle privacy mode (hides IP from bar and overlay)
+bindsym $mod+p exec ~/.local/bin/privacy-toggle
 
 # ============ SCREENSHOTS ============
 bindsym Print exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png

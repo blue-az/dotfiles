@@ -13,7 +13,7 @@
         "memory",
         "custom/cpu",
         "custom/gpu",
-        "network",
+        "custom/ip",
         "clock",
         "custom/wifi",
         "custom/battery",
@@ -77,12 +77,11 @@
         "on-click": "~/.config/waybar/scripts/popout.sh gpu"
     },
 
-    "network": {
-        "interface": "mlan0",
-        "format-wifi": "<span color=\"#ffffff\">IP</span> <span color=\"#50fa7b\"> {ipaddr}</span>",
-        "format-ethernet": "<span color=\"#ffffff\">IP</span> <span color=\"#50fa7b\"> {ipaddr}</span>",
-        "format-disconnected": "<span color=\"#ffffff\">IP</span> <span color=\"#ff5555\"> disconnected</span>",
-        "tooltip-format": "{ifname}: {ipaddr}",
+    "custom/ip": {
+        "exec": "~/.config/waybar/scripts/network.sh",
+        "interval": 10,
+        "return-type": "json",
+        "signal": 9,
         "on-click": "~/.config/waybar/scripts/popout.sh network"
     },
 

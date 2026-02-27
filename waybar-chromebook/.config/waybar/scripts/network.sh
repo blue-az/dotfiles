@@ -1,0 +1,1 @@
+/home/blueaz/.dotfiles/waybar/.config/waybar/scripts/network.sh

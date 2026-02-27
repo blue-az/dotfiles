@@ -24,8 +24,12 @@ GPU_TEMPC=$(awk '{printf "%.0f", $1/1000}' /sys/class/thermal/thermal_zone1/temp
 GPU_TEMPC=${GPU_TEMPC:-0}
 GPU_TEMP=$((GPU_TEMPC * 9 / 5 + 32))
 
-# IP (auto-detect first non-loopback)
-IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1)
+# IP (auto-detect first non-loopback, or hide if privacy mode is on)
+if [ -f ~/.config/privacy-mode ]; then
+    IP="***.***.***.***"
+else
+    IP=$(ip -4 addr show | grep -oP '(?<=inet\s)[\d.]+' | grep -v 127.0.0.1 | head -1)
+fi
 
 # Battery (Chromebook uses sbs-9-000b)
 BAT=""
