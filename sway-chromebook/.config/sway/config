@@ -155,6 +155,10 @@ bindsym $mod+r mode "resize"
 # Toggle privacy mode (hides IP from bar and overlay)
 bindsym $mod+p exec ~/.local/bin/privacy-toggle
 
+# ============ SCREEN ROTATION ============
+# Manual rotation cycle (normal -> 90 -> 180 -> 270 -> normal)
+bindsym $mod+o exec ~/.local/bin/sway-rotate-cycle
+
 # ============ SCREENSHOTS ============
 # Chromebook-style (Ctrl+F5 = screenshot, Ctrl+Shift+F5 = partial)
 bindsym Ctrl+F5 exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png

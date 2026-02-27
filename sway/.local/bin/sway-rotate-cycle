@@ -1,0 +1,43 @@
+#!/bin/bash
+# Cycle through screen rotations: normal -> 90 -> 180 -> 270 -> normal
+
+OUTPUT="eDP-1"
+SCALE="1.5"
+STATE_FILE="/tmp/sway-rotation-state"
+
+# Get current rotation state
+if [ -f "$STATE_FILE" ]; then
+    CURRENT=$(cat "$STATE_FILE")
+else
+    CURRENT="normal"
+fi
+
+# Cycle to next rotation
+case "$CURRENT" in
+    normal)
+        NEXT="90"
+        ;;
+    90)
+        NEXT="180"
+        ;;
+    180)
+        NEXT="270"
+        ;;
+    270)
+        NEXT="normal"
+        ;;
+    *)
+        NEXT="normal"
+        ;;
+esac
+
+# Apply rotation
+swaymsg output "$OUTPUT" transform "$NEXT" scale "$SCALE"
+
+# Save state
+echo "$NEXT" > "$STATE_FILE"
+
+# Show notification (if dunst is running)
+if pgrep -x dunst > /dev/null; then
+    notify-send -t 1000 "Screen Rotation" "Rotated to: $NEXT"
+fi

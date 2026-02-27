@@ -115,6 +115,7 @@ alias 4s="sh ~/.screenlayout/sway-4s.sh"
 # alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
 
 CB_LINK_HOME="${CB_LINK_HOME:-$HOME/Tools/cb-link}"
+export CB_LINK_HOSTS="192.168.8.178 fedora.local desktop.local"
 if [ ! -d "$CB_LINK_HOME" ] && [ -d "$HOME/cb-link" ]; then
     CB_LINK_HOME="$HOME/cb-link"
 fi
