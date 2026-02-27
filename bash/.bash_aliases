@@ -130,7 +130,12 @@ alias cbmr="cbm && cbt"                       # Start mirror mode then push to t
 alias cbt="$CB_LINK_HOME/cb-tablet.sh"
 alias cbts="$CB_LINK_HOME/cb-tablet.sh stop"
 alias zof='sudo firewall-cmd --add-port=5900/tcp'
-alias cbh="bat $CB_LINK_HOME/cb-link-cheatsheet.txt"
+# Use bat if available, otherwise cat
+if command -v bat &> /dev/null; then
+    alias cbh="bat $CB_LINK_HOME/cb-link-cheatsheet.txt"
+else
+    alias cbh="cat $CB_LINK_HOME/cb-link-cheatsheet.txt"
+fi
 
 # Chromebook display aliases (CB side - client, for CB machine only)
 alias cbv="$CB_LINK_HOME/cb-connect.sh"           # Quick viewer launch
