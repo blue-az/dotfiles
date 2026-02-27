@@ -156,10 +156,15 @@ bindsym $mod+r mode "resize"
 bindsym $mod+p exec ~/.local/bin/privacy-toggle
 
 # ============ SCREENSHOTS ============
+# Chromebook-style (Ctrl+F5 = screenshot, Ctrl+Shift+F5 = partial)
+bindsym Ctrl+F5 exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym Ctrl+Shift+F5 exec grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+# Copy to clipboard variants
+bindsym Ctrl+Alt+F5 exec grim - | wl-copy
+bindsym Ctrl+Alt+Shift+F5 exec grim -g "$(slurp)" - | wl-copy
+# Fallback Print key bindings (if external keyboard has Print key)
 bindsym Print exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
 bindsym Shift+Print exec grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
-bindsym Ctrl+Print exec grim - | wl-copy
-bindsym Ctrl+Shift+Print exec grim -g "$(slurp)" - | wl-copy
 
 # ============ BRIGHTNESS (Chromebook) ============
 bindsym XF86MonBrightnessUp exec brightnessctl set +5%
