@@ -61,7 +61,7 @@ alias zwc="cd ~/.dotfiles/machines/z13-windows"
 
 # System info
 alias ff="fastfetch"
-alias ffp="fastfetch | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/***.***.***.***/g'"
+alias ffp="fastfetch --pipe false | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/***.***.***.***/g'"
 
 # pycharm
 alias pc="/opt/pycharm-2025.2.3/bin/pycharm"
