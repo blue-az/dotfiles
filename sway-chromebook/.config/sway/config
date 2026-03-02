@@ -22,7 +22,7 @@ input type:touchpad {
 output eDP-1 pos 0 0 scale 1.5
 
 # Wallpaper
-output * bg ~/.dotfiles/wallpaper/NewDebianCB_Banner.png fill
+output * bg ~/.dotfiles/wallpaper/DebianDark2.png fill
 
 # ============ SCREEN LOCK ============
 bindsym $mod+Escape exec swaylock -f -c 000000
