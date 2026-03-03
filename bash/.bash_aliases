@@ -142,7 +142,8 @@ fi
 # Chromebook display aliases (CB side - client, for CB machine only)
 alias cbv="$CB_LINK_HOME/cb-connect.sh"           # Quick viewer launch
 alias cbc="$CB_LINK_HOME/cb-connect.sh"           # Connect to AMD
-alias cbcf="$CB_LINK_HOME/cb-connect.sh f"        # Fullscreen connect
+alias cbcf="$CB_LINK_HOME/cb-connect.sh f"        # Safe fullscreen (ssvnc, avoids gray-screen)
+alias cbtf="$CB_LINK_HOME/cb-connect.sh tf"       # TigerVNC fullscreen (legacy, avoid in mirror)
 alias cbcm="$CB_LINK_HOME/cb-connect.sh m"        # Mirror mode connect
 alias cbcd="$CB_LINK_HOME/cb-connect.sh d"        # Disconnect
 alias cbcs="$CB_LINK_HOME/cb-connect.sh s"        # Status
