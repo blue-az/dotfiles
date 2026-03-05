@@ -61,7 +61,7 @@ bindsym $mod+d exec wofi --show drun
 bindsym $mod+Shift+f exec firefox
 
 # Cycle through audio sources
-bindsym $mod+Mod1+F11 exec ~/.config/i3/scripts/cycle-audio-source.sh
+bindsym $mod+Mod1+F11 exec ~/.config/shared/scripts/cycle-audio-source.sh
 bindsym $mod+Mod1+F2 exec ~/.config/i3/scripts/cycle-video-audio.sh
 
 # Change focus (vim-style)

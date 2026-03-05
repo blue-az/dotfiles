@@ -13,7 +13,7 @@ Host: MS-7B51 (1.0)
 Kernel: Linux 6.17.8-300.fc43.x86_64
 Packages: 3627 (rpm), 15 (flatpak)
 Shell: bash 5.3.0
-Display (XB271HU): 2560x1440 @ 144 Hz in 27" [External]
+Display (Acer Predator XB271HU): 2560x1440 @ 144 Hz native (165 Hz OC capable) in 27" [External]
 Display (Acer AL2216W): 1680x1050 @ 60 Hz in 22" [External]
 Display (LG TV): 1920x1080 @ 60 Hz in 7" [External]
 WM: Sway 1.11 (Wayland)
@@ -106,7 +106,7 @@ Host: Mac mini (2018)
 Kernel: Darwin 24.6.0
 Packages: 16 (brew), 1 (brew-cask)
 Shell: zsh 5.9
-Display (XB271HU): 2560x1440 @ 60 Hz in 27" [External]
+Display (Acer Predator XB271HU): 2560x1440 @ 144 Hz native (165 Hz OC capable) in 27" [External]
 WM: Quartz Compositor (yabai + skhd)
 CPU: Intel(R) Core(TM) i7-8700B (12) @ 3.20 GHz
 GPU: Intel UHD Graphics 630 [Integrated]

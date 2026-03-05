@@ -9,7 +9,7 @@ Hardware and software issues for desktop (NVIDIA RTX 3090, Intel).
 - **Submitted:** 2025-12-30
 
 #### Problem
-Monitor audio (XB271HU via DisplayPort) occasionally drops out. Software shows correct sink selected, but no audio plays through monitor.
+Monitor audio (Acer Predator XB271HU via DisplayPort) occasionally drops out. Software shows correct sink selected, but no audio plays through monitor.
 
 #### Symptoms
 - Audio stops playing through monitor
@@ -54,7 +54,7 @@ sudo systemctl enable --now nvidia-hdmi-audio-fix.service
 
 #### Hardware Info
 - GPU: NVIDIA GA102 (RTX 3090)
-- Monitor: Acer XB271HU on DisplayPort (hdmi-output-0 / pro-output-3)
+- Monitor: Acer Predator XB271HU on DisplayPort (hdmi-output-0 / pro-output-3)
 - Audio stack: PipeWire 1.4.9 with WirePlumber
 - Card: `alsa_card.pci-0000_01_00.1` using pro-audio profile
 

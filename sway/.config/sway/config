@@ -34,7 +34,7 @@ set $swayidle_off_timeout 1830
 include ~/.config/sway/config.d/machine.conf
 
 # Wallpaper (replaces feh)
-output * bg ~/.dotfiles/wallpaper/NewDebianCB_Banner.png fill
+output * bg ~/.dotfiles/wallpaper/FedoraDark.jpg fill
 
 # ============ SCREEN LOCK ============
 # Lock screen manually
@@ -78,7 +78,7 @@ bindsym $mod+p exec ~/.local/bin/privacy-toggle
 bindsym $mod+Shift+f exec firefox
 
 # Cycle through audio sources
-bindsym $mod+Mod1+F11 exec ~/.config/i3/scripts/cycle-audio-source.sh
+bindsym $mod+Mod1+F11 exec ~/.config/shared/scripts/cycle-audio-source.sh
 
 bindsym $mod+Mod1+F2 exec ~/.config/i3/scripts/cycle-video-audio.sh
 
@@ -186,8 +186,8 @@ bindsym $mod+r mode "resize"
 # Full screen to file
 bindsym Print exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
 
-# Select region to file
-bindsym Shift+Print exec grim -g "$(slurp)" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+# Focused output to file (active/highlighted screen)
+bindsym Shift+Print exec grim -o "$(swaymsg -t get_outputs | jq -r '.[] | select(.focused==true) | .name')" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # Full screen to clipboard
 bindsym Ctrl+Print exec grim - | wl-copy
@@ -203,9 +203,9 @@ bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 # ============ BRIGHTNESS (DDC/CI for external monitors) ============
 # Disabled - DDC/CI is slow and triggers waybar whiteout issue
 # Only monitor 2 (AL2216W) responds; monitor 1 (XB271HU) ignores brightness via DDC
-# Script available: ~/.config/i3/scripts/brightness-ddc.sh up|down
-bindsym $mod+F1 exec ~/.config/i3/scripts/brightness-ddc.sh down
-bindsym $mod+F2 exec ~/.config/i3/scripts/brightness-ddc.sh up
+# Script available: ~/.config/shared/scripts/brightness-ddc.sh up|down
+bindsym $mod+F1 exec ~/.config/shared/scripts/brightness-ddc.sh down
+bindsym $mod+F2 exec ~/.config/shared/scripts/brightness-ddc.sh up
 
 # ============ VIRTUAL DISPLAY (for Deskreen extend) ============
 # Create virtual output for Chromebook as second monitor

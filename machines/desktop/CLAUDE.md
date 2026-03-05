@@ -19,7 +19,7 @@ Kernel: Linux 6.17.8-300.fc43.x86_64
 Uptime: 8 days, 17 hours, 34 mins
 Packages: 3627 (rpm), 15 (flatpak)
 Shell: bash 5.3.0
-Display (XB271HU): 2560x1440 @ 144 Hz in 27" [External]
+Display (Acer Predator XB271HU): 2560x1440 @ 144 Hz native (165 Hz OC capable) in 27" [External]
 Display (Acer AL2216W): 1680x1050 @ 60 Hz in 22" [External]
 Display (LG TV): 1920x1080 @ 60 Hz in 7" [External]
 DE: sway:wlroots
