@@ -44,6 +44,7 @@ alias cl="claude"
 
 # System info
 alias ff="fastfetch"
+alias ffp="fastfetch --pipe false | sed 's/[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/***.***.***.***/g'"
 
 # Source shared bash aliases
 [ -f ~/.bash_aliases ] && source ~/.bash_aliases

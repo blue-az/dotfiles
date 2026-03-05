@@ -21,7 +21,7 @@ Kernel: Darwin 24.6.0
 Uptime: 2 mins
 Packages: 16 (brew), 1 (brew-cask)
 Shell: zsh 5.9
-Display (XB271HU): 2560x1440 in 27", 60 Hz [External]
+Display (Acer Predator XB271HU): 2560x1440 @ 144 Hz native (165 Hz OC capable) in 27" [External]
 WM: Quartz Compositor 278.4.7
 WM Theme: Multicolor (Dark)
 Theme: Aqua
@@ -43,7 +43,7 @@ Locale: en_US.UTF-8
 - Intel UHD Graphics 630
 - 8GB RAM
 - 500GB SSD
-- External display: Acer XB271HU (2560x1440 @ 60Hz)
+- External display: Acer Predator XB271HU (2560x1440 @ 144Hz native, 165Hz OC capable)
 
 ## OS
 - macOS Sequoia 15.7.2
@@ -113,6 +113,7 @@ Persisted via LaunchAgent: `~/Library/LaunchAgents/com.local.KeyRemapping.plist`
 | `la` | `ls -A` |
 | `cl` | `claude` |
 | `ff` | `fastfetch` |
+| `ffp` | `fastfetch` with IP addresses redacted |
 | `jn` | `jupyter notebook` |
 | `sbash` / `szsh` | `source ~/.zshrc` |
 
