@@ -76,7 +76,21 @@ open_system_monitor() {
 }
 
 open_gpu_monitor() {
-    launch_terminal "gpu monitor" "nvtop || btop || htop || top"
+    local url="http://127.0.0.1:8765/?theme=dark"
+    local log_file="/tmp/gpu-dashboard.log"
+    local dash_cmd="python3 /home/blueaz/Tools/gpu-monitor/gpu_dashboard.py --host 127.0.0.1 --port 8765"
+
+    if ! curl -fsS --max-time 1 "http://127.0.0.1:8765/health" >/dev/null 2>&1; then
+        nohup sh -lc "$dash_cmd" >"$log_file" 2>&1 &
+        sleep 1
+    fi
+
+    if curl -fsS --max-time 1 "http://127.0.0.1:8765/health" >/dev/null 2>&1 && has xdg-open; then
+        xdg-open "$url" >/dev/null 2>&1 &
+        return 0
+    fi
+
+    launch_terminal "gpu dashboard error" "tail -n 80 '$log_file'; echo; echo 'Dashboard URL: $url'"
 }
 
 open_battery() {
