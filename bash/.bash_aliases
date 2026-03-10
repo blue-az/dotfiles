@@ -128,6 +128,7 @@ alias cbmz="CB_LINK_OUTPUT=eDP-1 CB_LINK_MIRROR_RES=2560x1600 $CB_LINK_HOME/cb-d
 alias cbtog="$CB_LINK_HOME/cb-display.sh toggle"
 alias cbs="$CB_LINK_HOME/cb-display.sh stop"
 alias cbst="$CB_LINK_HOME/cb-display.sh status"
+alias cbcb="$CB_LINK_HOME/cb-display.sh cb"       # Show CB connect command
 alias cbmr="cbm && cbt"                       # Start mirror mode then push to tablet over USB
 alias cbt="$CB_LINK_HOME/cb-tablet.sh"
 alias cbts="$CB_LINK_HOME/cb-tablet.sh stop"
@@ -145,6 +146,8 @@ alias cbc="$CB_LINK_HOME/cb-connect.sh"           # Connect to AMD
 alias cbcf="$CB_LINK_HOME/cb-connect.sh f"        # Safe fullscreen (ssvnc, avoids gray-screen)
 alias cbtf="$CB_LINK_HOME/cb-connect.sh tf"       # TigerVNC fullscreen (legacy, avoid in mirror)
 alias cbcm="$CB_LINK_HOME/cb-connect.sh m"        # Mirror mode connect
+alias cbmf="$CB_LINK_HOME/cb-connect.sh mf"       # Fullscreen mirror (ssvnc)
+alias cbfast="$CB_LINK_HOME/cb-connect.sh fast"   # Low color (faster on slow WiFi)
 alias cbcd="$CB_LINK_HOME/cb-connect.sh d"        # Disconnect
 alias cbcs="$CB_LINK_HOME/cb-connect.sh s"        # Status
 

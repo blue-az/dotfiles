@@ -7,4 +7,4 @@ else
     touch "$FLAG"
 fi
 
-pkill -RTMIN+9 waybar
+pkill -RTMIN+9 i3blocks 2>/dev/null; pkill -RTMIN+9 waybar 2>/dev/null; true
