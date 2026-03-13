@@ -46,11 +46,33 @@ window#waybar {
 #battery,
 #custom-cpu,
 #custom-gpu,
+#custom-clipboard,
+#custom-primary,
 #custom-wifi,
 #custom-audio,
 #custom-battery {
     padding: 0 10px;
     border-left: 1px solid #44475a;
+}
+
+#custom-clipboard,
+#custom-primary {
+    margin: 3px 0 3px 8px;
+    padding: 0 8px;
+    border: 1px solid #44475a;
+    border-radius: 4px;
+}
+
+#custom-clipboard.empty,
+#custom-primary.empty {
+    color: #f1fa8c;
+    background-color: rgba(68, 71, 90, 0.35);
+}
+
+#custom-clipboard.filled,
+#custom-primary.filled {
+    color: #50fa7b;
+    background-color: rgba(80, 250, 123, 0.12);
 }
 
 #clock {

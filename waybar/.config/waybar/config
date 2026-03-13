@@ -7,6 +7,8 @@
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": [],
     "modules-right": [
+        "custom/clipboard",
+        "custom/primary",
         "custom/brightness",
         "custom/audio",
         "disk",
@@ -44,6 +46,18 @@
         "on-click": "~/.config/waybar/scripts/popout.sh brightness",
         "on-scroll-up": "~/.config/shared/scripts/brightness-ddc.sh up",
         "on-scroll-down": "~/.config/shared/scripts/brightness-ddc.sh down"
+    },
+
+    "custom/clipboard": {
+        "exec": "~/.config/waybar/scripts/clipboard.sh clipboard",
+        "interval": 2,
+        "return-type": "json"
+    },
+
+    "custom/primary": {
+        "exec": "~/.config/waybar/scripts/clipboard.sh primary",
+        "interval": 2,
+        "return-type": "json"
     },
 
     "custom/audio": {
