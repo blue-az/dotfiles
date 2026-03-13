@@ -65,7 +65,7 @@ window#waybar {
 
 #custom-clipboard.empty,
 #custom-primary.empty {
-    color: #f1fa8c;
+    color: #ffffff;
     background-color: rgba(68, 71, 90, 0.35);
 }
 

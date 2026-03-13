@@ -51,6 +51,6 @@ else
     tooltip="${label}: non-text data available"
 fi
 
-printf '{"text":"%s OK","class":"filled","tooltip":"%s"}\n' \
+printf '{"text":"%s Y","class":"filled","tooltip":"%s"}\n' \
     "$label" \
     "$(json_escape "$tooltip")"
