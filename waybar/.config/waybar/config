@@ -9,7 +9,6 @@
     "modules-right": [
         "custom/clipboard",
         "custom/primary",
-        "custom/brightness",
         "pulseaudio",
         "disk",
         "memory",
@@ -61,9 +60,20 @@
     },
 
     "pulseaudio": {
-        "format": "VOL {volume}%",
-        "format-muted": "VOL MUTE",
+        "format": "VOL {volume}% {icon}",
+        "format-muted": "VOL MUTE {icon}",
+        "format-icons": {
+            "headphone": "HP",
+            "headset": "HS",
+            "hands-free": "HS",
+            "portable": "PORT",
+            "car": "CAR",
+            "phone": "PHONE",
+            "hdmi": "HDMI",
+            "default": ["SPK", "SPK"]
+        },
         "scroll-step": 5,
+        "max-volume": 100,
         "on-click": "~/.config/waybar/scripts/popout.sh audio"
     },
 

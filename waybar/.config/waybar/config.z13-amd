@@ -7,7 +7,6 @@
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": [],
     "modules-right": [
-        "custom/brightness",
         "custom/audio",
         "disk",
         "memory",
