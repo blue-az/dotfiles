@@ -3,6 +3,7 @@
 # Terminal + launcher
 set $term_cmd foot
 set $launcher_cmd "wmenu-run"
+set $file_manager_cmd thunar
 
 # Shorter idle on laptop
 set $swayidle_lock_timeout 300

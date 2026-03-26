@@ -29,6 +29,7 @@ include ~/.config/sway/config.d/outputs.conf
 # Machine-specific overrides (symlink to config.d/machine.conf.*)
 set $term_cmd terminator
 set $launcher_cmd "wofi --show drun"
+set $file_manager_cmd dolphin
 set $swayidle_lock_timeout 1800
 set $swayidle_off_timeout 1830
 include ~/.config/sway/config.d/machine.conf
@@ -69,7 +70,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec $launcher_cmd
 
 # Launch Dolphin file manager
-bindsym $mod+Shift+d exec dolphin
+bindsym $mod+Shift+d exec $file_manager_cmd
 
 # Toggle privacy mode (hides IP from bar and overlay)
 bindsym $mod+p exec ~/.local/bin/privacy-toggle
