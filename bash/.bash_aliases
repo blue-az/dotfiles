@@ -32,6 +32,7 @@ alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=h
 
 # Codex
 alias UC="sudo npm install -g @openai/codex" # get latest version
+alias UG="sudo npm install -g @google/gemini-cli@latest"
 
 # Z13 LED (rear lightbar)
 alias rlon="~/.local/bin/z13-led --on"
@@ -49,9 +50,21 @@ alias jn="jupyter notebook"
 
 # LLM
 alias g3="ollama run gemma3:27b"
+alias os="nohup ollama serve >/tmp/ollama.log 2>&1 &"
 alias cl="claude"
 
+# Claude Code mode switches
+# lcc: local Claude Code via Ollama/Gemma
+# acc: Anthropic API Claude Code
+# scc: subscription/OAuth Claude Code
+alias lcc='source ~/Tools/Claude-Switch/bin/claude-local-mode'
+alias acc='source ~/Tools/Claude-Switch/bin/claude-api-mode'
+alias scc='source ~/Tools/Claude-Switch/bin/claude-sub-mode'
+alias ccs='~/Tools/Claude-Switch/bin/claude-mode-status'
+alias 26b='~/Tools/Claude-Switch/bin/cc-local --model gemma4:26b'
+
 # TennisAgent
+alias PP="cd ~/Python/project-phoenix"
 alias TA="cd ~/Python/project-phoenix/domains/TennisAgent"
 
 # Dotfiles directories
