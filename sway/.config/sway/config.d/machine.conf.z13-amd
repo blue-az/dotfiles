@@ -9,8 +9,8 @@ set $file_manager_cmd thunar
 set $swayidle_lock_timeout 300
 set $swayidle_off_timeout 330
 
-# Keyboard backlight toggle
-bindsym $mod+F11 exec asusctl -n
+# Keyboard backlight brightness
+bindsym $mod+F11 exec asusctl leds next
 
 # Laptop panel brightness
 bindsym XF86MonBrightnessUp exec brightnessctl set +5%
