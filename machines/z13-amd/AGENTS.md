@@ -24,12 +24,17 @@
 - GPU: AMD Radeon 8050S (amdgpu). Utilization via:
   - `cat /sys/class/drm/card1/device/gpu_busy_percent`
 - NPU is present (AMD Strix Halo); use only when explicitly supported by tooling.
-- Auto-rotate is enabled via `~/.local/bin/sway-autorotate` and `~/.config/systemd/user/sway-autorotate.service`.
+- Auto-rotate should stay disabled. The old `sway-autorotate.service` could leave `eDP-1` stuck at `transform 90`; use manual Sway output commands if rotation is needed.
 
 ## Rear LED (DIY)
 - DIY control files live in `machines/z13-amd/led/` (script, udev rule, systemd service, install steps).
 - The udev rule uses group-scoped permissions (plugdev). Install steps are in `machines/z13-amd/led/INSTALL.md`.
-- Current defaults restore lightbar + keyboard to green on boot/resume; adjust RGB in the service if desired.
+- The repo-local `z13-restore.service` restores lightbar + keyboard to green if installed and enabled.
+- This machine also has a separate system-level restore path outside the repo:
+  - `/etc/systemd/system/gz302-rgb-restore.service`
+  - `/usr/local/bin/gz302-rgb-restore`
+  - `/usr/lib/systemd/system-sleep/gz302-reset.sh`
+- That external restore path re-applies the saved rear lightbar state from `/etc/gz302/rgb-window.conf` on boot and after resume, and can override the repo-local expectations.
 
 ## Validation Notes
 - After changes, reload `sway` and `waybar` to confirm outputs, bar layout, and battery stats.

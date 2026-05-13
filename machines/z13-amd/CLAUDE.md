@@ -105,10 +105,7 @@ ln -sf outputs.conf.z13-amd outputs.conf
 - For ML/AI workloads when supported
 
 ## Auto-Rotate
-Uses same sway-autorotate script as Intel Z13:
-- Script: `~/.local/bin/sway-autorotate`
-- Service: `~/.config/systemd/user/sway-autorotate.service`
-- Accelerometer: `/sys/bus/iio/devices/iio:device0/`
+Auto-rotate should stay disabled on this machine. The old `sway-autorotate.service` could leave `eDP-1` stuck at `transform 90`; use manual Sway output commands if rotation is needed.
 
 ## Bar Setup
 - waybar: main status bar (bottom) - matches desktop
