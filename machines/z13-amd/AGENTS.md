@@ -8,6 +8,7 @@
 - Primary packages:
   - `cd ~/.dotfiles`
   - `stow apps bash sway waybar i3 nvim xkb wallpaper`
+- Bash machine aliases are loaded from `machines/z13-amd/bash_aliases` when the host reports `fedora`.
 - Sway outputs for this machine:
   - `ln -sf ~/.dotfiles/sway/.config/sway/config.d/outputs.conf.z13-amd ~/.config/sway/config.d/outputs.conf`
 - Machine-specific sway overrides:

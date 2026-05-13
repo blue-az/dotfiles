@@ -32,14 +32,7 @@ alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=h
 
 # Codex
 alias UC="sudo npm install -g @openai/codex" # get latest version
-
-# Z13 LED (rear lightbar)
-alias rlon="~/.local/bin/z13-led --on"
-alias rlof="~/.local/bin/z13-led --off"
-alias rlr="~/.local/bin/z13-led --color 255 0 0"
-alias rlg="~/.local/bin/z13-led --color 0 255 0"
-alias rls="~/.dotfiles/machines/z13-amd/led/z13-window-cycle"
-alias rlc="~/.dotfiles/machines/z13-amd/led/z13-window-step"
+alias UG="sudo npm install -g @google/gemini-cli@latest"
 
 # Obsidian
 alias Ob="flatpak run md.obsidian.Obsidian"
@@ -49,9 +42,21 @@ alias jn="jupyter notebook"
 
 # LLM
 alias g3="ollama run gemma3:27b"
+alias os="nohup ollama serve >/tmp/ollama.log 2>&1 &"
 alias cl="claude"
 
+# Claude Code mode switches
+# lcc: local Claude Code via Ollama/Gemma
+# acc: Anthropic API Claude Code
+# scc: subscription/OAuth Claude Code
+alias lcc='source ~/Tools/Claude-Switch/bin/claude-local-mode'
+alias acc='source ~/Tools/Claude-Switch/bin/claude-api-mode'
+alias scc='source ~/Tools/Claude-Switch/bin/claude-sub-mode'
+alias ccs='~/Tools/Claude-Switch/bin/claude-mode-status'
+alias 26b='~/Tools/Claude-Switch/bin/cc-local --model gemma4:26b'
+
 # TennisAgent
+alias PP="cd ~/Python/project-phoenix"
 alias TA="cd ~/Python/project-phoenix/domains/TennisAgent"
 
 # Dotfiles directories
@@ -73,21 +78,6 @@ alias sr="streamlit run streamlit_app.py"
 alias lc="libreoffice --calc"
 alias lw="libreoffice --writer"
 alias fm="dolphin"
-
-# Wifi client
-alias SF="sudo systemctl stop firewalld"
-alias sH="nmcli device wifi hotspot ssid 'LinuxDisplay' password ''"
-alias SH="nmcli device disconnect wlp194s0"
-
-alias sF="sudo systemctl start firewalld"
-alias da4="nmcli device wifi connect 'da4e9a'"
-alias 5G="nmcli device wifi connect 'da4e9a_5G'"
-
-alias Ei="nmcli device wifi rescan; sleep 1; nmcli connection up \"iPhone\""
-alias nmlist="nmcli device wifi list"
-
-alias Cc="nmcli device wifi connect 'LinuxDisplay' password ''"
-
 
 alias DE="~/Downloads/deskreen-ce-3.1.17-x86_64.AppImage"
 
@@ -115,41 +105,12 @@ alias 4s="sh ~/.screenlayout/sway-4s.sh"
 # alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
 # alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
 
-CB_LINK_HOME="${CB_LINK_HOME:-$HOME/Tools/cb-link}"
-export CB_LINK_HOSTS="192.168.8.178 fedora.local desktop.local"
-if [ ! -d "$CB_LINK_HOME" ] && [ -d "$HOME/cb-link" ]; then
-    CB_LINK_HOME="$HOME/cb-link"
+_dotfiles_machine="${DOTFILES_MACHINE:-$(hostname 2>/dev/null)}"
+case "$_dotfiles_machine" in
+    fedora) _dotfiles_machine="z13-amd" ;;
+esac
+
+if [ -n "$_dotfiles_machine" ] && [ -f "$HOME/.dotfiles/machines/$_dotfiles_machine/bash_aliases" ]; then
+    . "$HOME/.dotfiles/machines/$_dotfiles_machine/bash_aliases"
 fi
-
-# Chromebook display aliases (AMD side - server)
-alias cbe="$CB_LINK_HOME/cb-display.sh extend"
-alias cbm="$CB_LINK_HOME/cb-display.sh mirror"
-alias cbmz="CB_LINK_OUTPUT=eDP-1 CB_LINK_MIRROR_RES=2560x1600 $CB_LINK_HOME/cb-display.sh mirror"
-alias cbtog="$CB_LINK_HOME/cb-display.sh toggle"
-alias cbs="$CB_LINK_HOME/cb-display.sh stop"
-alias cbst="$CB_LINK_HOME/cb-display.sh status"
-alias cbcb="$CB_LINK_HOME/cb-display.sh cb"       # Show CB connect command
-alias cbmr="cbm && cbt"                       # Start mirror mode then push to tablet over USB
-alias cbt="$CB_LINK_HOME/cb-tablet.sh"
-alias cbts="$CB_LINK_HOME/cb-tablet.sh stop"
-alias zof='sudo firewall-cmd --add-port=5900/tcp'
-# Use bat if available, otherwise cat
-if command -v bat &> /dev/null; then
-    alias cbh="bat $CB_LINK_HOME/cb-link-cheatsheet.txt"
-else
-    alias cbh="cat $CB_LINK_HOME/cb-link-cheatsheet.txt"
-fi
-
-# Chromebook display aliases (CB side - client, for CB machine only)
-alias cbv="$CB_LINK_HOME/cb-connect.sh"           # Quick viewer launch
-alias cbc="$CB_LINK_HOME/cb-connect.sh"           # Connect to AMD
-alias cbcf="$CB_LINK_HOME/cb-connect.sh f"        # Safe fullscreen (ssvnc, avoids gray-screen)
-alias cbtf="$CB_LINK_HOME/cb-connect.sh tf"       # TigerVNC fullscreen (legacy, avoid in mirror)
-alias cbcm="$CB_LINK_HOME/cb-connect.sh m"        # Mirror mode connect
-alias cbmf="$CB_LINK_HOME/cb-connect.sh mf"       # Fullscreen mirror (ssvnc)
-alias cbfast="$CB_LINK_HOME/cb-connect.sh fast"   # Low color (faster on slow WiFi)
-alias cbcd="$CB_LINK_HOME/cb-connect.sh d"        # Disconnect
-alias cbcs="$CB_LINK_HOME/cb-connect.sh s"        # Status
-
-alias cbel="HEADLESS_RES=1280x800 $CB_LINK_HOME/cb-display.sh extend"
-alias cbml="HEADLESS_RES=1280x800 $CB_LINK_HOME/cb-display.sh mirror"
+unset _dotfiles_machine

@@ -80,6 +80,7 @@ Config: `~/.dotfiles/sway/.config/sway/config.d/outputs.conf.z13-amd`
 ~/.dotfiles/waybar/.config/waybar/style.css
 ~/.dotfiles/i3/.config/i3blocks/config
 ~/.dotfiles/bash/.bash_aliases
+~/.dotfiles/machines/z13-amd/bash_aliases
 ~/.dotfiles/xkb/.config/xkb/keymap (shared)
 ```
 
