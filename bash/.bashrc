@@ -176,3 +176,6 @@ if [ -f "$HOME/.config/openai/.env" ]; then
   . "$HOME/.config/openai/.env"
   set +a
 fi
+
+# Local Claude Code experiments through Ollama-compatible proxy config.
+alias cc-local="ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_API_KEY= ANTHROPIC_BASE_URL=http://localhost:11434 CLAUDE_CONFIG_DIR=/tmp/cc-local-config claude"
