@@ -106,7 +106,7 @@ ln -sf outputs.conf.z13-amd outputs.conf
 - For ML/AI workloads when supported
 
 ## Auto-Rotate
-Auto-rotate should stay disabled on this machine. The old `sway-autorotate.service` could leave `eDP-1` stuck at `transform 90`; use manual Sway output commands if rotation is needed.
+Deprecated and removed. Use manual Sway output commands if rotation is ever needed.
 
 ## Bar Setup
 - waybar: main status bar (bottom) - matches desktop

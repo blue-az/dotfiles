@@ -25,7 +25,7 @@
 - GPU: AMD Radeon 8050S (amdgpu). Utilization via:
   - `cat /sys/class/drm/card1/device/gpu_busy_percent`
 - NPU is present (AMD Strix Halo); use only when explicitly supported by tooling.
-- Auto-rotate should stay disabled. The old `sway-autorotate.service` could leave `eDP-1` stuck at `transform 90`; use manual Sway output commands if rotation is needed.
+- Auto-rotate is deprecated and removed; use manual Sway output commands if rotation is ever needed.
 
 ## Rear LED (DIY)
 - DIY control files live in `machines/z13-amd/led/` (script, udev rule, systemd service, install steps).

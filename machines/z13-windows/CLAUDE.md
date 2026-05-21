@@ -128,4 +128,4 @@ Start-Process "C:\Program Files\whkd\bin\whkd.exe" -Verb RunAs
 | Focus-follows-mouse | Built-in | masir |
 | Shell | bash | Git Bash |
 | Config format | Text | JSON |
-| Auto-rotate | sway-autorotate | Not available |
+| Auto-rotate | Not used (deprecated) | Not available |
