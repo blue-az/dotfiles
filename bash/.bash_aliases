@@ -44,6 +44,7 @@ alias jn="jupyter notebook"
 alias g3="ollama run gemma3:27b"
 alias os="nohup ollama serve >/tmp/ollama.log 2>&1 &"
 alias cl="claude"
+alias opr="/home/blueaz/operator-control-plane/opr"
 
 # Claude Code mode switches
 # lcc: local Claude Code via Ollama/Gemma

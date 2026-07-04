@@ -6,3 +6,5 @@ machines/desktop/*.private.asc
 .nvimlog
 gemini/
 openai/
+.codex
+.claude/*.tmp.*
