@@ -194,8 +194,9 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # ============ SCREENSHOTS ============
-# Full screen to file
+# Full screen to file (F12 = fallback for keyboards without a working PrtSc, e.g. Z13 folio)
 bindsym Print exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
+bindsym F12 exec grim ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
 
 # Focused output to file (active/highlighted screen)
 bindsym Shift+Print exec grim -o "$(swaymsg -t get_outputs | jq -r '.[] | select(.focused==true) | .name')" ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png
