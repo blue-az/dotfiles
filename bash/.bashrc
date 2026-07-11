@@ -72,8 +72,11 @@ xterm*|rxvt*)
     ;;
 esac
 
-# added becuase pulseaudio doesn't start right
-export $(dbus-launch)
+# Use the systemd user session bus; never spawn a private one (dbus-launch
+# here created an orphan bus per shell that broke D-Bus activation, e.g. GIMP)
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && [ -S "/run/user/$(id -u)/bus" ]; then
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$(id -u)/bus"
+fi
 
 # ERF: add to start nvim
 export PATH="$PATH:/opt/nvim-linux64/bin"
