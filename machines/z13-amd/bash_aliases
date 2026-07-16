@@ -6,6 +6,9 @@ alias rlg="~/.local/bin/z13-led --color 0 255 0"
 alias rls="~/.dotfiles/machines/z13-amd/led/z13-window-cycle"
 alias rlc="~/.dotfiles/machines/z13-amd/led/z13-window-step"
 
+# Z13 power
+alias susp="systemctl suspend"
+
 # Z13 WiFi client
 alias SF="sudo systemctl stop firewalld"
 alias sH="nmcli device wifi hotspot ssid 'LinuxDisplay' password ''"

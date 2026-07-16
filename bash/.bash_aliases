@@ -108,7 +108,7 @@ alias 4s="sh ~/.screenlayout/sway-4s.sh"
 
 _dotfiles_machine="${DOTFILES_MACHINE:-$(hostname 2>/dev/null)}"
 case "$_dotfiles_machine" in
-    fedora) _dotfiles_machine="z13-amd" ;;
+    fedora|z13) _dotfiles_machine="z13-amd" ;;
 esac
 
 if [ -n "$_dotfiles_machine" ] && [ -f "$HOME/.dotfiles/machines/$_dotfiles_machine/bash_aliases" ]; then
