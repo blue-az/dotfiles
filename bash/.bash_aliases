@@ -87,6 +87,10 @@ alias sb='source ~/.bashrc'
 alias sbash='source ~/.bashrc'
 alias 3off="xrandr --output HDMI-1 --off"
 alias nv='nvidia-smi'
+alias 200='sudo nvidia-smi -pl 200'
+
+# openwiki against local Ollama (config in ~/.openwiki/.env; base URL can't be persisted there)
+alias openwiki='OPENAI_BASE_URL=http://localhost:11434/v1 openwiki'
 
 # Monitor refresh rate toggle (XB271HU)
 alias 144='swaymsg output DP-2 mode 2560x1440@144Hz'

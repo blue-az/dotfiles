@@ -11,3 +11,8 @@ fi
 if [ -z "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = "1" ]; then
     exec sway
 fi
+. "$HOME/.cargo/env"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/blueaz/.local/bin:$PATH"

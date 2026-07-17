@@ -74,6 +74,9 @@ bindsym $mod+Shift+d exec $file_manager_cmd
 
 # Toggle privacy mode (hides IP from bar and overlay)
 bindsym $mod+p exec ~/.local/bin/privacy-toggle
+# Work router (separate dry-run planner; not the operator ledger)
+bindsym $mod+b exec foot -e python3 /home/blueaz/Python/project-phoenix/scripts/phoenix_work_router.py --interactive
+for_window [title="PhoenixRouter"] floating enable, resize set 800 600
 
 # Launch Firefox
 bindsym $mod+Shift+f exec firefox
