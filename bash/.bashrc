@@ -172,16 +172,16 @@ if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/path.bash.inc' ]; then .
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc' ]; then . '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc'; fi
 
-export PATH="$HOME/.openclaw/bin:$PATH"
+[ -d "$HOME/.openclaw/bin" ] && export PATH="$HOME/.openclaw/bin:$PATH"
 
 # OpenClaw Completion
-source "/home/blueaz/.openclaw/completions/openclaw.bash"
+[ -f "$HOME/.openclaw/completions/openclaw.bash" ] && source "$HOME/.openclaw/completions/openclaw.bash"
 # Anthropic API key for Claude Code
 # [ -f "$HOME/.config/anthropic/env" ] && source "$HOME/.config/anthropic/env"
 
 # Local Claude Code experiments through Ollama-compatible proxy config.
 alias cc-local="ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_API_KEY= ANTHROPIC_BASE_URL=http://localhost:11434 CLAUDE_CONFIG_DIR=/tmp/cc-local-config claude"
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 
 # Added by Antigravity CLI installer
