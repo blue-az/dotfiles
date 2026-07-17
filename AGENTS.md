@@ -9,7 +9,10 @@
 - Z13 AMD guide: `machines/z13-amd/AGENTS.md`.
 ## Current Machine (Agent Note)
 - To identify the host, run: `hostnamectl --static` (preferred) or `cat /etc/hostname`.
-- Use that name to open `machines/<name>/AGENTS.md` for any machine-specific instructions; if it doesn't exist, create it.
+- Map the hostname to its `machines/` directory before opening or creating anything — hostnames and directory names are not 1:1:
+  - `z13` (formerly `fedora`), aka "laptop" or "AMD" → `machines/z13-amd/`
+  - `desktop`, aka "3090" → `machines/desktop/`
+- Only create a new `machines/<name>/` directory for genuinely new hardware, never for a renamed or aliased host. Do not create a literal-hostname directory (e.g., `machines/fedora/`) for a machine already listed above.
 - Template for a new machine guide:
 ```md
 # <Machine Name> Guidelines
