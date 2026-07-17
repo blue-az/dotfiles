@@ -110,6 +110,20 @@ alias 4s="sh ~/.screenlayout/sway-4s.sh"
 # alias 2s="sudo sh /home/blueaz/.screenlayout/2s.sh"
 # alias 3s="sudo sh /home/blueaz/.screenlayout/3screens.sh"
 
+# Sync the system repos (BN/BT, Operator, dotfiles, vault, camelid) across machines.
+# Run at session start on any machine; safe with untracked scratch (autostash covers the rest).
+bnsync() {
+    local r
+    for r in ~/Python ~/operator-control-plane ~/.dotfiles ~/Documents/obsidian-vault ~/Python/camelid-nano; do
+        [ -d "$r/.git" ] || { echo "$r: not present (skipped)"; continue; }
+        if git -C "$r" pull --rebase --autostash -q 2>/dev/null; then
+            echo "$r: $(git -C "$r" log --oneline -1)"
+        else
+            echo "$r: PULL FAILED — resolve manually"
+        fi
+    done
+}
+
 _dotfiles_machine="${DOTFILES_MACHINE:-$(hostname 2>/dev/null)}"
 case "$_dotfiles_machine" in
     fedora|z13) _dotfiles_machine="z13-amd" ;;
