@@ -4,24 +4,56 @@ Hardware and software issues for desktop (NVIDIA RTX 3090, Intel).
 
 ## Open Issues
 
-### HDMI Audio Dropout to Monitor
-- **Status:** Monitoring
-- **Submitted:** 2025-12-30
+### Dual 3090 & Quad 3090 Local AI Infrastructure Expansion
+- **Status:** Open / Procurement & Testing
+- **Submitted:** 2026-07-23
 
 #### Problem
-Monitor audio (Acer Predator XB271HU via DisplayPort) occasionally drops out. Software shows correct sink selected, but no audio plays through monitor.
+Need high-throughput, low-cost local LLM inference and agentic execution (96GB VRAM target) to run 70B and MoE models (Gemma 4 26B/31B, Llama 3 70B) locally at zero API token cost, outperforming Mac Studio setups without VC hardware lock-in.
+
+#### Hardware Strategy & Milestones
+- **Card #1 (EVGA RTX 3090 XC3 24GB):** Purchased 2026-07-23 for $1,099 + tax/shipping ($1,200 all-in). Delivery expected 7/25–7/29.
+- **Phase 1 (Desktop Testing):** Test dual 3090s (existing 3090 + EVGA XC3) on current desktop (MSI Z390 / i9-9900KF) using existing 750W PSU with power capping (`nvidia-smi -pl 200` or `250` for ~500W–550W total system load). Validate 48GB VRAM pool, vLLM / Camelid / Ollama multi-GPU tensor parallelism.
+  - *Safety Exit:* If performance/workflow doesn't justify expansion, re-list EVGA 3090 XC3 on eBay to recoup ~100% investment.
+- **Phase 2 (Quad Rig Build):** Swap RTX 2080 Super into desktop for lightweight display/gaming. Procure Cards #3 & #4 (RTX 3090s, target <= $1,200/ea), AMD EPYC 7000 CPU + Mobo combo (128 PCIe Gen4 lanes), dual 1200W ATX PSUs, and open-air / 4U frame.
+- **Phase 3 (Monetization & Decommission):** Rent out Quad 3090 (96GB VRAM) server compute via Vast.ai / RunPod or local air-gapped business API seats until hardware costs are amortized (~5–6 months). Evaluate selling heavy desktop tower and using z13 laptop + Chromebooks + dedicated Quad AI server.
+
+### Sway Multi-Monitor Workspace Assignment Discrepancies
+- **Status:** Open / Planning Refactor
+- **Submitted:** 2026-07-21
+
+#### Problem
+In Sway on desktop, moving containers to specific workspaces (e.g. `$mod+Shift+2` or `$mod+Shift+4`) behaves inconsistently compared to single-monitor setups (like laptop `z13-amd`).
 
 #### Symptoms
-- Audio stops playing through monitor
-- `wpctl status` shows correct sink selected
-- ELD files show `monitor_present=0, eld_valid=0` when broken
-- No errors in logs
+- Moving a container to WS 2 (`$mod+Shift+2`) causes it to jump physically to DP-3 (secondary monitor on the left).
+- Moving a container to WS 4 (`$mod+Shift+4`) stays on the current focused monitor because WS 4 is assigned to `DP-1` which is currently disabled (`output DP-1 disable`).
+- On laptop, all workspaces live on `eDP-1`, so moving windows between workspaces never changes physical screens unexpectedly.
 
 #### Root Cause
-GPU memory clock transitions cause HDMI/DP audio to drop. This is a known NVIDIA driver bug affecting RTX 30/40 series on Linux. When the GPU reclocks (changes power states), the audio connection drops.
+[`outputs.conf.desktop`](file:///home/blueaz/.dotfiles/sway/.config/sway/config.d/outputs.conf.desktop) hardcodes:
+- `workspace 1 output DP-2`
+- `workspace 2 output DP-3`
+- `workspace 3 output DP-1` (Disabled output)
+- `workspace 4 output DP-1` (Disabled output)
 
-#### Current Workaround
-Power cycle the monitor (full power off, not just standby). Software restarts (PipeWire, kernel module reload) do not help.
+#### Planned Fix
+- Decide whether to remove hardcoded workspace output assignments (allowing workspaces to dynamically land on the active monitor like laptop) or clean up disabled `DP-1` references.
+
+### HDMI Audio Dropout to Monitor & Hotkey Cycling Redesign
+- **Status:** Open / Planning Redesign
+- **Submitted:** 2025-12-30 (Updated 2026-07-21)
+
+#### Problem
+Monitor audio (Acer Predator XB271HU via DisplayPort) occasionally drops out due to GPU memory clock reclocking. To work around audio routing issues, two separate hotkey combinations are currently used to cycle audio:
+- `$mod+Mod1+F11`: `cycle-audio-source.sh` (cycles sink: monitor -> built-in -> earpods)
+- `$mod+Mod1+F2`: `cycle-video-audio.sh` (cycles NVIDIA pro-audio sub-sinks `pro-output-*`)
+
+Having two separate cycling hotkeys is cumbersome and non-intuitive when monitor DP audio drops out.
+
+#### Planned Solution
+- Combine and streamline audio cycling logic into a single smart toggle/script that checks sink health and automatically skips/falls back from broken monitor DP channels.
+
 
 #### Potential Fix: Lock Memory Clocks
 Test temporarily:
