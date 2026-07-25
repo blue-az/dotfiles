@@ -1,5 +1,8 @@
 # Z13 AMD Guidelines
 
+## Agent Terminology
+- **BN = Bottlenecks**: In user prompts and docs, **BN** stands for **Bottlenecks** (friction points, issue tracking in `ISSUES.md`, and bottleneck resolution).
+
 ## Machine Overview
 - Host: ASUS ROG Flow Z13 (GZ302EA) on Fedora Linux 43 (Sway).
 - Goal: match desktop configs; only diverge for display, power, WiFi, and GPU tooling.

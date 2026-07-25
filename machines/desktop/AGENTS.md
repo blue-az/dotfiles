@@ -1,5 +1,8 @@
 # desktop Guidelines
 
+## Agent Terminology
+- **BN = Bottlenecks**: In user prompts and docs, **BN** stands for **Bottlenecks** (friction points, issue tracking in `ISSUES.md`, and bottleneck resolution).
+
 ## Machine Overview
 - Host: `desktop`
 - OS: Fedora Linux (Sway as primary WM)

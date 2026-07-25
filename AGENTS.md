@@ -1,12 +1,18 @@
 # Repository Guidelines
 
+## Agent Terminology & Definitions
+- **BN = Bottlenecks**: In user prompts and documentation, **BN** stands for **Bottlenecks** (tracking system/workflow friction points, issue tracking, and bottleneck resolution). Always interpret "BN" as Bottlenecks.
+
 ## Project Structure & Module Organization
 - Top-level folders are stow packages for dotfiles (e.g., `apps/`, `bash/`, `nvim/`, `sway/`, `waybar/`, `xkb/`, `wallpaper/`, `x11/`, `macos/`). Each package mirrors the target path under `$HOME` (for example `sway/.config/sway/`).
 - Hardware- and OS-specific notes live in `machines/` (per host) and `devices/` (phones/tablets). Monitor presets are in `monitors/`.
 - Issues and setup references are documented in `ISSUES.md` and the various `CLAUDE.md` or `README.md` files.
 ## Machine-Specific Guides
+- Comprehensive machine sitemap and specs: [machine-overview.md](file:///home/blueaz/.dotfiles/machines/machine-overview.md).
 - Host-level contributor notes live in `machines/<name>/AGENTS.md`. Use these for per-machine stow sets, output configs, and device-specific quirks.
-- Z13 AMD guide: `machines/z13-amd/AGENTS.md`.
+- Key Linux Guides: `machines/desktop/AGENTS.md`, `machines/z13-amd/AGENTS.md`, `machines/pine-phone/AGENTS.md`, `machines/raspberrypi/AGENTS.md`.
+- macOS & Chromebook Guides: `machines/mac-mini/AGENTS.md`, `machines/chromebook-lenovo/AGENTS.md`, `machines/chromebook-kevin/AGENTS.md`, `machines/ideapad-u400/AGENTS.md`.
+- Windows Guides: `machines/desktop-windows/AGENTS.md`, `machines/z13-windows/AGENTS.md`.
 ## Current Machine (Agent Note)
 - To identify the host, run: `hostnamectl --static` (preferred) or `cat /etc/hostname`.
 - Map the hostname to its `machines/` directory before opening or creating anything — hostnames and directory names are not 1:1:
