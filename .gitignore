@@ -8,3 +8,4 @@ gemini/
 openai/
 .codex
 .claude/*.tmp.*
+*.bak.*
