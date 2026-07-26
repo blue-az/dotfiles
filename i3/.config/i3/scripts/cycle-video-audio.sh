@@ -31,44 +31,45 @@ ensure_pro_audio() {
 }
 ensure_pro_audio
 
+# Map monitors to sinks by rank: the Nth ELD reporting a monitor (in pin order)
+# is the Nth pro-output sink (in device order). Matching the ELD index directly
+# against alsa.device cannot work - the pin indices (0, 4) and the sink device
+# numbers (3, 7, 8, 9) are separate numbering schemes, so the preferred monitor
+# never resolved and the cycle fell back to whichever sink sorted first.
 find_preferred_monitor_sink() {
     local pattern
     local eld_file
-    local eld_index
-    local sink
-    local dev
-    mapfile -t device_map < <(pactl list sinks 2>/dev/null | awk '
-        /^Sink #/ { if (name != "") print name "|" dev; name=""; dev="" }
-        /^Name:/ { name=$2 }
-        /^[[:space:]]*alsa\.device =/ { gsub(/"/, "", $3); dev=$3 }
-        END { if (name != "") print name "|" dev }
-    ')
+    local name
+    local rank=0
+    local -a live_sinks
+    local -a eld_files
 
     [ -n "$gpu_card" ] || return 1
-    for eld_file in /proc/asound/card"$gpu_card"/eld#*; do
-        [ -r "$eld_file" ] || continue
-        if ! grep -q '^monitor_present[[:space:]]\+1' "$eld_file"; then
-            continue
-        fi
-        if ! grep -q '^eld_valid[[:space:]]\+1' "$eld_file"; then
-            continue
-        fi
-        # The field is separated from the key by *two* tabs, so -F'\t' '{print $2}'
-        # returns an empty string and no monitor ever matched.
+
+    mapfile -t live_sinks < <(pactl list short sinks 2>/dev/null | awk '{print $2}' |
+        grep -E '^alsa_output\..*\.pro-output-' |
+        awk -F'pro-output-' '{print $2"\t"$0}' | sort -n -k1,1 | cut -f2)
+    [ "${#live_sinks[@]}" -gt 0 ] || return 1
+
+    mapfile -t eld_files < <(for eld_file in /proc/asound/card"$gpu_card"/eld#*; do
+        [ -r "$eld_file" ] && printf '%s\t%s\n' "${eld_file##*.}" "$eld_file"
+    done | sort -n -k1,1 | cut -f2)
+
+    for eld_file in "${eld_files[@]}"; do
+        grep -q '^monitor_present[[:space:]]\+1' "$eld_file" || continue
+        grep -q '^eld_valid[[:space:]]\+1' "$eld_file" || continue
+        # The value is separated from its key by *two* tabs, so the previous
+        # -F'\t' '{print $2}' returned an empty string and never matched.
         name=$(awk '/^monitor_name/ {sub(/^monitor_name[[:space:]]+/, ""); print; exit}' "$eld_file")
         for pattern in "${preferred_monitor_patterns[@]}"; do
             if echo "$name" | grep -qi "$pattern"; then
-                eld_index="${eld_file##*.}"
-                for entry in "${device_map[@]}"; do
-                    sink="${entry%%|*}"
-                    dev="${entry#*|}"
-                    if [ "$dev" = "$eld_index" ]; then
-                        echo "$sink"
-                        return 0
-                    fi
-                done
+                if [ "$rank" -lt "${#live_sinks[@]}" ]; then
+                    echo "${live_sinks[$rank]}"
+                    return 0
+                fi
             fi
         done
+        rank=$((rank + 1))
     done
     return 1
 }
