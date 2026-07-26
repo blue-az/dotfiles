@@ -1,20 +1,30 @@
 # Fedora Desktop - Multi-monitor setup
 # Copy to outputs.conf on this machine
 
+# Outputs are matched by identifier ("make model serial"), not connector name.
+# Connector names are handed out by the GPU and shifted when the RTX 2080 went
+# in: the left Acer moved DP-3 -> DP-1, so `output DP-1 disable` began switching
+# off the left Acer instead of the 1080p TV, and DP-3 stopped existing entirely.
+# Identifiers follow the monitor, so they survive GPU swaps and cable moves.
+# Refresh after a hardware change with:
+#   swaymsg -t get_outputs -r | jq -r '.[] | "\(.make) \(.model) \(.serial)"'
+
 # Display configuration - boot default is the 2s layout (left Acer + main Acer).
-# Both TVs must be disabled explicitly: any connector not named here gets
+# Every display must be named explicitly: any output not listed here gets
 # auto-placed by sway at scale 1, which parks the 4K TV to the right of main.
-# Switch layouts after login with the 1s/2s/3s/3sp/4s aliases.
-output DP-1 disable
-output HDMI-A-1 disable
-output DP-3 pos 0 390 res 1680x1050
-output DP-2 pos 1680 0 mode 2560x1440@60Hz
+output "LG Electronics LG TV SSCR2 0x01010101" disable
+output "Acer Technologies Acer AL2216W L92080554231" pos 0 390 res 1680x1050
+output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 1680 0 mode 2560x1440@60Hz
+
+# The 1080p LG TV is not plugged into the RTX 2080 (HDMI-A-2 is free for it), so
+# its identifier is unknown and it cannot be named here yet. Connect it, run the
+# command above, then add a `disable` line for it and hand workspaces 3 and 4
+# back their preferred output.
 
 # Workspace assignments - sway picks the first output in the list that is
 # active, so these hold up in the layouts where the TVs are switched off.
-workspace 1 output DP-2
-workspace 2 output DP-3
-workspace 3 output DP-1 DP-2
-workspace 4 output DP-1 DP-2
-workspace 6 output HDMI-A-1 DP-2
-
+workspace 1 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
+workspace 2 output "Acer Technologies Acer AL2216W L92080554231"
+workspace 3 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
+workspace 4 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
+workspace 6 output "LG Electronics LG TV SSCR2 0x01010101" "Acer Technologies XB271HU #ASP2u3xvGwHd"
