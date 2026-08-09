@@ -29,11 +29,11 @@ Originally built **August 2019**; the GPU and RAM have since been replaced.
 | Motherboard | MSI MPG Z390 Gaming Plus, **LGA1151** | build spec |
 | CPU | Intel Core i9-9900KF Coffee Lake, 8C/16T, 3.6 GHz base / 5.00 GHz — **no integrated graphics** ("KF") | build spec |
 | CPU cooler | Scythe Ninja 5 (large fin-stack tower) | build spec |
-| RAM | Now 64 GB (reports 62.72 GiB). Originally Corsair Vengeance LPX 16GB (2x8GB) DDR4-3200, upgraded to TEAMGROUP Elite DDR4 32GB (2x16GB) 3200MHz — **neither accounts for 64GB, so there has been a third kit**. Current kit unrecorded. | build spec / TODO |
+| RAM | **Currently 32 GB.** Ran 64 GB (4 sticks); two were pulled, putting it back at the TEAMGROUP Elite DDR4 2x16GB 3200MHz the 2019 spec lists. Original Corsair Vengeance LPX 16GB (2x8GB) predates that. The `62.72 GiB` in `machine-overview.md` is a pre-pull snapshot. | build spec / reported |
 | GPU 1 | Zotac RTX 3090 Trinity — 2.5-slot (58mm), 292–320mm, native slots 2-3 | repo |
 | GPU 2 | EVGA RTX 3090 XC3 — 2.2-slot (48mm), 285mm — mounting unresolved, see `machines/desktop/ISSUES.md` | repo |
 | GPU (original) | ASUS ROG STRIX GeForce RTX 2080 Overclocked 8G GDDR6 — displaced by the 3090, now on the shelf | build spec |
-| PSU | **Corsair HXi Series HX750i, 750W.** Drives the dual-3090 power capping (`nvidia-smi -pl 200`/`250`, ~500–550W total) | build spec |
+| PSU | ⚠️ **The Corsair HXi HX750i, 750W BLEW — it is dead, not shelf stock.** What is in the desktop now is unrecorded. See the warning below. | build spec / reported |
 | Storage | **Samsung 970 EVO 1TB NVMe SSD.** The 488 GiB btrfs root is Fedora's share; the rest is the Windows 11 side of the dual boot. | build spec |
 | Network | `eno1` (onboard ethernet) | repo |
 | Displays | Acer Predator XB271HU 2560x1440@144 (165 OC) · Acer AL2216W 1680x1050@60 · LG TV 1920x1080@60 | repo |
@@ -41,6 +41,24 @@ Originally built **August 2019**; the GPU and RAM have since been replaced.
 Sag support: Zotac uses an upHere G195BK; the EVGA is planned to sit on a cut
 wood dowel. The Zotac's fans already suffered real sag damage — do not reinstall
 it unsupported.
+
+> ### ⚠️ The 750W PSU is dead — this invalidates Phase 1
+>
+> The Corsair HX750i blew. Two consequences that are not yet resolved anywhere:
+>
+> 1. **Phase 1 of the quad-rig plan is built on a unit that no longer exists.**
+>    It reads "using existing 750W PSU with power capping (`nvidia-smi -pl 200`
+>    or `250` for ~500W–550W total)". That entire power budget was sized against
+>    *that specific* 750W unit. It has to be re-derived against whatever is
+>    actually in the machine before any dual-3090 testing happens.
+> 2. **Is the shelf PSU still on the shelf?** If the backup PSU was used to
+>    revive the desktop, then it is in service and System 2 needs a PSU too —
+>    making it eight parts, not seven. This is the single most important thing
+>    to confirm on the shelf.
+>
+> Also worth checking, since it failed while driving a 3090: confirm the Zotac
+> and the board came through it. A PSU that dies under load can take other
+> parts with it, and neither has been health-checked in the record.
 
 ---
 

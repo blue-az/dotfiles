@@ -6,6 +6,11 @@ Component-level hardware (case, board, PSU, cooler, spare parts shelf) lives in
 [parts/README.md](parts/README.md) — this file covers running systems as the OS
 sees them, which does not include anything that lacks a driver.
 
+**These are dated snapshots, not live state.** Known drift as of 2026-08-09: the
+desktop's `62.72 GiB` predates two RAM sticks being pulled (now 32 GB), and its
+750W PSU has since blown. Trust `parts/README.md` over the blocks below for
+anything component-level.
+
 ---
 
 ## Desktop (Fedora)
