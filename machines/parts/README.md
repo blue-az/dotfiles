@@ -140,7 +140,7 @@ just has to not get in its way.
 | 3 | CPU cooler | on shelf | **65W TDP rated** | ⚠️ **This is the binding constraint on part 6.** |
 | 4 | RAM | on shelf | **16 GB max** | Ceiling is the plan, not the board — Z390 takes far more if it ever needs to. |
 | 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
-| 6 | CPU | **chosen 2026-08-09** | **Intel i3-9100F** — 4C/4T, 65W, no iGPU, ~$20 and widely available | Meets the 65W ceiling. Weakest of the shortlist: fine for GPU-bound inference, will bottleneck CPU-bound work. Accepted trade at the price. |
+| 6 | CPU | **bought 2026-08-09** | **Intel i3-9100F** `SRF6N` — 4C/4T, 3.6 GHz, 65W, **no iGPU**. $17.99 used, kcliquidation (99.8%, 22.9K) | Meets the 65W ceiling. Weakest of the shortlist: fine GPU-bound, bottlenecks CPU-bound work. Accepted trade at the price. **No integrated graphics — this machine cannot produce video without a card installed.** |
 | 7 | Drive | **bought 2026-08-09** | **Samsung PM981a 512 GB NVMe** (`MZVLB512HBJQ`), used | OEM sibling of System 1's 970 EVO — same M.2 2280 / PCIe 3.0 x4 class, half the capacity. OEM means **no consumer warranty**. Check SMART on arrival (`smartctl -a`): Power On Hours and Percentage Used. Still the wrong size if System 2 ever does inference. |
 
 ### The 65W ceiling drives the CPU choice
@@ -212,8 +212,18 @@ BIOS supports 9th gen before buying; Z390 generally does out of the box.
 > Fix: bench-test them early rather than waiting. Pull the 850W from System 1
 > briefly, boot the new board bare (CPU + cooler + one RAM stick + SSD), confirm
 > POST and that the drive is detected, then put it back. An hour's work that
-> converts two unverifiable used parts into known-good ones while there is still
+> converts unverifiable used parts into known-good ones while there is still
 > recourse. Check SMART on the PM981a in the same sitting.
+>
+> **The 9100F has no integrated graphics, so this test needs a card.** Two
+> levels, depending on how much disruption is acceptable:
+>
+> - **No GPU needed:** power on and watch the board's EZ Debug LEDs step past
+>   CPU and DRAM. That alone proves the used CPU and the RAM are alive — enough
+>   to act on a return.
+> - **GPU needed:** to reach BIOS and confirm the SSD is detected, borrow a card.
+>   The ASUS 2080 is the one to grab if it is out of System 1 at the time; it is
+>   the least disruptive of the three to pull and reseat.
 
 ---
 
