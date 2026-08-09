@@ -111,12 +111,21 @@ Until that is settled, the four shelf `TODO`s below cannot be filled from the
 
 ## System 2 — second desktop from backup parts (not built)
 
-> ### ⛔ Gated on the RM1000x — not immediate, and not urgent
+> ### ⛔ Two gates, both upstream — not immediate, and not urgent
 >
-> System 2's PSU is the **850W currently running System 1 on approved temporary
-> use**. It cannot move until the warranty RM1000x arrives and takes over. So
-> System 2 does not start when the parts are gathered — it starts when that
-> replacement lands. No rush; this is a scoping exercise, not a build queue.
+> System 2 needs **two** things to fall, and neither is about acquiring parts:
+>
+> 1. **The RM1000x lands.** System 2's PSU is the 850W currently running
+>    System 1 on approved temporary use. It only frees up when the warranty
+>    replacement takes over.
+> 2. **The dual-3090 benchmark completes.** System 2's GPU is the second 3090,
+>    which has to stay in System 1 until the dual numbers are captured.
+>
+> Note the benchmark is **not** itself gated on the RM1000x — 850W is more
+> headroom than the ~500–550W the original plan budgeted against a 750W unit.
+> What blocks it is the unresolved EVGA mounting problem in
+> `machines/desktop/ISSUES.md`, not power. No rush on any of it; this is a
+> scoping exercise, not a build queue.
 
 **Design target: minimum viable, must still drive a 3090.** Deliberately scoped
 to the low end rather than balanced — the 3090 does the work, everything else
@@ -156,13 +165,26 @@ BIOS supports 9th gen before buying; Z390 generally does out of the box.
   through system RAM** — dataset prep, large model loading/conversion, or
   multi-GPU work. If System 2 is ever meant to do AI work rather than drive a
   display, this is the first ceiling it hits, not the CPU.
-- **Three GPUs, two systems.** Assigning a 3090 to System 2 means System 1 runs
-  one 3090 plus the 2080 rather than dual 3090s — which is in tension with
-  Phase 1 of the quad-rig plan. Worth deciding explicitly rather than by
-  whichever build happens first.
+- **GPU allocation is decided.** End state: **System 1 runs mixed (one 3090 +
+  the 2080); System 2 gets the second 3090.** Dual-3090 in System 1 is a
+  *temporary benchmarking configuration*, not the target — the cards get split
+  once the numbers are in. This supersedes any reading of Phase 1 as an end
+  state.
 - **Case deferred is fine, but the 3090 sets a floor.** Both 3090s are ~292–320mm
   and 2.2–2.5 slots. A $40 case will fit that only if it is a mid-tower; whoever
   picks needs that number, not a free choice.
+
+### Inbound
+
+| Item | Arrives | For |
+|---|---|---|
+| Thermal paste | **2026-08-09 (today)** | Mounting the 65W cooler, and reseating anything disturbed during the EVGA install |
+| RAM | 2026-08-10 | System 2's 16 GB |
+| 65W-TDP CPU cooler | on hand / recent | System 2 — sets the CPU ceiling |
+
+**Acquisition gap: case, CPU, HDD.** But the critical path is the two gates at
+the top of this section, not shopping — parts can sit until the RM1000x lands
+and the dual benchmark is captured.
 
 ---
 
