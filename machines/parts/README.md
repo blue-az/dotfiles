@@ -54,7 +54,7 @@ Erik accepted an alternate model:
 | | |
 |---|---|
 | Warranty replacement | **Corsair RMx Series RM1000x, 1000W, fully modular** — part `CP-9020271-NA` |
-| Interim unit | 850W (model unrecorded — not identifiable from Gmail) |
+| Interim unit | 850W (model unrecorded) — **approved for temporary use**, currently running System 1 |
 | Return tracking | UPS `1Z966E659098549741`, prepaid label |
 | Replacement ships | only *after* Corsair receives the dead unit |
 
@@ -111,40 +111,58 @@ Until that is settled, the four shelf `TODO`s below cannot be filled from the
 
 ## System 2 — second desktop from backup parts (not built)
 
-**A complete build is 7 parts.** Four are on the shelf, three are not. This table
-is the whole list — it should never be necessary to watch the build video again
-once the Model column is filled.
+> ### ⛔ Gated on the RM1000x — not immediate, and not urgent
+>
+> System 2's PSU is the **850W currently running System 1 on approved temporary
+> use**. It cannot move until the warranty RM1000x arrives and takes over. So
+> System 2 does not start when the parts are gathered — it starts when that
+> replacement lands. No rush; this is a scoping exercise, not a build queue.
 
-| # | Part | Status | Model | Notes |
+**Design target: minimum viable, must still drive a 3090.** Deliberately scoped
+to the low end rather than balanced — the 3090 does the work, everything else
+just has to not get in its way.
+
+| # | Part | Status | Spec | Notes |
 |---|---|---|---|---|
-| 1 | PSU | likely covered | 850W (model TODO) | The interim unit should free up when the warranty RM1000x lands. Confirm before counting on it. |
-| 2 | Motherboard | on shelf | TODO | **Record this first.** Socket + chipset decide parts 5 and 6. |
-| 3 | CPU cooler | on shelf | TODO | Must mount the same socket as the board. |
-| 4 | RAM | on shelf | TODO | DDR generation must match the board. |
-| 5 | Case | **to buy** | — | Only needs slot count / GPU length if the 2080 OC goes in (~300mm, 2.7 slots — large for a small case). |
-| 6 | CPU | **to buy** | — | **Not a free choice** — the board's socket decides the shortlist. Same LGA1151 era as the 9900KF means a cheap used market. |
-| 7 | HDD | **to buy** | — | Consider an SSD for boot regardless of the slot's name; biggest felt-speed difference on an older build, negligible cost at small capacities. |
+| 1 | PSU | gated | **850W** (model TODO) | Ample for one 3090. Frees up only when the RM1000x lands. |
+| 2 | Motherboard | on shelf | **Same as System 1** — MSI MPG Z390 Gaming Plus class, **LGA1151** | Reported as identical; verify the exact board before buying a CPU against it. |
+| 3 | CPU cooler | on shelf | **65W TDP rated** | ⚠️ **This is the binding constraint on part 6.** |
+| 4 | RAM | on shelf | **16 GB max** | Ceiling is the plan, not the board — Z390 takes far more if it ever needs to. |
+| 5 | Case | **deferred** | — | Not being specified. ~$40 units are available, but the preference is to ship the parts and let whoever receives it choose. |
+| 6 | CPU | **to buy** | LGA1151, **≤65W TDP** | See shortlist below. |
+| 7 | HDD | **to buy** | whatever is on hand, else cheapest | Upgrade later. An SSD is still the single biggest felt-speed difference if the cheap option is close in price. |
 
-A GPU is not in the seven — **there are three cards for two systems** (Zotac
-3090, EVGA 3090 XC3, ASUS 2080), so System 2 is covered with one to spare. Note
-part 6 though: if the CPU chosen has no integrated graphics (like the 9900KF),
-that GPU is **required** for the machine to POST at all, not optional.
+### The 65W ceiling drives the CPU choice
 
-**Status as of 2026-08-09:** the gap has narrowed to **case, CPU, and HDD**.
-PSU is likely covered by the freed 850W, RAM by the 2026-08-10 delivery, GPU by
-the spare 2080, and cooler/board were already on the shelf. Also inbound: a
-"65W fan" (as described — exact part unrecorded).
+The cooler caps CPU TDP at 65W, which **rules out the K-series entirely** — the
+9900KF in System 1 is 95W. On LGA1151 that leaves the non-K Coffee Lake parts,
+all 65W:
 
-### Checks to run once the shelf models are recorded
+| CPU | Cores | iGPU | Fit for "drives a 3090" |
+|---|---|---|---|
+| i3-9100F | 4C/4T | none | Cheapest that works. Will bottleneck a 3090 in CPU-bound work. |
+| **i5-9400F** | 6C/6T | none | The usual budget-3090 pairing. Best value on the min end. |
+| i7-9700F | 8C/8T | none | Comfortable headroom, still 65W. |
+| i9-9900 | 8C/16T | none | Same silicon class as System 1's 9900KF at 65W instead of 95W. Priciest. |
 
-1. **Socket chain** — spare board socket must match both the new CPU *and* the
-   spare cooler's mounting bracket. A cooler that fits the 9900KF's LGA1151 will
-   not mount on an AM4/AM5 board without the right kit.
-2. **RAM generation** — spare RAM's DDR generation must match the spare board.
-3. **PSU headroom** — the 2080 OC is a ~215W card; check the spare PSU's wattage
-   and that it has the right PCIe power connectors for it.
-4. **Display output** — if the new CPU has no integrated graphics (like the
-   9900KF), System 2 *requires* the 2080 to POST to a display at all.
+**Prefer an `F` part.** No integrated graphics is fine here — a 3090 is always
+present — and F chips are cheaper for identical compute. Confirm the board's
+BIOS supports 9th gen before buying; Z390 generally does out of the box.
+
+### Consequences of the min-end scope worth knowing
+
+- **16 GB with a 3090 is fine for display, gaming, and inference** where the
+  model lives in the card's 24 GB. It is **tight for anything that stages
+  through system RAM** — dataset prep, large model loading/conversion, or
+  multi-GPU work. If System 2 is ever meant to do AI work rather than drive a
+  display, this is the first ceiling it hits, not the CPU.
+- **Three GPUs, two systems.** Assigning a 3090 to System 2 means System 1 runs
+  one 3090 plus the 2080 rather than dual 3090s — which is in tension with
+  Phase 1 of the quad-rig plan. Worth deciding explicitly rather than by
+  whichever build happens first.
+- **Case deferred is fine, but the 3090 sets a floor.** Both 3090s are ~292–320mm
+  and 2.2–2.5 slots. A $40 case will fit that only if it is a mid-tower; whoever
+  picks needs that number, not a free choice.
 
 ---
 
