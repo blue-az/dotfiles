@@ -139,9 +139,9 @@ just has to not get in its way.
 | 2 | Motherboard | on shelf | **Same as System 1** — MSI MPG Z390 Gaming Plus class, **LGA1151** | Reported as identical; verify the exact board before buying a CPU against it. |
 | 3 | CPU cooler | on shelf | **65W TDP rated** | ⚠️ **This is the binding constraint on part 6.** |
 | 4 | RAM | on shelf | **16 GB max** | Ceiling is the plan, not the board — Z390 takes far more if it ever needs to. |
-| 5 | Case | **deferred** | — | Not being specified. ~$40 units are available, but the preference is to ship the parts and let whoever receives it choose. |
-| 6 | CPU | **to buy** | LGA1151, **≤65W TDP** | See shortlist below. |
-| 7 | HDD | **to buy** | whatever is on hand, else cheapest | Upgrade later. An SSD is still the single biggest felt-speed difference if the cheap option is close in price. |
+| 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
+| 6 | CPU | **chosen 2026-08-09** | **Intel i3-9100F** — 4C/4T, 65W, no iGPU, ~$20 and widely available | Meets the 65W ceiling. Weakest of the shortlist: fine for GPU-bound inference, will bottleneck CPU-bound work. Accepted trade at the price. |
+| 7 | HDD | **to buy** | NVMe, **500 GB floor / 1 TB if it does AI work** | ⚠️ **Not a mechanical drive.** Check for a spare SATA SSD first — free beats cheap. Model files are 20–40 GB each, so 500 GB fills fast on an inference box. Board has M.2; note the second slot may disable some SATA ports. |
 
 ### The 65W ceiling drives the CPU choice
 
@@ -151,7 +151,7 @@ all 65W:
 
 | CPU | Cores | iGPU | Fit for "drives a 3090" |
 |---|---|---|---|
-| i3-9100F | 4C/4T | none | Cheapest that works. Will bottleneck a 3090 in CPU-bound work. |
+| **i3-9100F ← chosen** | 4C/4T | none | Cheapest that works, ~$20 and plentiful. Will bottleneck a 3090 in CPU-bound work; fine when the GPU is doing the job. |
 | **i5-9400F** | 6C/6T | none | The usual budget-3090 pairing. Best value on the min end. |
 | i7-9700F | 8C/8T | none | Comfortable headroom, still 65W. |
 | i9-9900 | 8C/16T | none | Same silicon class as System 1's 9900KF at 65W instead of 95W. Priciest. |
