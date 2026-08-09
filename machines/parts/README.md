@@ -137,7 +137,7 @@ just has to not get in its way.
 |---|---|---|---|---|
 | 1 | PSU | gated | **Rosewill 850W** | Ample for one 3090. Frees up only when the RM1000x lands. |
 | 2 | Motherboard | arrives 2026-08-10 | **MSI MPG Z390 Gaming Plus, LGA1151** — same board as System 1 | Confirmed against the 2019 build spec. Validates the whole chain below. |
-| 3 | CPU cooler | in hand | **Scythe Ninja** | See the note below — this is a much larger cooler than the "65W" figure implied, so the CPU ceiling may not come from here. Immaterial now: the 9100F is 65W and any Ninja handles it easily. |
+| 3 | CPU cooler | in hand | **65W-rated cooler** (model unrecorded) — a second unit, bought for this build | ⚠️ **This is the binding constraint on part 6.** The Scythe Ninja 5 is System 1's and stays there. |
 | 4 | RAM | in hand | **Corsair Vengeance LPX 16 GB (2x8GB) DDR4-3200** | System 1's *original* 2019 kit, displaced by the TEAMGROUP upgrade. This is where the "16 GB max" ceiling comes from — it is the kit itself, not a board or plan limit. |
 | 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
 | 6 | CPU | **bought 2026-08-09** | **Intel i3-9100F** `SRF6N` — 4C/4T, 3.6 GHz, 65W, **no iGPU**. $17.99 used, kcliquidation (99.8%, 22.9K) | Meets the 65W ceiling. Weakest of the shortlist: fine GPU-bound, bottlenecks CPU-bound work. Accepted trade at the price. **No integrated graphics — this machine cannot produce video without a card installed.** |
@@ -155,20 +155,12 @@ System 1, every downstream part checks out:
 | Board → RAM | DDR4 ✅ |
 | Board → SSD | Z390 has M.2; PM981a is M.2 2280 PCIe 3.0 x4 ✅ |
 | Board → GPU | PCIe 3.0 x16 ✅ |
-| Cooler → socket | Scythe Ninja — LGA1151 is a standard mount for that line ✅, but confirm the bracket set is present with the unit |
+| Cooler → socket | 65W unit must have LGA1151 mounting — **the one link still unverified**; confirm the bracket set when it goes on |
 
-> **Open point on the cooler.** The parts list gives System 2 a *Scythe Ninja*,
-> but the 2019 build spec and the dual-3090 drawing set both place a **Scythe
-> Ninja 5 in System 1**, where it is still installed. So either there are two
-> Ninjas on hand, or one of those two records is stale. Separately, a Ninja is a
-> large fin-stack tower rated well above 65W — so the "65W max" figure that
-> shaped the CPU shortlist probably was not a cooler limit after all.
->
-> **This changes nothing that has been bought.** The i3-9100F is a 65W part and
-> any Ninja cools it without effort; if anything there is now headroom the
-> shortlist assumed away. Worth settling only so the record is right — and
-> because if the ceiling was never 65W, an i5-9400F or i7-9700F would have been
-> available at a similar price.
+> **Two coolers, do not conflate them.** The **Scythe Ninja 5 belongs to
+> System 1** and stays there — it is in the 2019 build spec and the dual-3090
+> drawing set. System 2 gets a **separate 65W-rated cooler** bought for this
+> build. The 65W ceiling on the CPU is real and comes from that second unit.
 
 ### The 65W ceiling drives the CPU choice
 
@@ -264,7 +256,7 @@ What is left is cosmetic rather than blocking:
 
 | Unknown | Blocks anything? | How to close it |
 |---|---|---|
-| Which Scythe Ninja, and whether there are two | No — the 9100F is comfortably within any of them | Look at the unit; see the cooler note above |
+| 65W cooler — model and LGA1151 bracket | **Mounting only.** The 65W rating is known and the 9100F fits it | Box or bracket set in hand |
 | Riser cable + 180° power connector | No, but **the working dual-GPU config is not reproducible without it** | Record at install |
 
 Everything else is now recorded. Once System 2 boots,
