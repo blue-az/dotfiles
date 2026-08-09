@@ -136,12 +136,26 @@ just has to not get in its way.
 | # | Part | Status | Spec | Notes |
 |---|---|---|---|---|
 | 1 | PSU | gated | **850W** (model TODO) | Ample for one 3090. Frees up only when the RM1000x lands. |
-| 2 | Motherboard | on shelf | **Same as System 1** — MSI MPG Z390 Gaming Plus class, **LGA1151** | Reported as identical; verify the exact board before buying a CPU against it. |
+| 2 | Motherboard | arrives 2026-08-10 | **MSI MPG Z390 Gaming Plus, LGA1151** — same board as System 1 | Confirmed against the 2019 build spec. Validates the whole chain below. |
 | 3 | CPU cooler | on shelf | **65W TDP rated** | ⚠️ **This is the binding constraint on part 6.** |
 | 4 | RAM | on shelf | **16 GB max** | Ceiling is the plan, not the board — Z390 takes far more if it ever needs to. |
 | 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
 | 6 | CPU | **bought 2026-08-09** | **Intel i3-9100F** `SRF6N` — 4C/4T, 3.6 GHz, 65W, **no iGPU**. $17.99 used, kcliquidation (99.8%, 22.9K) | Meets the 65W ceiling. Weakest of the shortlist: fine GPU-bound, bottlenecks CPU-bound work. Accepted trade at the price. **No integrated graphics — this machine cannot produce video without a card installed.** |
 | 7 | Drive | **bought 2026-08-09** | **Samsung PM981a 512 GB NVMe** (`MZVLB512HBJQ`), used | OEM sibling of System 1's 970 EVO — same M.2 2280 / PCIe 3.0 x4 class, half the capacity. OEM means **no consumer warranty**. Check SMART on arrival (`smartctl -a`): Power On Hours and Percentage Used. Still the wrong size if System 2 ever does inference. |
+
+### Compatibility chain — validated 2026-08-09
+
+With the board confirmed as the same MSI MPG Z390 Gaming Plus (LGA1151) as
+System 1, every downstream part checks out:
+
+| Link | Status |
+|---|---|
+| Board socket → CPU | LGA1151 ↔ i3-9100F ✅ |
+| Chipset → CPU generation | Z390 launched alongside 9th gen ✅ (a very early BIOS may still want a flash — System 1's 9900KF is the same socket, so there is no chicken-and-egg risk) |
+| Board → RAM | DDR4 ✅ |
+| Board → SSD | Z390 has M.2; PM981a is M.2 2280 PCIe 3.0 x4 ✅ |
+| Board → GPU | PCIe 3.0 x16 ✅ |
+| Cooler → socket | 65W unit must have LGA1151 mounting — **the one link still unverified**; confirm when it goes on |
 
 ### The 65W ceiling drives the CPU choice
 
@@ -227,28 +241,20 @@ BIOS supports 9th gen before buying; Z390 generally does out of the box.
 
 ---
 
-## How to fill this in
+## Remaining unknowns
 
-The four shelf models exist only in a build video right now. Watch it **once**
-and replace the four `TODO`s in the System 2 table — after that this file is the
-source and the video is retired.
+**The video is retired.** Its build-spec page is transcribed into System 1 above,
+and it also settled System 2's board — the blocking unknown that decided the CPU,
+RAM, and cooler. Nothing further needs to be watched.
 
-Priority order, because part 2 unblocks parts 3, 4, and 6:
+What is left is cosmetic rather than blocking:
 
-1. Motherboard — socket and chipset
-2. PSU — wattage and PCIe connectors
-3. RAM — DDR generation and capacity
-4. Cooler — supported sockets
+| Unknown | Blocks anything? | How to close it |
+|---|---|---|
+| Interim 850W PSU — exact model | No. Wattage is what matters and it is known | Side sticker |
+| RAM — exact kit/timings | No. 16 GB DDR4 is enough to plan against | Stick label, or `sudo dmidecode -t memory` once it boots |
+| 65W cooler — model and socket support | **Mounting only** — must be LGA1151 | Box or the bracket set in hand |
+| Riser cable + 180° power connector | No, but the working dual config is not reproducible without it | Record at install |
 
-Faster alternatives to watching it, if either applies:
-
-- **The video is online with a parts list in its description** (or links a
-  PCPartPicker build) — paste the URL and the list can be pulled from the page
-  directly, no watching required.
-- **The board is reachable** — if the spare board is installed in anything that
-  boots, `sudo dmidecode -t baseboard -t memory` prints the board model and the
-  full RAM spec with no video at all.
-
-If neither applies, the physical labels work: board model is silkscreened
-between the PCIe slots, PSU wattage is on the side sticker, RAM timings are on
-the stick label.
+Once System 2 boots, `sudo dmidecode -t baseboard -t memory` prints the board and
+the full RAM spec in one shot and closes two of these for free.
