@@ -1,0 +1,25 @@
+[Unit]
+Description=OpenClaw Gateway (v2026.4.5)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/blueaz/.openclaw/tools/node-v22.22.0/bin/node /home/blueaz/.openclaw/lib/node_modules/openclaw/dist/entry.js gateway --port 18789
+Restart=always
+RestartSec=5
+TimeoutStopSec=30
+TimeoutStartSec=30
+SuccessExitStatus=0 143
+KillMode=control-group
+Environment=HOME=/home/blueaz
+Environment=TMPDIR=/tmp
+Environment=PATH=/home/blueaz/.openclaw/tools/node-v22.22.0/bin:/home/blueaz/.local/bin:/home/blueaz/.npm-global/bin:/home/blueaz/bin:/home/blueaz/.volta/bin:/home/blueaz/.asdf/shims:/home/blueaz/.bun/bin:/home/blueaz/.nvm/current/bin:/home/blueaz/.fnm/current/bin:/home/blueaz/.local/share/pnpm:/usr/local/bin:/usr/bin:/bin
+Environment=OPENCLAW_GATEWAY_PORT=18789
+Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service
+Environment="OPENCLAW_WINDOWS_TASK_NAME=OpenClaw Gateway"
+Environment=OPENCLAW_SERVICE_MARKER=openclaw
+Environment=OPENCLAW_SERVICE_KIND=gateway
+Environment=OPENCLAW_SERVICE_VERSION=2026.4.5
+
+[Install]
+WantedBy=default.target

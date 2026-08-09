@@ -27,7 +27,7 @@ input type:touchpad {
 include ~/.config/sway/config.d/outputs.conf
 
 # Machine-specific overrides (symlink to config.d/machine.conf.*)
-set $term_cmd terminator
+set $term_cmd foot
 set $launcher_cmd "wofi --show drun"
 set $file_manager_cmd dolphin
 set $swayidle_lock_timeout 1800
@@ -60,8 +60,11 @@ exec dunst
 exec swaymsg 'workspace 2; workspace 1'
 
 # ============ KEYBINDINGS ============
-# Start a terminal
+# Start a terminal (Super+Enter, Ctrl+Alt+T, Super+T, Alt+Enter)
 bindsym $mod+Return exec $term_cmd
+bindsym Ctrl+Alt+t exec $term_cmd
+bindsym $mod+t exec $term_cmd
+bindsym Mod1+Return exec $term_cmd
 
 # Kill focused window
 bindsym $mod+Shift+q kill

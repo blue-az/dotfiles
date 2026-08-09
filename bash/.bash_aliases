@@ -99,6 +99,12 @@ alias 60='swaymsg output DP-2 mode 2560x1440@60Hz'
 # not used
 alias XI="xrdb -merge ~/.Xresources"
 alias dis="export DISPLAY=:0"
+
+# Always skip tool-permission prompts in Agy (interactive and headless -p alike).
+# Chosen 2026-07-25 after confirming there's no persisted settings.json equivalent —
+# this is the only way to make it apply every time, at the cost of no confirmation
+# prompts ever, for any tool call, in any Agy session.
+alias agy="agy --dangerously-skip-permissions"
 # Screen layouts (Sway/Wayland)
 alias 1s="sh ~/.screenlayout/sway-1s.sh"
 alias 2s="sh ~/.screenlayout/sway-2s.sh"

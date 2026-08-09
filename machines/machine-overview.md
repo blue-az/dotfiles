@@ -180,3 +180,30 @@ Disk (/): 29.16 GiB - btrfs
 Local IP (mlan0): 192.168.x.x/24
 Battery: Yes
 ```
+
+---
+
+## PinePhone (postmarketOS)
+```
+Host: PINE64 PinePhone (Convergence Edition, 3 GB RAM / 32 GB eMMC)
+OS: postmarketOS v25.12 (Phosh)
+Kernel: Linux 6.x (ARM64)
+WM: Phosh (Wayland)
+Display: 1440x720 5.95"
+Battery: Yes
+Role: Mobile Linux device / testing recovery target
+```
+
+---
+
+## Raspberry Pi (Raspberry Pi OS)
+```
+Host: raspberrypi
+Hardware: Raspberry Pi 3 family (ARM)
+OS: Raspberry Pi OS (Debian 13-era)
+Kernel: Linux 6.12.75+rpt-rpi-v7
+Shell: bash 5.2
+Networking: Ethernet / Wi-Fi (192.168.8.x)
+Role: Headless SBC / low-power remote node
+```
+
