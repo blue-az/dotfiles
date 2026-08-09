@@ -56,13 +56,23 @@ Either that is two cards or one card described two ways — check the shelf.
 
 ## System 2 — second desktop from backup parts (not built)
 
-Missing, per Erik:
+**A complete build is 7 parts.** Four are on the shelf, three are not. This table
+is the whole list — it should never be necessary to watch the build video again
+once the Model column is filled.
 
-| Part | Notes |
-|---|---|
-| **Case** | Slot count and GPU length only matter if the 2080 goes in — it is ~300mm and 2.7 slots, which is a large card for a small case. |
-| **CPU** | **Constrained by the spare motherboard's socket, not chosen freely.** Record the board first; that decides the entire shortlist. If it is the same LGA1151 generation as the 9900KF, the used market for that era is cheap. |
-| **HDD** | Consider an SSD for boot regardless of what the slot is called — no meaningful cost difference at small capacities, and it is the single biggest felt-speed difference on an older build. |
+| # | Part | Status | Model | Notes |
+|---|---|---|---|---|
+| 1 | PSU | on shelf | TODO | Wattage and PCIe connectors are the numbers that matter. |
+| 2 | Motherboard | on shelf | TODO | **Record this first.** Socket + chipset decide parts 5 and 6. |
+| 3 | CPU cooler | on shelf | TODO | Must mount the same socket as the board. |
+| 4 | RAM | on shelf | TODO | DDR generation must match the board. |
+| 5 | Case | **to buy** | — | Only needs slot count / GPU length if the 2080 OC goes in (~300mm, 2.7 slots — large for a small case). |
+| 6 | CPU | **to buy** | — | **Not a free choice** — the board's socket decides the shortlist. Same LGA1151 era as the 9900KF means a cheap used market. |
+| 7 | HDD | **to buy** | — | Consider an SSD for boot regardless of the slot's name; biggest felt-speed difference on an older build, negligible cost at small capacities. |
+
+A GPU is not in the seven — the ASUS 2080 OC on the shelf covers it. But note
+part 6: if the CPU chosen has no integrated graphics (like the 9900KF), that GPU
+is **required** for the machine to POST at all, not optional.
 
 ### Checks to run once the shelf models are recorded
 
@@ -79,10 +89,26 @@ Missing, per Erik:
 
 ## How to fill this in
 
-Watch the build video once, then replace every `TODO` above. The rows that
-actually block the System 2 build, in priority order:
+The four shelf models exist only in a build video right now. Watch it **once**
+and replace the four `TODO`s in the System 2 table — after that this file is the
+source and the video is retired.
 
-1. Spare motherboard — socket and chipset
-2. Spare PSU — wattage and PCIe connectors
-3. Spare RAM — DDR generation and capacity
-4. Spare cooler — supported sockets
+Priority order, because part 2 unblocks parts 3, 4, and 6:
+
+1. Motherboard — socket and chipset
+2. PSU — wattage and PCIe connectors
+3. RAM — DDR generation and capacity
+4. Cooler — supported sockets
+
+Faster alternatives to watching it, if either applies:
+
+- **The video is online with a parts list in its description** (or links a
+  PCPartPicker build) — paste the URL and the list can be pulled from the page
+  directly, no watching required.
+- **The board is reachable** — if the spare board is installed in anything that
+  boots, `sudo dmidecode -t baseboard -t memory` prints the board model and the
+  full RAM spec with no video at all.
+
+If neither applies, the physical labels work: board model is silkscreened
+between the PCIe slots, PSU wattage is on the side sticker, RAM timings are on
+the stick label.
