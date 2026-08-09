@@ -141,7 +141,7 @@ just has to not get in its way.
 | 4 | RAM | on shelf | **16 GB max** | Ceiling is the plan, not the board — Z390 takes far more if it ever needs to. |
 | 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
 | 6 | CPU | **chosen 2026-08-09** | **Intel i3-9100F** — 4C/4T, 65W, no iGPU, ~$20 and widely available | Meets the 65W ceiling. Weakest of the shortlist: fine for GPU-bound inference, will bottleneck CPU-bound work. Accepted trade at the price. |
-| 7 | HDD | **to buy** | NVMe, **500 GB floor / 1 TB if it does AI work** | ⚠️ **Not a mechanical drive.** Check for a spare SATA SSD first — free beats cheap. Model files are 20–40 GB each, so 500 GB fills fast on an inference box. Board has M.2; note the second slot may disable some SATA ports. |
+| 7 | Drive | **bought 2026-08-09** | **Samsung PM981a 512 GB NVMe** (`MZVLB512HBJQ`), used | OEM sibling of System 1's 970 EVO — same M.2 2280 / PCIe 3.0 x4 class, half the capacity. OEM means **no consumer warranty**. Check SMART on arrival (`smartctl -a`): Power On Hours and Percentage Used. Still the wrong size if System 2 ever does inference. |
 
 ### The 65W ceiling drives the CPU choice
 
@@ -182,17 +182,38 @@ BIOS supports 9th gen before buying; Z390 generally does out of the box.
   and 2.2–2.5 slots. A $40 case will fit that only if it is a mid-tower; whoever
   picks needs that number, not a free choice.
 
-### Inbound
+### Inbound / status as of 2026-08-09
 
-| Item | Arrives | For |
+| Item | Status | For |
 |---|---|---|
-| Thermal paste | **2026-08-09 (today)** | Mounting the 65W cooler, and reseating anything disturbed during the EVGA install |
-| RAM | 2026-08-10 | System 2's 16 GB |
-| 65W-TDP CPU cooler | on hand / recent | System 2 — sets the CPU ceiling |
+| RAM (16 GB) | **in hand** | System 2 |
+| 65W-TDP cooler | **in hand** | System 2 — sets the CPU ceiling |
+| Thermal paste | arrives 2026-08-09 | Cooler mount; reseating anything disturbed in the EVGA install |
+| Motherboard | arrives **2026-08-10** | System 2 — **record the exact model on arrival**, it is still a TODO above |
+| CPU (i3-9100F, used) | **~1 week out** | System 2 |
+| NVMe SSD (Samsung PM981a 512 GB, used) | **~1 week out** | System 2 |
+| PSU (Corsair RM1000x) | ⚠️ **not started** — dead unit not yet shipped back | System 1; frees the 850W for System 2 |
 
-**Acquisition gap: case, CPU, HDD.** But the critical path is the two gates at
-the top of this section, not shopping — parts can sit until the RM1000x lands
-and the dual benchmark is captured.
+> ### ⏰ The RMA return is the only hard deadline in this project
+>
+> The dead HX750i **has not been sent back yet**. Nothing ships from Corsair
+> until they receive it, and the approved window closes **~2026-08-28** — about
+> 19 days out. Everything else here can slip indefinitely at no cost; this one
+> expires and cannot be restarted. It is also the gate on System 2's PSU, so a
+> missed window stalls both machines.
+
+> ### ⏰ Test the used parts before their return windows close
+>
+> The CPU and SSD are used eBay purchases arriving ~2026-08-16, so their return
+> windows likely close ~mid-September. System 2 cannot be powered on until the
+> 850W frees up, which depends on an RMA that has not started — so on the
+> current path **both parts sit untested until well after they can be returned**.
+>
+> Fix: bench-test them early rather than waiting. Pull the 850W from System 1
+> briefly, boot the new board bare (CPU + cooler + one RAM stick + SSD), confirm
+> POST and that the drive is detected, then put it back. An hour's work that
+> converts two unverifiable used parts into known-good ones while there is still
+> recourse. Check SMART on the PM981a in the same sitting.
 
 ---
 
