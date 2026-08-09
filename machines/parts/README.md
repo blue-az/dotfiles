@@ -29,7 +29,7 @@ Originally built **August 2019**; the GPU and RAM have since been replaced.
 | Motherboard | MSI MPG Z390 Gaming Plus, **LGA1151** | build spec |
 | CPU | Intel Core i9-9900KF Coffee Lake, 8C/16T, 3.6 GHz base / 5.00 GHz — **no integrated graphics** ("KF") | build spec |
 | CPU cooler | Scythe Ninja 5 (large fin-stack tower) | build spec |
-| RAM | **Currently 32 GB.** Ran 64 GB (4 sticks); two were pulled, putting it back at the TEAMGROUP Elite DDR4 2x16GB 3200MHz the 2019 spec lists. Original Corsair Vengeance LPX 16GB (2x8GB) predates that. The `62.72 GiB` in `machine-overview.md` is a pre-pull snapshot. | build spec / reported |
+| RAM | **Currently 32 GB.** Ran 64 GB across 4 sticks; **two died in the PSU incident** and were pulled, landing it back on the TEAMGROUP Elite DDR4 2x16GB 3200MHz the 2019 spec lists. The dead sticks were first mistaken for a blown motherboard — the board is fine. A replacement stick/kit arrives **2026-08-10**. Original Corsair Vengeance LPX 16GB (2x8GB) predates all of this. `machine-overview.md`'s `62.72 GiB` is a pre-failure snapshot. | build spec / reported |
 | GPU 1 | Zotac RTX 3090 Trinity — 2.5-slot (58mm), 292–320mm, native slots 2-3 | repo |
 | GPU 2 | EVGA RTX 3090 XC3 — 2.2-slot (48mm), 285mm — mounting unresolved, see `machines/desktop/ISSUES.md` | repo |
 | GPU (original) | ASUS ROG STRIX GeForce RTX 2080 Overclocked 8G GDDR6 — displaced by the 3090, now on the shelf | build spec |
@@ -42,23 +42,38 @@ Sag support: Zotac uses an upHere G195BK; the EVGA is planned to sit on a cut
 wood dowel. The Zotac's fans already suffered real sag damage — do not reinstall
 it unsupported.
 
-> ### ⚠️ The 750W PSU is dead — this invalidates Phase 1
->
-> The Corsair HX750i blew. Two consequences that are not yet resolved anywhere:
->
-> 1. **Phase 1 of the quad-rig plan is built on a unit that no longer exists.**
->    It reads "using existing 750W PSU with power capping (`nvidia-smi -pl 200`
->    or `250` for ~500W–550W total)". That entire power budget was sized against
->    *that specific* 750W unit. It has to be re-derived against whatever is
->    actually in the machine before any dual-3090 testing happens.
-> 2. **Is the shelf PSU still on the shelf?** If the backup PSU was used to
->    revive the desktop, then it is in service and System 2 needs a PSU too —
->    making it eight parts, not seven. This is the single most important thing
->    to confirm on the shelf.
->
-> Also worth checking, since it failed while driving a 3090: confirm the Zotac
-> and the board came through it. A PSU that dies under load can take other
-> parts with it, and neither has been health-checked in the record.
+### The PSU failure, and what replaced it
+
+**2026-07-27** — the Corsair HX750i "popped loudly and expelled gas thru vent.
+Dead after." Originally bought from Amazon.
+
+**Corsair RMA #2009087410** (ticket opened 2026-07-27, warranty exchange approved
+**2026-07-29, valid 30 days**). The HX750i is out of stock, so Corsair offered and
+Erik accepted an alternate model:
+
+| | |
+|---|---|
+| Warranty replacement | **Corsair RMx Series RM1000x, 1000W, fully modular** — part `CP-9020271-NA` |
+| Interim unit | 850W (model unrecorded — not identifiable from Gmail) |
+| Return tracking | UPS `1Z966E659098549741`, prepaid label |
+| Replacement ships | only *after* Corsair receives the dead unit |
+
+> ⏳ **The 30-day RMA window closes around 2026-08-28.** The replacement does not
+> ship until the return arrives, so if the dead HX750i has not gone out yet, that
+> is the clock to watch.
+
+**Knock-on effects:**
+
+1. **Phase 1 of the quad-rig plan is blocked** — it specifies "existing 750W PSU
+   with power capping (`nvidia-smi -pl 200`/`250`, ~500–550W total)". That budget
+   was sized against a unit that no longer exists and must be re-derived. The
+   1000W replacement is *more* headroom than the plan assumed, which is good news
+   for dual-3090 testing once it lands.
+2. **The 850W may become System 2's PSU.** It is described as temporary, so once
+   the RM1000x arrives it should free up — which is a large part of why the second
+   build is suddenly close. Confirm rather than assume.
+3. **The motherboard is cleared.** It was initially suspected blown; the actual
+   casualties were RAM sticks. See the RAM row.
 
 ---
 
@@ -102,7 +117,7 @@ once the Model column is filled.
 
 | # | Part | Status | Model | Notes |
 |---|---|---|---|---|
-| 1 | PSU | on shelf | TODO | Wattage and PCIe connectors are the numbers that matter. |
+| 1 | PSU | likely covered | 850W (model TODO) | The interim unit should free up when the warranty RM1000x lands. Confirm before counting on it. |
 | 2 | Motherboard | on shelf | TODO | **Record this first.** Socket + chipset decide parts 5 and 6. |
 | 3 | CPU cooler | on shelf | TODO | Must mount the same socket as the board. |
 | 4 | RAM | on shelf | TODO | DDR generation must match the board. |
@@ -110,9 +125,15 @@ once the Model column is filled.
 | 6 | CPU | **to buy** | — | **Not a free choice** — the board's socket decides the shortlist. Same LGA1151 era as the 9900KF means a cheap used market. |
 | 7 | HDD | **to buy** | — | Consider an SSD for boot regardless of the slot's name; biggest felt-speed difference on an older build, negligible cost at small capacities. |
 
-A GPU is not in the seven — the ASUS 2080 OC on the shelf covers it. But note
-part 6: if the CPU chosen has no integrated graphics (like the 9900KF), that GPU
-is **required** for the machine to POST at all, not optional.
+A GPU is not in the seven — **there are three cards for two systems** (Zotac
+3090, EVGA 3090 XC3, ASUS 2080), so System 2 is covered with one to spare. Note
+part 6 though: if the CPU chosen has no integrated graphics (like the 9900KF),
+that GPU is **required** for the machine to POST at all, not optional.
+
+**Status as of 2026-08-09:** the gap has narrowed to **case, CPU, and HDD**.
+PSU is likely covered by the freed 850W, RAM by the 2026-08-10 delivery, GPU by
+the spare 2080, and cooler/board were already on the shelf. Also inbound: a
+"65W fan" (as described — exact part unrecorded).
 
 ### Checks to run once the shelf models are recorded
 
