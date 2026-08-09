@@ -50,11 +50,19 @@ note.**
 | ATX slot pitch | — | 20.32mm between adjacent slots | — | ATX/PCI bracket standard |
 | OwlTree PCIe 4.0 x16 riser | 200mm flexible length | — | 89mm constant width, 90° adapter at card end only | product listing |
 | Case / board / cooler | Fractal Design Define R6 (7 rear slots) / MSI MPG Z390 Gaming Plus / Scythe Ninja 5 (large fin-stack tower, not a fan icon) | | | this session |
-| ASUS ROG STRIX RTX 2080 OC (reference dummy only — not part of final build) | ~300mm | ~65mm (2.7-slot) | ~120mm ESTIMATE, not sourced | prior test-fit |
+| ASUS ROG STRIX RTX 2080 OC (**now part of the final build** — vertical, paired with the EVGA; was originally the test-fit dummy) | ~300mm | ~65mm (2.7-slot) | ~120mm ESTIMATE, not sourced | prior test-fit |
 
 Measured real clearances (physically test-fit this session, more reliable than
 formula-derived estimates): **~30mm** between the two cards' cooler shrouds;
 **~16-20mm** between the EVGA and the PSU shroud below it.
+
+**Verified physically 2026-08-09: the 2080 + EVGA 3090 pairing fits BETTER in
+this case than two 3090s do — despite the 2080 being the thicker card on paper
+(~2.7 slot vs the Zotac's 2.5).** This is a real quirk of these specific cards in
+this specific case, confirmed by test-fit, not a measurement error. Do not
+"correct" it by re-deriving from slot-thickness numbers; the numbers predict the
+opposite and the numbers are wrong here. Same rule as the riser-cable geometry
+above — physical fit is load-bearing, spec arithmetic is not.
 
 ## Topology (the physical layout to draw)
 
