@@ -13,3 +13,5 @@ openai/
 .codex
 .claude/*.tmp.*
 *.bak.*
+# Scratch space — nothing here should ever be committed
+temp/
