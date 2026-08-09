@@ -58,8 +58,11 @@ vim.g.R_rconsole_height = 15
 vim.api.nvim_set_keymap('n', '<F2>', ':NERDTreeToggle<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
 
--- python compiler
-vim.g.python3_host_prog = '/home/blueaz/Python/.venv/bin/python'
+-- python3 provider host: a dedicated venv that only carries pynvim, so it
+-- survives `uv sync` on the project venv. Rebuild with:
+--   uv venv ~/.local/share/nvim/venv
+--   uv pip install --python ~/.local/share/nvim/venv/bin/python pynvim
+vim.g.python3_host_prog = vim.fn.expand('~/.local/share/nvim/venv/bin/python')
 
 -- Python file defaults
 vim.cmd([[

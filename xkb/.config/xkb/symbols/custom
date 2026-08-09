@@ -7,3 +7,19 @@ xkb_symbols "swap_caps_super" {
     modifier_map Mod4 { <CAPS> };
     modifier_map Lock { <LWIN>, <RWIN> };
 };
+
+// Reclaim the ; home-row key as a second BackSpace.
+// : stays put on Shift+; -- vim needs it where the fingers expect it.
+// ; moves up to the grave key; ` and ~ retreat to AltGr
+// (which requires level3(ralt_switch) in the keymap).
+partial alphanumeric_keys
+xkb_symbols "semicolon_backspace" {
+    key <AC10> {
+        type[Group1] = "TWO_LEVEL",
+        [ BackSpace, colon ]
+    };
+    key <TLDE> {
+        type[Group1] = "FOUR_LEVEL",
+        [ semicolon, colon, grave, asciitilde ]
+    };
+};
