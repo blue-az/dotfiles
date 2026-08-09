@@ -36,6 +36,11 @@
   - NVIDIA tooling is expected (`nvidia-smi` paths in scripts).
 - Services:
   - Keep custom machine services documented in `machines/desktop/CLAUDE.md`.
+  - OpenClaw gateway user units live in `machines/desktop/openclaw/`, outside
+    every stow package, because they hardcode `/home/blueaz/.openclaw/...` and
+    would otherwise be linked on every host that stows `sway`. Install them with
+    `machines/desktop/openclaw/INSTALL.md`; that file also records which of the
+    two ollama profiles still needs to be identified and removed.
 
 ## Validation Notes
 - What to reload/restart after changes:
