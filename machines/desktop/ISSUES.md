@@ -11,6 +11,46 @@ Hardware and software issues for desktop (NVIDIA RTX 3090, Intel).
 #### Problem
 Need high-throughput, low-cost local LLM inference and agentic execution (96GB VRAM target) to run 70B and MoE models (Gemma 4 26B/31B, Llama 3 70B) locally at zero API token cost, outperforming Mac Studio setups without VC hardware lock-in.
 
+#### Interconnect ceiling on this board (verified 2026-08-09)
+
+**The MSI MPG Z390 Gaming Plus runs x16/x4, and the second full-length slot is fed by the chipset, not the CPU.**
+
+| Slot | Width | Source |
+|---|---|---|
+| PCI_E1 | x16 | CPU |
+| PCI_E4 | **x4** | **PCH** |
+
+Officially CrossFire-capable, **not SLI-certified** — NVIDIA requires x8/x8 minimum, which this board cannot provide. Consequences that matter more than any GPU spec:
+
+- The second card gets **PCIe 3.0 x4 ≈ 3.9 GB/s**, not the x8 a lane-split board would give.
+- Those are **PCH lanes sharing the DMI 3.0 uplink** (~3.9 GB/s total) with the M.2 NVMe, SATA, USB, and LAN. Under load the effective figure is lower still.
+- Without NVLink, GPU↔GPU traffic routes **GPU2 → PCH → DMI → CPU → GPU1**. That is the worst possible path for tensor parallelism.
+- The 9900KF only has 16 CPU lanes total, so no board-level fix exists here. **This is precisely what Phase 2's EPYC (128 lanes) is for.**
+
+**Note which slot the vertical card lands in.** If the riser plugs into PCI_E4, the vertically-mounted card is the x4 one — that is the configuration being benchmarked.
+
+#### Dual-GPU performance predictions — pre-registered 2026-08-09
+
+Written **before** benchmarking so the results cannot be rationalized afterward.
+
+1. **EVGA vs Zotac, single card: parity, within 1–3%.** Same GA102, 10496 cores, 24GB GDDR6X. Expect a tie in short bursts; the EVGA XC3's 2.2-slot cooler may throttle sooner than the Trinity's 2.5-slot under sustained load, showing up as a slow decline rather than a lower peak.
+2. **Mismatched 3090 + 2080: no pooling benefit; expect ≈ single-3090 or worse.** Turing (SM 7.5) has no bf16, so the whole stack is pinned to fp16. vLLM tensor parallelism assumes homogeneous GPUs and would cap at 2× the smaller card, stranding 16GB of the 3090. llama.cpp's uneven layer split does work, but the 2080's 448 GB/s against the 3090's 936 GB/s makes those layers roughly half-speed. Real value here is **independent** workloads on the 2080 (display, Whisper, TTS, encode), not pooling.
+3. **True dual 3090 — split by framework:**
+   - **Tensor parallel (vLLM): expected to disappoint on this board**, bottlenecked by the x4 PCH link above rather than by the cards.
+   - **Layer split (Ollama / llama.cpp): expected to be the usable path**, since it moves far less data across the interconnect.
+   - **Capacity win is real regardless of interconnect:** 48GB holds a 70B at Q4 (~40GB) that a single 3090 simply cannot, at any speed.
+   - **For models that already fit in 24GB, dual may be *slower* than single at batch-1** once communication overhead is counted. Gains show up in batched/concurrent serving.
+
+**Interpretation warning:** if the dual numbers come in poor, the likely cause is the x4 PCH link, **not the GPUs**. Do not conclude "dual 3090 isn't worth it" from results on this board — that conclusion would be an artifact of the platform Phase 2 exists to replace.
+
+**To capture during the benchmark:**
+- `lspci -vv | grep -i LnkSta` — negotiated width per card, confirming which is on x4
+- `nvidia-smi topo -m` — whether NVLink is present
+- Single-card baseline for each card separately, same model and quant
+- Dual on a model that fits 24GB (measures TP overhead) **and** a 70B Q4 (measures the capacity win)
+
+**NVLink is the one available lever.** The 3090 is the only consumer Ampere card with it (~112 GB/s, bypassing PCIe entirely), roughly $80–150. On this board it would matter more to tensor-parallel throughput than anything else in the build — though it helps layer-split workloads much less.
+
 #### Hardware Strategy & Milestones
 - **Card #1 (EVGA RTX 3090 XC3 24GB):** Purchased 2026-07-23 for $1,099 + tax/shipping ($1,200 all-in). Delivery expected 7/25–7/29.
 - **Existing card (Zotac RTX 3090 Trinity, in the first x16 slot):** 2.5 slots thick (58mm), 292mm length. Identified from case photos by branding/styling, not a confirmed exact SKU — verify against box/invoice if precision ever matters beyond clearance planning.
