@@ -9,6 +9,7 @@
 - Issues and setup references are documented in `ISSUES.md` and the various `CLAUDE.md` or `README.md` files.
 ## Machine-Specific Guides
 - Comprehensive machine sitemap and specs: [machine-overview.md](file:///home/blueaz/.dotfiles/machines/machine-overview.md).
+- Hardware parts inventory (built systems + spare-parts shelf): `machines/parts/README.md`.
 - Host-level contributor notes live in `machines/<name>/AGENTS.md`. Use these for per-machine stow sets, output configs, and device-specific quirks.
 - Key Linux Guides: `machines/desktop/AGENTS.md`, `machines/z13-amd/AGENTS.md`, `machines/pine-phone/AGENTS.md`, `machines/raspberrypi/AGENTS.md`.
 - macOS & Chromebook Guides: `machines/mac-mini/AGENTS.md`, `machines/chromebook-lenovo/AGENTS.md`, `machines/chromebook-kevin/AGENTS.md`, `machines/ideapad-u400/AGENTS.md`.

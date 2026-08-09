@@ -2,6 +2,10 @@
 
 Quick reference of all machines via fastfetch output.
 
+Component-level hardware (case, board, PSU, cooler, spare parts shelf) lives in
+[parts/README.md](parts/README.md) — this file covers running systems as the OS
+sees them, which does not include anything that lacks a driver.
+
 ---
 
 ## Desktop (Fedora)
