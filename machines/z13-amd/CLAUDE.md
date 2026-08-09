@@ -87,13 +87,19 @@ Config: `~/.dotfiles/sway/.config/sway/config.d/outputs.conf.z13-amd`
 ## Stow Packages
 ```bash
 cd ~/.dotfiles
-stow bash sway waybar i3 nvim xkb wallpaper
+stow --no-folding apps audio bash sway waybar i3 nvim xkb wallpaper
 ```
 
-Then symlink the outputs config:
+`--no-folding` is required: see the Stow Packages & Linking section of
+`machines/z13-amd/AGENTS.md` for why folding corrupts the pointer symlinks below.
+
+Then create the per-machine pointers (both untracked, both hard-included by
+`sway/.config/sway/config`):
 ```bash
 cd ~/.config/sway/config.d
 ln -sf outputs.conf.z13-amd outputs.conf
+ln -sf machine.conf.z13-amd machine.conf
+ln -sf ~/.dotfiles/waybar/.config/waybar/config.z13-amd ~/.config/waybar/config
 ```
 
 ## GPU
