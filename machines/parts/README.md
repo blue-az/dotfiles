@@ -6,9 +6,10 @@ spec and the backup parts list stop living in a build video.
 Follows the same idea as `keyboards/<name>/README.md`, but one file — parts are
 only interesting relative to each other (socket, wattage, clearance).
 
-**Every row carries a source.** `repo` = already documented elsewhere in this
-repo and verified. `reported` = stated by Erik, model not yet recorded.
-`TODO` = unknown, fill from the build video. Do not upgrade a `reported` or
+**Every row carries a source.** `build spec` = the "PC Build Specs — August 2019
+build" page from the build video, transcribed 2026-08-09; the most authoritative
+source here. `repo` = documented elsewhere in this repo and verified.
+`reported` = stated by Erik, model not yet recorded. `TODO` = unknown. Do not upgrade a `reported` or
 `TODO` row to a specific model without checking the actual hardware or invoice —
 guessing here produces exactly the incompatibility this file exists to prevent.
 
@@ -20,15 +21,20 @@ Dual-boots Fedora 43 (Sway) and Windows 11 on the same hardware.
 
 | Part | Spec | Source |
 |---|---|---|
-| Case | Fractal Design Define R6 — 7 rear expansion slots, run **open** (no side panel) | repo |
-| Motherboard | MSI MPG Z390 Gaming Plus | repo |
-| CPU | Intel Core i9-9900KF, 8C/16T @ 5.00 GHz — **no integrated graphics** ("KF") | repo |
-| CPU cooler | Scythe Ninja 5 (large fin-stack tower) | repo |
-| RAM | 64 GB (reports 62.72 GiB) — speed/kit/slot layout unrecorded | repo / TODO |
+Originally built **August 2019**; the GPU and RAM have since been replaced.
+
+| Part | Spec | Source |
+|---|---|---|
+| Case | Fractal Design Define R6 USB-C, Black Brushed Aluminum/Steel, ATX Silent Modular Mid Tower — 7 rear expansion slots, run **open** (no side panel) | build spec |
+| Motherboard | MSI MPG Z390 Gaming Plus, **LGA1151** | build spec |
+| CPU | Intel Core i9-9900KF Coffee Lake, 8C/16T, 3.6 GHz base / 5.00 GHz — **no integrated graphics** ("KF") | build spec |
+| CPU cooler | Scythe Ninja 5 (large fin-stack tower) | build spec |
+| RAM | Now 64 GB (reports 62.72 GiB). Originally Corsair Vengeance LPX 16GB (2x8GB) DDR4-3200, upgraded to TEAMGROUP Elite DDR4 32GB (2x16GB) 3200MHz — **neither accounts for 64GB, so there has been a third kit**. Current kit unrecorded. | build spec / TODO |
 | GPU 1 | Zotac RTX 3090 Trinity — 2.5-slot (58mm), 292–320mm, native slots 2-3 | repo |
 | GPU 2 | EVGA RTX 3090 XC3 — 2.2-slot (48mm), 285mm — mounting unresolved, see `machines/desktop/ISSUES.md` | repo |
-| PSU | 750W — model unrecorded. Drives the dual-3090 power capping (`nvidia-smi -pl 200`/`250`, ~500–550W total) | repo / TODO |
-| Storage | 488 GiB root, btrfs — physical drive model/count unrecorded | repo / TODO |
+| GPU (original) | ASUS ROG STRIX GeForce RTX 2080 Overclocked 8G GDDR6 — displaced by the 3090, now on the shelf | build spec |
+| PSU | **Corsair HXi Series HX750i, 750W.** Drives the dual-3090 power capping (`nvidia-smi -pl 200`/`250`, ~500–550W total) | build spec |
+| Storage | **Samsung 970 EVO 1TB NVMe SSD.** The 488 GiB btrfs root is Fedora's share; the rest is the Windows 11 side of the dual boot. | build spec |
 | Network | `eno1` (onboard ethernet) | repo |
 | Displays | Acer Predator XB271HU 2560x1440@144 (165 OC) · Acer AL2216W 1680x1050@60 · LG TV 1920x1080@60 | repo |
 
@@ -46,11 +52,27 @@ it unsupported.
 | Motherboard | yes | TODO — **socket + chipset determine the CPU and the cooler**, record before shopping | reported |
 | CPU cooler | yes | TODO — record socket compatibility, not just the model | reported |
 | RAM | yes | TODO — DDR generation must match the spare board | reported |
-| GPU | yes | ASUS ROG STRIX RTX 2080 OC — ~300mm, ~2.7-slot. Used as the 3090 clearance test-fit dummy, explicitly "not part of the final build" | repo |
+| GPU | yes | **ASUS ROG STRIX GeForce RTX 2080 Overclocked 8G GDDR6** — ~300mm, ~2.7-slot. System 1's original card, displaced by the 3090; also served as the 3090 clearance test-fit dummy | build spec |
 
-Naming discrepancy to settle: `machines/desktop/ISSUES.md` Phase 2 says "swap
-**RTX 2080 Super** into desktop," while the drawing set says **RTX 2080 OC**.
-Either that is two cards or one card described two ways — check the shelf.
+**Naming settled: it is an RTX 2080, not a 2080 Super.** The build spec reads
+"GeForce RTX 2080 Overclocked 8G GDDR6" — 2080 is the die; OC is ASUS's factory
+overclock on that die. Super is a different die entirely. Earlier references to
+an "RTX 2080 Super" in `machines/desktop/ISSUES.md` were a conflation and have
+been corrected. Call it **RTX 2080** in any future note.
+
+### Open question: are the shelf parts duplicates, or displaced upgrades?
+
+The August 2019 build spec covers System 1, and its PSU, board, cooler, and case
+are all **still in service** — so it does not by itself identify the shelf.
+Two possibilities, and they lead to very different System 2 builds:
+
+- **Displaced by upgrades** — like the 2080 and the older RAM kits. This fits
+  RAM cleanly (two kits have been superseded), but nothing in the repo shows the
+  board, PSU, or cooler ever being replaced.
+- **A genuinely separate set** from another machine, unrelated to this build.
+
+Until that is settled, the four shelf `TODO`s below cannot be filled from the
+2019 spec — they need a look at the actual shelf.
 
 ---
 
