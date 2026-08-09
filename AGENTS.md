@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Top-level folders are stow packages for dotfiles (e.g., `apps/`, `bash/`, `nvim/`, `sway/`, `waybar/`, `xkb/`, `wallpaper/`, `x11/`, `macos/`). Each package mirrors the target path under `$HOME` (for example `sway/.config/sway/`).
+- Top-level folders are stow packages for dotfiles (e.g., `apps/`, `audio/`, `bash/`, `nvim/`, `sway/`, `waybar/`, `xkb/`, `wallpaper/`, `x11/`, `macos/`). Each package mirrors the target path under `$HOME` (for example `sway/.config/sway/`).
 - Hardware- and OS-specific notes live in `machines/` (per host) and `devices/` (phones/tablets). Monitor presets are in `monitors/`.
 - Issues and setup references are documented in `ISSUES.md` and the various `CLAUDE.md` or `README.md` files.
 ## Machine-Specific Guides

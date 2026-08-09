@@ -7,7 +7,7 @@
 ## Stow Packages & Linking
 - Primary packages:
   - `cd ~/.dotfiles`
-  - `stow apps bash sway waybar i3 nvim xkb wallpaper`
+  - `stow apps audio bash sway waybar i3 nvim xkb wallpaper`
 - Bash machine aliases are loaded from `machines/z13-amd/bash_aliases` when the host reports `z13` (or the legacy hostname `fedora`).
 - Sway outputs for this machine:
   - `ln -sf ~/.dotfiles/sway/.config/sway/config.d/outputs.conf.z13-amd ~/.config/sway/config.d/outputs.conf`
@@ -20,6 +20,22 @@
 - Built-in panel: `eDP-1` at 2560x1600 with scale 1.9.
 - Power nodes: `BAT0` and `AC0`.
 - WiFi interface: `wlp194s0` (use `nmcli` for connections).
+
+## Audio
+- Sinks: built-in analog is `alsa_output.pci-0000_c4_00.6.analog-stereo`; the
+  external display is `alsa_output.pci-0000_c4_00.1.hdmi-stereo-extra1`
+  (card `alsa_card.pci-0000_c4_00.1`, port `hdmi-output-1`).
+- The `audio` stow package raises HDMI/DP session priority above analog so the
+  display is re-selected automatically after it is unplugged and plugged back
+  in. Without it, analog outranks HDMI (1009 vs 632) and sound stays on the
+  laptop speakers.
+- That rule is pinned to this machine's Radeon audio card (`pci-0000_c4_00.1`),
+  so it is inert on any other host. Do not stow `audio` on the desktop: sink
+  selection there goes through `cycle-audio-source.sh` and a static priority
+  override would fight it.
+- Caveat: because HDMI now outranks analog, plugging in headphones will *not*
+  auto-switch away from the display. Switch manually with `pavucontrol` or
+  `pactl set-default-sink`.
 
 ## GPU, NPU, and Sensors
 - GPU: AMD Radeon 8050S (amdgpu). Utilization via:
