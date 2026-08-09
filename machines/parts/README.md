@@ -118,14 +118,16 @@ Until that is settled, the four shelf `TODO`s below cannot be filled from the
 > 1. **The RM1000x lands.** System 2's PSU is the 850W currently running
 >    System 1 on approved temporary use. It only frees up when the warranty
 >    replacement takes over.
-> 2. **The dual-3090 benchmark completes.** System 2's GPU is the second 3090,
->    which has to stay in System 1 until the dual numbers are captured.
+> 2. **The dual-3090 benchmark completes.** System 2's GPU — expected to be the
+>    Zotac — stays in System 1 until the dual numbers are captured. The
+>    benchmark may also change *which* card System 2 gets; see the allocation
+>    branch below.
 >
-> Note the benchmark is **not** itself gated on the RM1000x — 850W is more
-> headroom than the ~500–550W the original plan budgeted against a 750W unit.
-> What blocks it is the unresolved EVGA mounting problem in
-> `machines/desktop/ISSUES.md`, not power. No rush on any of it; this is a
-> scoping exercise, not a build queue.
+> The benchmark is **not** gated on the RM1000x — 850W is more headroom than the
+> ~500–550W the original plan budgeted against a 750W unit. Nor is it blocked on
+> mounting any more: as of 2026-08-09 a different riser cable plus a 180° power
+> connector runs two cards in the existing case, horizontal + vertical. No rush
+> on any of it; this is a scoping exercise, not a build queue.
 
 **Design target: minimum viable, must still drive a 3090.** Deliberately scoped
 to the low end rather than balanced — the 3090 does the work, everything else
@@ -165,11 +167,17 @@ BIOS supports 9th gen before buying; Z390 generally does out of the box.
   through system RAM** — dataset prep, large model loading/conversion, or
   multi-GPU work. If System 2 is ever meant to do AI work rather than drive a
   display, this is the first ceiling it hits, not the CPU.
-- **GPU allocation is decided.** End state: **System 1 runs mixed (one 3090 +
-  the 2080); System 2 gets the second 3090.** Dual-3090 in System 1 is a
-  *temporary benchmarking configuration*, not the target — the cards get split
-  once the numbers are in. This supersedes any reading of Phase 1 as an end
-  state.
+- **GPU allocation, and the branch that decides it.** System 1 can now run two
+  cards in its existing case — one horizontal, one vertical — via a different
+  riser cable plus a 180° power connector. So the sequence is:
+  1. **Benchmark dual 3090s first** (one horizontal, one vertical). This gates
+     everything.
+  2. **If the split proceeds:** System 1 keeps the **EVGA 3090 horizontal + the
+     ASUS 2080 vertical**; the **Zotac 3090 goes to System 2**.
+  3. **If dual performance wins**, the split does not happen — System 1 keeps
+     both 3090s and **System 2 gets the 2080 instead**. That changes System 2's
+     scope below: a 2080 is a ~215W card against the 3090's ~350W, so the
+     "must drive a 3090" sizing becomes generous rather than minimum.
 - **Case deferred is fine, but the 3090 sets a floor.** Both 3090s are ~292–320mm
   and 2.2–2.5 slots. A $40 case will fit that only if it is a mid-tower; whoever
   picks needs that number, not a free choice.
