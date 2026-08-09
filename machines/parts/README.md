@@ -29,7 +29,7 @@ Originally built **August 2019**; the GPU and RAM have since been replaced.
 | Motherboard | MSI MPG Z390 Gaming Plus, **LGA1151** | build spec |
 | CPU | Intel Core i9-9900KF Coffee Lake, 8C/16T, 3.6 GHz base / 5.00 GHz — **no integrated graphics** ("KF") | build spec |
 | CPU cooler | Scythe Ninja 5 (large fin-stack tower) | build spec |
-| RAM | **Currently 32 GB.** Ran 64 GB across 4 sticks; **two died in the PSU incident** and were pulled, landing it back on the TEAMGROUP Elite DDR4 2x16GB 3200MHz the 2019 spec lists. The dead sticks were first mistaken for a blown motherboard — the board is fine. A replacement stick/kit arrives **2026-08-10**. Original Corsair Vengeance LPX 16GB (2x8GB) predates all of this. `machine-overview.md`'s `62.72 GiB` is a pre-failure snapshot. | build spec / reported |
+| RAM | **Currently 32 GB.** Ran 64 GB across 4 sticks; **two died in the PSU incident** and were pulled, landing it back on the TEAMGROUP Elite DDR4 2x16GB 3200MHz the 2019 spec lists. The dead sticks were first mistaken for a blown motherboard — the board is fine. The **original Corsair Vengeance LPX 16GB (2x8GB) 3200MHz now goes to System 2**. `machine-overview.md`'s `62.72 GiB` is a pre-failure snapshot. | build spec / reported |
 | GPU 1 | Zotac RTX 3090 Trinity — 2.5-slot (58mm), 292–320mm, native slots 2-3 | repo |
 | GPU 2 | EVGA RTX 3090 XC3 — 2.2-slot (48mm), 285mm — mounting unresolved, see `machines/desktop/ISSUES.md` | repo |
 | GPU (original) | ASUS ROG STRIX GeForce RTX 2080 Overclocked 8G GDDR6 — displaced by the 3090, now on the shelf | build spec |
@@ -54,7 +54,7 @@ Erik accepted an alternate model:
 | | |
 |---|---|
 | Warranty replacement | **Corsair RMx Series RM1000x, 1000W, fully modular** — part `CP-9020271-NA` |
-| Interim unit | 850W (model unrecorded) — **approved for temporary use**, currently running System 1 |
+| Interim unit | **Rosewill 850W** — approved for temporary use, currently running System 1, earmarked for System 2 afterward |
 | Return tracking | UPS `1Z966E659098549741`, prepaid label |
 | Replacement ships | only *after* Corsair receives the dead unit |
 
@@ -135,10 +135,10 @@ just has to not get in its way.
 
 | # | Part | Status | Spec | Notes |
 |---|---|---|---|---|
-| 1 | PSU | gated | **850W** (model TODO) | Ample for one 3090. Frees up only when the RM1000x lands. |
+| 1 | PSU | gated | **Rosewill 850W** | Ample for one 3090. Frees up only when the RM1000x lands. |
 | 2 | Motherboard | arrives 2026-08-10 | **MSI MPG Z390 Gaming Plus, LGA1151** — same board as System 1 | Confirmed against the 2019 build spec. Validates the whole chain below. |
-| 3 | CPU cooler | on shelf | **65W TDP rated** | ⚠️ **This is the binding constraint on part 6.** |
-| 4 | RAM | on shelf | **16 GB max** | Ceiling is the plan, not the board — Z390 takes far more if it ever needs to. |
+| 3 | CPU cooler | in hand | **Scythe Ninja** | See the note below — this is a much larger cooler than the "65W" figure implied, so the CPU ceiling may not come from here. Immaterial now: the 9100F is 65W and any Ninja handles it easily. |
+| 4 | RAM | in hand | **Corsair Vengeance LPX 16 GB (2x8GB) DDR4-3200** | System 1's *original* 2019 kit, displaced by the TEAMGROUP upgrade. This is where the "16 GB max" ceiling comes from — it is the kit itself, not a board or plan limit. |
 | 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
 | 6 | CPU | **bought 2026-08-09** | **Intel i3-9100F** `SRF6N` — 4C/4T, 3.6 GHz, 65W, **no iGPU**. $17.99 used, kcliquidation (99.8%, 22.9K) | Meets the 65W ceiling. Weakest of the shortlist: fine GPU-bound, bottlenecks CPU-bound work. Accepted trade at the price. **No integrated graphics — this machine cannot produce video without a card installed.** |
 | 7 | Drive | **bought 2026-08-09** | **Samsung PM981a 512 GB NVMe** (`MZVLB512HBJQ`), used | OEM sibling of System 1's 970 EVO — same M.2 2280 / PCIe 3.0 x4 class, half the capacity. OEM means **no consumer warranty**. Check SMART on arrival (`smartctl -a`): Power On Hours and Percentage Used. Still the wrong size if System 2 ever does inference. |
@@ -155,7 +155,20 @@ System 1, every downstream part checks out:
 | Board → RAM | DDR4 ✅ |
 | Board → SSD | Z390 has M.2; PM981a is M.2 2280 PCIe 3.0 x4 ✅ |
 | Board → GPU | PCIe 3.0 x16 ✅ |
-| Cooler → socket | 65W unit must have LGA1151 mounting — **the one link still unverified**; confirm when it goes on |
+| Cooler → socket | Scythe Ninja — LGA1151 is a standard mount for that line ✅, but confirm the bracket set is present with the unit |
+
+> **Open point on the cooler.** The parts list gives System 2 a *Scythe Ninja*,
+> but the 2019 build spec and the dual-3090 drawing set both place a **Scythe
+> Ninja 5 in System 1**, where it is still installed. So either there are two
+> Ninjas on hand, or one of those two records is stale. Separately, a Ninja is a
+> large fin-stack tower rated well above 65W — so the "65W max" figure that
+> shaped the CPU shortlist probably was not a cooler limit after all.
+>
+> **This changes nothing that has been bought.** The i3-9100F is a 65W part and
+> any Ninja cools it without effort; if anything there is now headroom the
+> shortlist assumed away. Worth settling only so the record is right — and
+> because if the ceiling was never 65W, an i5-9400F or i7-9700F would have been
+> available at a similar price.
 
 ### The 65W ceiling drives the CPU choice
 
@@ -251,10 +264,9 @@ What is left is cosmetic rather than blocking:
 
 | Unknown | Blocks anything? | How to close it |
 |---|---|---|
-| Interim 850W PSU — exact model | No. Wattage is what matters and it is known | Side sticker |
-| RAM — exact kit/timings | No. 16 GB DDR4 is enough to plan against | Stick label, or `sudo dmidecode -t memory` once it boots |
-| 65W cooler — model and socket support | **Mounting only** — must be LGA1151 | Box or the bracket set in hand |
-| Riser cable + 180° power connector | No, but the working dual config is not reproducible without it | Record at install |
+| Which Scythe Ninja, and whether there are two | No — the 9100F is comfortably within any of them | Look at the unit; see the cooler note above |
+| Riser cable + 180° power connector | No, but **the working dual-GPU config is not reproducible without it** | Record at install |
 
-Once System 2 boots, `sudo dmidecode -t baseboard -t memory` prints the board and
-the full RAM spec in one shot and closes two of these for free.
+Everything else is now recorded. Once System 2 boots,
+`sudo dmidecode -t baseboard -t memory` will confirm the board and RAM against
+what is written here.
