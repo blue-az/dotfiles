@@ -17,7 +17,17 @@
 - Machine-specific sway overrides:
   - `ln -sf ~/.dotfiles/sway/.config/sway/config.d/machine.conf.z13-amd ~/.config/sway/config.d/machine.conf`
 - Waybar config for this machine:
+  - `stow --no-folding waybar` (required — see below)
   - `ln -sf ~/.dotfiles/waybar/.config/waybar/config.z13-amd ~/.config/waybar/config`
+- **Stow folding vs. the `ln -sf` overrides above.** Plain `stow <pkg>` folds a
+  package whose target directory does not exist yet: `~/.config/waybar` becomes
+  a single symlink *into the repo*, so the `ln -sf` lines above then write the
+  machine symlink inside `~/.dotfiles` and convert a tracked file into a
+  symlink. For waybar that silently replaces the generic `config` (which the
+  desktop uses per `machines/desktop/AGENTS.md`) with a link to the Z13 variant.
+  Any package that carries `<name>.<machine>` variants must be stowed with
+  `--no-folding` so the override symlink lives in `~/.config`, outside the repo.
+  Check with `ls -ld ~/.config/<pkg>`: a directory is correct, a symlink is not.
 
 ## Display, Power, and Network
 - Built-in panel: `eDP-1` at 2560x1600 with scale 1.9.

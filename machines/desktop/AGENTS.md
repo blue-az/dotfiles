@@ -9,10 +9,20 @@
 - Goal: Keep desktop behavior stable while reducing config sprawl and duplication.
 
 ## Stow Packages & Linking
-- Packages: `bash sway waybar i3 shared nvim xkb x11 wallpaper`
-- Outputs/config links:
-  - Sway outputs: `sway/.config/sway/config.d/outputs.conf.desktop`
-  - Waybar config: `waybar/.config/waybar/config`
+- Packages: `stow --no-folding bash sway waybar i3 shared nvim xkb x11 wallpaper`
+- Outputs/config links (both are untracked per-machine pointers — recreate them
+  after a fresh clone, and after the commit that untracked `machine.conf`):
+  - `ln -sf outputs.conf.desktop ~/.config/sway/config.d/outputs.conf`
+  - `ln -sf machine.conf.desktop ~/.config/sway/config.d/machine.conf`
+  - Sway hard-includes both (`sway/.config/sway/config` lines 27 and 35), so a
+    missing pointer means the desktop loses those overrides on reload.
+- Waybar config: this machine uses the generic `waybar/.config/waybar/config`
+  directly — no pointer symlink, and do not repoint it at a `config.<machine>`
+  variant.
+- Use `--no-folding` so `~/.config/<pkg>` stays a real directory. If stow folds
+  it into a symlink, the `ln -sf` lines above write into `~/.dotfiles` and
+  convert tracked files into machine-specific symlinks. Verify with
+  `ls -ld ~/.config/sway` — a directory is correct, a symlink is not.
 
 ## Machine-Specific Notes
 - Display:

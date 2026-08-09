@@ -1,5 +1,9 @@
 # Machine-specific configs (use templates instead)
+# These are per-machine pointer symlinks created by the `ln -sf` steps in
+# machines/<name>/AGENTS.md. They must stay untracked: committing one makes
+# every other machine adopt this machine's overrides on its next pull.
 sway/.config/sway/config.d/outputs.conf
+sway/.config/sway/config.d/machine.conf
 .aider*
 openai/.config/openai/.env
 machines/desktop/*.private.asc
