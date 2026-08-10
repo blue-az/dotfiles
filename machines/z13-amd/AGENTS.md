@@ -70,7 +70,8 @@
 - `keyd` is installed on this host as a **source build under `/usr/local`** (no
   Fedora package exists), running as a system service. Config: `/etc/keyd/default.conf`,
   tracked at `keyboards/keyd/default.conf`.
-- Layout: `;` is BackSpace, `Shift+;` is `:`, `AltGr+;` is `;`. Grave is untouched.
+- Layout: `'` is BackSpace, `;` is Right Ctrl. `Shift+'` and `Shift+;` still give
+  `"` and `:`. The displaced `'` and `;` are on `LeftAlt+'` and `LeftAlt+;`.
 - `xkb/` carries only the caps/super swap now. Do **not** move the `;` remap back
   into xkb — a non-printable keysym on level 1 makes Chromium tag that key
   `VKEY_BACK` at every shift level. See `keyboards/keyd/README.md`.
