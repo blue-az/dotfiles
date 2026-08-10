@@ -66,6 +66,20 @@
   - `/usr/lib/systemd/system-sleep/gz302-reset.sh`
 - That external restore path re-applies the saved rear lightbar state from `/etc/gz302/rgb-window.conf` on boot and after resume, and can override the repo-local expectations.
 
+## Keyboard Remapping (keyd)
+- `keyd` is installed on this host as a **source build under `/usr/local`** (no
+  Fedora package exists), running as a system service. Config: `/etc/keyd/default.conf`,
+  tracked at `keyboards/keyd/default.conf`.
+- Layout: `;` is BackSpace, `Shift+;` is `:`, `AltGr+;` is `;`. Grave is untouched.
+- `xkb/` carries only the caps/super swap now. Do **not** move the `;` remap back
+  into xkb — a non-printable keysym on level 1 makes Chromium tag that key
+  `VKEY_BACK` at every shift level. See `keyboards/keyd/README.md`.
+- Apply config edits with `sudo install -m644 ... /etc/keyd/default.conf && sudo keyd reload`.
+  Panic chord if the keyboard misbehaves: hold backspace+escape+enter.
+
 ## Validation Notes
 - After changes, reload `sway` and `waybar` to confirm outputs, bar layout, and battery stats.
+- Keyboard remap changes: `keyd check <file>` before installing, then verify with
+  `wev -f wl_keyboard:key` (compositor side) and a `keydown` probe in Chrome
+  (Chromium's `keyCode` is the part that historically broke).
 - Keep any machine-only overrides isolated to `outputs.conf.z13-amd` or clearly marked sections.
