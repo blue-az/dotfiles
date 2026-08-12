@@ -41,6 +41,7 @@ alias Ob="flatpak run md.obsidian.Obsidian"
 alias jn="jupyter notebook"
 
 # LLM
+alias UO="curl -fsSL https://ollama.com/install.sh | sh"
 alias g3="ollama run gemma3:27b"
 alias os="nohup ollama serve >/tmp/ollama.log 2>&1 &"
 alias cl="claude"
