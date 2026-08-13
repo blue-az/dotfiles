@@ -4,6 +4,14 @@
 a stow package: keyd is a system daemon and its config lives under `/etc`, so the
 file is installed explicitly rather than symlinked from `$HOME`.
 
+## Current mapping
+
+| Press | Emits |
+| --- | --- |
+| `;` | Right Ctrl (the real Right Ctrl is untouched) |
+| `Shift+;` | `:` — unmoved, where vim expects it |
+| `AltGr+;` | `;` — the displaced semicolon, on Right Alt |
+
 ## Why keyd instead of xkb
 
 The `;` → BackSpace remap originally lived in `xkb/.config/xkb/symbols/custom` as
@@ -23,10 +31,15 @@ any Electron app (VS Code, Slack, Discord, Signal). No amount of xkb tuning fixe
 this: any key carrying a non-printable keysym on level 1 leaks that VKEY to Chromium
 at every level.
 
-keyd sits *below* xkb, on evdev scancodes. Physical `;` emits `KEY_BACKSPACE`;
+keyd sits *below* xkb, on evdev scancodes. Physical `;` emits `KEY_RIGHTCTRL`;
 `Shift+;` emits a genuine `shift + KEY_SEMICOLON`, which the (now stock US) keymap
 resolves normally and Chromium tags `VKEY_OEM_1`. Side benefit: the remap now also
 applies to the i3/X11 session and the TTY, which the Sway-only `xkb_file` never did.
+
+The destination key later changed from BackSpace to Right Ctrl, but the reason for
+staying below xkb did not: Right Ctrl is equally non-printable, so putting it on
+level 1 of `<AC10>` would leak `VKEY_CONTROL` to Chromium the same way BackSpace
+leaked `VKEY_BACK`.
 
 ## Install
 
@@ -74,8 +87,8 @@ Validate before installing with `keyd check keyboards/keyd/default.conf`.
 ## Panic
 
 keyd grabs the keyboard, so a bad config can lock you out. Hold
-**backspace + escape + enter** together to terminate the daemon. Note that the `;`
-key is now backspace, so that chord works from the home row.
+**backspace + escape + enter** together to terminate the daemon. Use the real
+Backspace key — `;` is Right Ctrl under this config and will not work in the chord.
 
 `keyd monitor` prints live key events (useful for confirming what the daemon emits);
 `keyd -h` lists the rest.
