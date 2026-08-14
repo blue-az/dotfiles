@@ -19,12 +19,15 @@ output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 1680 0 mode 2560x1440@60Hz
 # The 1080p LG TV is not plugged into the RTX 2080 (HDMI-A-2 is free for it), so
 # its identifier is unknown and it cannot be named here yet. Connect it, run the
 # command above, then add a `disable` line for it and hand workspaces 3 and 4
-# back their preferred output.
+# back their preferred output (TV only, no XB fallback).
 
-# Workspace assignments - sway picks the first output in the list that is
-# active, so these hold up in the layouts where the TVs are switched off.
+# Workspace assignments. Sway sends a workspace to the first *active* output
+# in its list. If every listed output is off, or the workspace has no
+# assignment, it follows the focused output. Do not give 3/4/6 an XB
+# fallback: that pins them to the Predator, so Super+3/4/6 can never stay on
+# the left Acer.
 workspace 1 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
 workspace 2 output "Acer Technologies Acer AL2216W L92080554231"
-workspace 3 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
-workspace 4 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
-workspace 6 output "LG Electronics LG TV SSCR2 0x01010101" "Acer Technologies XB271HU #ASP2u3xvGwHd"
+# workspace 3 output "<1080p TV identifier>"   # when TV1080 is known
+# workspace 4 output "<1080p TV identifier>"   # when TV1080 is known
+workspace 6 output "LG Electronics LG TV SSCR2 0x01010101"
