@@ -182,6 +182,7 @@ if [ -f '/home/blueaz/.dotfiles/gemini/google-cloud-sdk/completion.bash.inc' ]; 
 # Local Claude Code experiments through Ollama-compatible proxy config.
 alias cc-local="ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_API_KEY= ANTHROPIC_BASE_URL=http://localhost:11434 CLAUDE_CONFIG_DIR=/tmp/cc-local-config claude"
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+[ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH"
 
 
 # Added by Antigravity CLI installer
