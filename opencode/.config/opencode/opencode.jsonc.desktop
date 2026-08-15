@@ -1,0 +1,57 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // DESKTOP variant. Machine-specific: `~/.config/opencode/opencode.jsonc` is a
+  // machine-local symlink to this file (or to opencode.jsonc.z13-amd), the same
+  // pattern sway uses for config.d/machine.conf. Do not stow opencode.jsonc
+  // itself.
+  //
+  // Model names are unified across machines as of 2026-08-15 -- z13's -24k/-16k
+  // tags were Modelfiles over byte-identical blobs and were replaced by the
+  // standard tags. Set num_ctx per request; never bake it into a tag name.
+  // Change to "openrouter/<model>" once `opencode auth login` has a key.
+  "model": "ollama/gemma4:26b",
+
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      // Tool-capable models only — agent harness needs tools (excludes pure
+      // completion seats like gemma3:27b from the curated set).
+      "models": {
+        "nemotron-3.5-lightning:latest": { "name": "Nemotron 3.5 Lightning 33B" },
+        "qwen3:32b": { "name": "Qwen3 32B" },
+        // z13 carries the standard tag as of 2026-08-15 (same blob
+        // sha256-280af6832eca.., instant pull). Slow on z13 (7.2 tok/s) but
+        // usable for delegated work — below the ~20 t/s interactive floor,
+        // which is a perceived-latency threshold, not a capability gate.
+        "gemma4:31b": { "name": "Gemma4 31B" },
+        "qwen2.5-coder:32b": { "name": "Qwen2.5 Coder 32B" },
+        "qwen3-vl:30b": { "name": "Qwen3-VL 30B" },
+        "qwen3.8:27b": { "name": "Qwen3.8 27B" },
+        // 2026-08-15: z13 now carries the standard gemma4:26b tag (identical
+        // blob sha256-7121486771cb.., ollama id 5571076f3d70, no download --
+        // the only difference was a baked num_ctx 24576). The z13-only
+        // duplicate is gone; one name works on both machines. Set num_ctx per
+        // request instead of relying on a baked tag.
+        "gemma4:26b": { "name": "Gemma4 26B" },
+        "qwen35-nothink:latest": { "name": "Qwen3.5 28B (nothink)" },
+        "qwen3.6:27b": { "name": "Qwen3.6 27B" },
+        "gpt-oss:latest": { "name": "gpt-oss 21B" },
+        "gemma4:e4b": { "name": "Gemma4 E4B 8B" },
+        "qwen2.5-coder:14b": { "name": "Qwen2.5 Coder 14B" },
+        // qwen2.5-14b-24k removed from this list but NOT deleted from z13: it
+        // established the July BT floor (evals/bt_floor/README.md), and
+        // deleting it would make that baseline unreproducible. It silently
+        // clamps context and is invalid for current runs, so it should not be
+        // selectable — but it stays on disk.
+        "gemma4:12b": { "name": "Gemma4 12B" },
+        "llama3.1:8b": { "name": "Llama 3.1 8B" },
+        "granite4:latest": { "name": "Granite4 3B" }
+      }
+    }
+  }
+}

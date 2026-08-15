@@ -1,0 +1,48 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Z13 variant. Machine-specific: `~/.config/opencode/opencode.jsonc` is a
+  // machine-local symlink to this file, the same pattern sway uses for
+  // config.d/machine.conf. Do not stow opencode.jsonc itself.
+  //
+  // Lists ONLY models installed on z13, so nothing in the picker is dead. The
+  // desktop variant carries eight more that are not present here; that is a
+  // capacity difference, not a naming one -- tags are unified across machines
+  // as of 2026-08-15.
+  //
+  // z13 is a Background machine (MACHINE_PROVENANCE_SPEC): no operator init,
+  // no ledger writes. Work leaves via git and harness logs.
+  "model": "ollama/gemma4:26b",
+
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        // Seat. 51.3 tok/s (sd 0.20, n=3) at num_ctx 16384 on AC/performance.
+        // Clears the ~20 t/s interactive floor; the only z13 model that does
+        // among the 26B+ class.
+        "gemma4:26b": { "name": "Gemma4 26B" },
+        // 26.8 tok/s (sd 0.06, n=3), 100% GPU, no CPU placement.
+        "gemma4:12b": { "name": "Gemma4 12B" },
+        "gpt-oss:latest": { "name": "gpt-oss 21B" },
+        // 16.3 tok/s at num_ctx 8192. Will NOT load at 12288 or above -- the
+        // CLIP vision projector plus 17 GB of weights exceeds the 17.5 GiB
+        // pool. Keep its context at or below 8192 on this machine.
+        "qwen3.8:27b": { "name": "Qwen3.8 27B (max ctx 8192 here)" },
+        // 12.0 tok/s at 16384. Below the interactive floor; fine delegated.
+        "qwen3.6:27b": { "name": "Qwen3.6 27B" },
+        "granite4:latest": { "name": "Granite4 3B" },
+        // BROKEN ON Z13 as of 2026-08-15: will not load at any context or
+        // num_gpu setting -- "radv/amdgpu: Not enough memory for command
+        // submission" then device lost. Ran at 7.1 tok/s on 2026-08-13. z13 is
+        // on ollama 0.32.13, desktop on 0.32.12 where it still works. Under
+        // investigation; left listed so the regression stays visible.
+        "gemma4:31b": { "name": "Gemma4 31B (BROKEN on z13 - see Z13_BENCHMARK)" }
+      }
+    }
+  }
+}
