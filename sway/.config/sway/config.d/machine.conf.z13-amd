@@ -5,9 +5,12 @@ set $term_cmd foot
 set $launcher_cmd "wmenu-run"
 set $file_manager_cmd thunar
 
-# Shorter idle on laptop
-set $swayidle_lock_timeout 300
-set $swayidle_off_timeout 330
+# Shorter idle on laptop than the 1800/1830 shared default, but 5 minutes was
+# too aggressive during long unattended benchmark runs -- the screen blanking
+# mid-sweep is harmless, but locking every 5 minutes is not what you want while
+# watching a model load. 15 minutes.
+set $swayidle_lock_timeout 900
+set $swayidle_off_timeout 930
 
 # Keyboard backlight brightness
 bindsym $mod+F11 exec asusctl leds next
