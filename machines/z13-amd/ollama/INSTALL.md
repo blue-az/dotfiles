@@ -80,6 +80,33 @@ peak, so that is close to the practical ceiling for this memory system.
 The vision projector now fits on the GPU too, so ollama no longer falls back to
 `--no-mmproj-offload` (which even the 26b was hitting).
 
+## ROCm comparison
+
+ROCm 7.2 is functional on kernel 7.1.5 and fully offloads both the 12b (49/49)
+and 31b (61/61). Direct `llama-server` A/B probes used the same build, GGUF,
+4096-token context, and request per model:
+
+| model / measurement | ROCm | Vulkan | ROCm delta |
+|---|---:|---:|---:|
+| 12b prompt, 2,893 tokens | 498.20 tok/s | 314.00 tok/s | +58.7% |
+| 12b generation, 98 tokens | 20.28 tok/s | 27.10 tok/s | -25.2% |
+| 31b prompt, 2,893 tokens | 164.17 tok/s | 153.24 tok/s | +7.1% |
+| 31b generation, 256 tokens | 7.64 tok/s | 11.19 tok/s | -31.7% |
+
+These are single-run synthetic probes, not a quality benchmark. The 12b chat
+correctness check returned the same answer on both backends.
+
+Keep the Vulkan service override. On the production-size 31b, ROCm's prompt
+gain was only 7% while generation was 32% slower. ROCm also filled the 20 GiB
+GTT pool and left about 2.8 GiB system memory available after the long prompt;
+Vulkan split the allocation across VRAM and GTT and left about 7.1 GiB
+available.
+
+ROCm memory reporting is not trustworthy near the limit: llama.cpp reported
+about 25.5 GiB free against a 20 GiB total pool and printed negative
+`unaccounted` memory. Do not rely on its automatic fit decision for a large
+model when another model is resident. Confirm `ollama ps` is empty first.
+
 ## Memory pressure
 
 Full 31b offload pins ~20 GiB of a 27 GiB pool. Swap here is zram (compressed
