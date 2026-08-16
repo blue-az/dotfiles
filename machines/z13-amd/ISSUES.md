@@ -31,9 +31,10 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 - Portal config at `/usr/share/xdg-desktop-portal/sway-portals.conf` correctly routes FileChooser to gtk
 
 ### Ollama Falls Back to CPU (gfx1151 Not Used)
-- **Status:** Open - upstream issue filed
+- **Status:** Open locally - Vulkan workaround in place, ROCm still unused
 - **Submitted:** 2025-12-30
 - **Issue URL:** https://github.com/ollama/ollama/issues/13589
+  (upstream closed as completed 2026-03-11)
 
 #### Problem
 Ollama silently falls back to CPU inference on Linux even though `rocminfo` correctly detects the gfx1151 GPU. The same hardware works with GPU on Windows.
@@ -53,6 +54,11 @@ granite4:latest    4235724a127c    2.4 GB    100% CPU
 1. Built Ollama from main (post PR #13196 GTT fix) - still CPU
 2. HSA_OVERRIDE_GFX_VERSION=11.5.0 - still CPU
 3. Verified rocminfo shows gfx1151 as Agent 2 with KERNEL_DISPATCH
+4. **Vulkan backend works** - this is the current workaround. gfx1151 is fully
+   usable via the systemd drop-in at
+   `/etc/systemd/system/ollama.service.d/vulkan-override.conf`
+   (`OLLAMA_VULKAN=1`, `HIP_VISIBLE_DEVICES=-1`). The GPU is not unusable; only
+   the ROCm/HIP path is.
 
 #### Related Issues
 - #9553 - gfx1151 crashes on Windows
@@ -63,9 +69,63 @@ granite4:latest    4235724a127c    2.4 GB    100% CPU
 - Windows dual-boot uses GPU successfully
 - No error messages - just silent fallback to CPU
 - gfx1151 is listed as "supported" in Ollama docs
-- Waiting for upstream fix
+- **ROCm may now be viable and is untested here.** The upstream thread closed
+  with AMD's requirement of [kernel >= 6.18.4 for Strix
+  Halo](https://rocm.docs.amd.com/en/latest/how-to/system-optimization/strixhalo.html#required-kernel-version),
+  plus amdgpu driver ~31.10; reporters confirmed ROCm working once both were
+  met. This machine runs 7.1.5, well past that, so the Vulkan override may be
+  obsolete. Worth retesting - ROCm is typically faster than Vulkan for prompt
+  processing.
+- **Retest carries risk:** the ROCm path previously page-faulted
+  (`GCVM_L2_PROTECTION_FAULT`), and this machine has a separate recurring
+  amdgpu hang tracked as drm/amd#5556. Test when a GPU reset is affordable.
 
 ## Resolved Issues
+
+### Large Models Fail to Load on Vulkan (RADV heap too small)
+- **Status:** Resolved
+- **Submitted:** 2026-08-15
+
+#### Problem
+Any model needing more than ~17.5 GiB of Vulkan heap died at load:
+
+```
+radv/amdgpu: Not enough memory for command submission.
+error loading model: vk::Queue::submit: ErrorDeviceLost
+```
+
+`gemma4:31b` failed on every attempt. Lowering the GPU layer count did not
+help — identical failure at 50/61, 40/61, 32/61 and 24/61 layers.
+
+#### Cause
+RADV on an APU exposes one pool of kernel VRAM + GTT (4 + 13.52 = 17.52 GiB),
+split 1/3 : 2/3. Kernel GTT defaulted to `ttm.pages_limit`, which is half of RAM.
+
+Ollama 0.32.13 (binary dated Aug 14) changed non-offloaded weights from mmap'd
+`CPU_Mapped` pages to pinned `Vulkan_Host` buffers, which come out of that same
+pool. So the total stayed at ~18893 MiB regardless of the layer split — always
+~1.4 GiB over the ceiling. The same model loaded fine on Aug 07 with
+`CPU_Mapped 17801 MiB + Vulkan0 13565 MiB`.
+
+#### Fix Applied
+```
+sudo grubby --update-kernel=ALL --args="amdgpu.gttsize=20480 ttm.pages_limit=5242880"
+```
+Both are required; reboot needed. Details in `ollama/INSTALL.md`.
+
+#### Testing
+- Kernel GTT 13.52 -> 20.00 GiB, RADV heap 17.52 -> 24.00 GiB (8 + 16)
+- `gemma4:31b` now reports `offloaded 61/61 layers to GPU` at 32k context
+- Throughput 8.45 -> 11.3 tok/s (~201 GB/s of a ~256 GB/s peak)
+- Vision projector fits on GPU; no more `--no-mmproj-offload` fallback
+
+#### Notes
+- Pins ~20 GiB of a 27 GiB pool. Swap is zram, not disk, so it cannot absorb a
+  real overcommit — 31b at large context plus a heavy browser will be tight.
+- `ollama/no-host.conf` is an uninstalled fallback (`LLAMA_ARG_NO_HOST=1`) for
+  any future model that lands in partial offload and overflows again.
+- Separate from the ROCm CPU-fallback issue above; that one is handled by the
+  Vulkan systemd drop-in.
 
 ### Keyboard Backlight Not Working
 - **Status:** Resolved (workaround)

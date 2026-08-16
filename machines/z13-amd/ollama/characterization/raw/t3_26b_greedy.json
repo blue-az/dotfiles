@@ -1,0 +1,63 @@
+{
+ "model": "gemma4:26b",
+ "n_samples": 1,
+ "total_seconds": 35.8,
+ "results": {
+  "x1": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```"
+   ],
+   "seconds": 1.0
+  },
+  "x2": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(lst):\n    largest = second = None\n    for x in lst:\n        if largest is None or x > largest:\n            second = largest\n            largest = x\n        elif x != largest and (second is None or x > second):\n            second = x\n    return second\n```"
+   ],
+   "seconds": 1.8
+  },
+  "x3": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping:\n            if not stack or stack.pop() != mapping[char]:\n                return False\n        else:\n            stack.append(char)\n    return not stack\n```"
+   ],
+   "seconds": 2.0
+  },
+  "x4": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```"
+   ],
+   "seconds": 2.0
+  },
+  "x5": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(n):\n    primes = []\n    candidate = 2\n    while len(primes) < n:\n        for p in primes:\n            if p * p > candidate: break\n            if candidate % p == 0: break\n        else:\n            primes.append(candidate)\n        candidate += 1\n    return primes[-1]\n```"
+   ],
+   "seconds": 2.2
+  },
+  "L1": {
+   "category": "longctx",
+   "samples": [
+    "To find the budget code for shipment SH-093, we follow these steps:\n\n1.  **Locate the shipment in the log:**\n    Scanning the records, we find:\n    `Record 093: shipment SH-093, depot DAMSON, units 148`\n\n2.  **Identify the depot:**\n    The depot for shipment SH-093 is **DAMSON**.\n\n3.  **Find the depot information in the provided table:**\n    Looking at the depot management table:\n    `Depot DAMSON is managed by Nakamura, budget code BX-42`\n\nThe budget code for depot DAMSON is BX-42.\n\nANSWER: BX-42"
+   ],
+   "seconds": 8.0
+  },
+  "L2": {
+   "category": "longctx",
+   "samples": [
+    "To find the total number of units for the depot CEDAR, we must identify every record associated with that depot and sum their units.\n\n1.  Record 002: 321\n2.  Record 008: 353\n3.  Record 014: 145\n4.  Record 020: 497\n5.  Record 026: 209\n6.  Record 032: 81\n7.  Record 038: 463\n8.  Record 044: 55\n9.  Record 050: 207\n10. Record 056: 169\n11. Record 062: 391\n12. Record 068: 473\n13. Record 074: 415\n14. Record 080: 367\n15. Record 086: 129\n16. Record 092: 151\n17. Record 098: 133\n18. Record 104: 225\n19. Record 110: 77\n20. Record 116: 89\n21. Record 122: 361\n22. Record 128: 143\n23. Record 134: 135\n\n**Calculation:**\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n\nTotal units for CEDAR: 5589\n\nANSWER: 5589"
+   ],
+   "seconds": 15.6
+  },
+  "L3": {
+   "category": "longctx",
+   "samples": [
+    "To find the sum of the units in Record 012 and Record 128, we first locate the specific values in the provided log:\n\n1.  **Record 012**: shipment SH-012, depot ALDER, units **241**\n2.  **Record 128**: shipment SH-128, depot CEDAR, units **143**\n\nNow, add the two values together:\n241 + 143 = 384\n\nANSWER: 384"
+   ],
+   "seconds": 3.1
+  }
+ }
+}
