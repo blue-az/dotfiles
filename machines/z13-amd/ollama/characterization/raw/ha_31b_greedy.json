@@ -1,0 +1,49 @@
+{
+ "model": "gemma4:31b",
+ "n_samples": 1,
+ "total_seconds": 140.2,
+ "results": {
+  "h1": {
+   "category": "hard-reasoning",
+   "samples": [
+    "To find out how much Ben paid, let's represent the amounts paid by each person using variables.\n\n1.  Let **$B$** be the amount Ben paid.\n2.  Ann paid 40% more than Ben:\n    $A = B + 0.40B = 1.4B$\n3.  Cal paid 25% less than Ann:\n    $C = A - 0.25A = 0.75A$\n    Substitute the value of $A$ in terms of $B$:\n    $C = 0.75(1.4B) = 1.05B$\n4.  The total bill is the sum of what Ann, Ben, and Cal paid:\n    $A + B + C = 310.50$\n    $1.4B + B + 1.05B = 310.50$\n5.  Combine the terms:\n    $3.45B = 310.50$\n6.  Solve for $B$:\n    $B = \\frac{310.50}{3.45}$\n    $B = 90$\n\nVerification:\nBen = $90.00\nAnn = $90 \\times 1.4 = $126.00\nCal = $126 \\times 0.75 = $94.50\nTotal = $90 + $126 + $94.50 = $310.50\n\nANSWER: $90.00"
+   ],
+   "seconds": 34.2
+  },
+  "h2": {
+   "category": "hard-reasoning",
+   "samples": [
+    "1. The green house is at position 1.\n2. There is exactly one house between the green house (pos 1) and the red house. This means the red house must be at position 3.\n3. The red house is immediately left of the blue house. Since the red house is at position 3, the blue house must be at position 4.\n4. Check the constraint: \"The blue house is not at position 3.\" Position 4 satisfies this.\n\nPositions:\n1: Green\n2: [Empty/Other]\n3: Red\n4: Blue\n5: [Empty/Other]\n\nANSWER: 4"
+   ],
+   "seconds": 14.2
+  },
+  "h3": {
+   "category": "hard-reasoning",
+   "samples": [
+    "To find $7^{100} \\pmod{13}$, we can use Fermat's Little Theorem.\n\n1.  **Fermat's Little Theorem** states that if $p$ is a prime number and $a$ is an integer not divisible by $p$, then $a^{p-1} \\equiv 1 \\pmod{p}$.\n2.  In this case, $a = 7$ and $p = 13$. Since 13 is prime and does not divide 7, we have:\n    $7^{13-1} \\equiv 7^{12} \\equiv 1 \\pmod{13}$.\n3.  We want to find $7^{100} \\pmod{13}$. We can express the exponent 100 in terms of 12:\n    $100 = 12 \\times 8 + 4$.\n4.  Using the properties of exponents:\n    $7^{100} = (7^{12})^8 \\times 7^4$.\n5.  Substituting the result from Fermat's Little Theorem:\n    $7^{100} \\equiv (1)^8 \\times 7^4 \\pmod{13}$\n    $7^{100} \\equiv 7^4 \\pmod{13}$.\n6.  Now we calculate $7^4 \\pmod{13}$:\n    $7^1 \\equiv 7 \\pmod{13}$\n    $7^2 = 49$. Since $49 = 13 \\times 3 + 10$, $7^2 \\equiv 10 \\equiv -3 \\pmod{13}$.\n    $7^4 = (7^2)^2 \\equiv (-3)^2 \\pmod{13}$\n    $7^4 \\equiv 9 \\pmod{13}$.\n\nTherefore, $7^{100} \\equiv 9 \\pmod{13}$.\n\nANSWER: 9"
+   ],
+   "seconds": 41.8
+  },
+  "h4": {
+   "category": "hard-reasoning",
+   "samples": [
+    "To determine the output of the code, let's trace the function `f(n, memo={})`.\n\n1.  **Function Logic**: The function implements a recursive calculation with memoization.\n2.  **Base Case**: If `n < 2`, it returns `1`.\n3.  **Recursive Step**: If `n >= 2`, it returns `f(n-1) + f(n-2)`.\n4.  **Sequence Identification**: This is the definition of the Fibonacci sequence, but with a slight shift in starting values.\n    *   `f(0) = 1`\n    *   `f(1) = 1`\n    *   `f(2) = f(1) + f(0) = 1 + 1 = 2`\n    *   `f(3) = f(2) + f(1) = 2 + 1 = 3`\n    *   `f(4) = f(3) + f(2) = 3 + 2 = 5`\n    *   `f(5) = f(4) + f(3) = 5 + 3 = 8`\n    *   `f(6) = f(5) + f(4) = 8 + 5 = 13`\n    *   `f(7) = f(6) + f(5) = 13 + 8 = 21`\n    *   `f(8) = f(7) + f(6) = 21 + 13 = 34`\n    *   `f(9) = f(8) + f(7) = 34 + 21 = 55`\n    *   `f(10) = f(9) + f(8) = 55 + 34 = 89`\n\nThe memoization dictionary ensures that each value is calculated only once, but it does not change the mathematical result.\n\nANSWER: 89"
+   ],
+   "seconds": 43.4
+  },
+  "h5": {
+   "category": "hard-constraints",
+   "samples": [
+    "Big dogs chase small cats.\nGreen frogs jump past thin brown logs.\nRed birds sing loud songs."
+   ],
+   "seconds": 3.3
+  },
+  "h6": {
+   "category": "hard-constraints",
+   "samples": [
+    "ABC=7\nDEF=16\nGHI=25\nJKL=34"
+   ],
+   "seconds": 3.1
+  }
+ }
+}

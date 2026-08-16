@@ -67,6 +67,51 @@ granite4:latest    4235724a127c    2.4 GB    100% CPU
 
 ## Resolved Issues
 
+### Large Models Fail to Load on Vulkan (RADV heap too small)
+- **Status:** Resolved
+- **Submitted:** 2026-08-15
+
+#### Problem
+Any model needing more than ~17.5 GiB of Vulkan heap died at load:
+
+```
+radv/amdgpu: Not enough memory for command submission.
+error loading model: vk::Queue::submit: ErrorDeviceLost
+```
+
+`gemma4:31b` failed on every attempt. Lowering the GPU layer count did not
+help — identical failure at 50/61, 40/61, 32/61 and 24/61 layers.
+
+#### Cause
+RADV on an APU exposes one pool of kernel VRAM + GTT (4 + 13.52 = 17.52 GiB),
+split 1/3 : 2/3. Kernel GTT defaulted to `ttm.pages_limit`, which is half of RAM.
+
+Ollama 0.32.13 (binary dated Aug 14) changed non-offloaded weights from mmap'd
+`CPU_Mapped` pages to pinned `Vulkan_Host` buffers, which come out of that same
+pool. So the total stayed at ~18893 MiB regardless of the layer split — always
+~1.4 GiB over the ceiling. The same model loaded fine on Aug 07 with
+`CPU_Mapped 17801 MiB + Vulkan0 13565 MiB`.
+
+#### Fix Applied
+```
+sudo grubby --update-kernel=ALL --args="amdgpu.gttsize=20480 ttm.pages_limit=5242880"
+```
+Both are required; reboot needed. Details in `ollama/INSTALL.md`.
+
+#### Testing
+- Kernel GTT 13.52 -> 20.00 GiB, RADV heap 17.52 -> 24.00 GiB (8 + 16)
+- `gemma4:31b` now reports `offloaded 61/61 layers to GPU` at 32k context
+- Throughput 8.45 -> 11.3 tok/s (~201 GB/s of a ~256 GB/s peak)
+- Vision projector fits on GPU; no more `--no-mmproj-offload` fallback
+
+#### Notes
+- Pins ~20 GiB of a 27 GiB pool. Swap is zram, not disk, so it cannot absorb a
+  real overcommit — 31b at large context plus a heavy browser will be tight.
+- `ollama/no-host.conf` is an uninstalled fallback (`LLAMA_ARG_NO_HOST=1`) for
+  any future model that lands in partial offload and overflows again.
+- Separate from the ROCm CPU-fallback issue above; that one is handled by the
+  Vulkan systemd drop-in.
+
 ### Keyboard Backlight Not Working
 - **Status:** Resolved (workaround)
 - **Submitted:** 2025-12-05
