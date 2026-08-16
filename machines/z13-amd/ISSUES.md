@@ -31,9 +31,10 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 - Portal config at `/usr/share/xdg-desktop-portal/sway-portals.conf` correctly routes FileChooser to gtk
 
 ### Ollama Falls Back to CPU (gfx1151 Not Used)
-- **Status:** Open - upstream issue filed
+- **Status:** Open locally - Vulkan workaround in place, ROCm still unused
 - **Submitted:** 2025-12-30
 - **Issue URL:** https://github.com/ollama/ollama/issues/13589
+  (upstream closed as completed 2026-03-11)
 
 #### Problem
 Ollama silently falls back to CPU inference on Linux even though `rocminfo` correctly detects the gfx1151 GPU. The same hardware works with GPU on Windows.
@@ -53,6 +54,11 @@ granite4:latest    4235724a127c    2.4 GB    100% CPU
 1. Built Ollama from main (post PR #13196 GTT fix) - still CPU
 2. HSA_OVERRIDE_GFX_VERSION=11.5.0 - still CPU
 3. Verified rocminfo shows gfx1151 as Agent 2 with KERNEL_DISPATCH
+4. **Vulkan backend works** - this is the current workaround. gfx1151 is fully
+   usable via the systemd drop-in at
+   `/etc/systemd/system/ollama.service.d/vulkan-override.conf`
+   (`OLLAMA_VULKAN=1`, `HIP_VISIBLE_DEVICES=-1`). The GPU is not unusable; only
+   the ROCm/HIP path is.
 
 #### Related Issues
 - #9553 - gfx1151 crashes on Windows
@@ -63,7 +69,16 @@ granite4:latest    4235724a127c    2.4 GB    100% CPU
 - Windows dual-boot uses GPU successfully
 - No error messages - just silent fallback to CPU
 - gfx1151 is listed as "supported" in Ollama docs
-- Waiting for upstream fix
+- **ROCm may now be viable and is untested here.** The upstream thread closed
+  with AMD's requirement of [kernel >= 6.18.4 for Strix
+  Halo](https://rocm.docs.amd.com/en/latest/how-to/system-optimization/strixhalo.html#required-kernel-version),
+  plus amdgpu driver ~31.10; reporters confirmed ROCm working once both were
+  met. This machine runs 7.1.5, well past that, so the Vulkan override may be
+  obsolete. Worth retesting - ROCm is typically faster than Vulkan for prompt
+  processing.
+- **Retest carries risk:** the ROCm path previously page-faulted
+  (`GCVM_L2_PROTECTION_FAULT`), and this machine has a separate recurring
+  amdgpu hang tracked as drm/amd#5556. Test when a GPU reset is affordable.
 
 ## Resolved Issues
 
