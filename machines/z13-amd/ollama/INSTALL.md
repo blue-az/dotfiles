@@ -82,23 +82,27 @@ The vision projector now fits on the GPU too, so ollama no longer falls back to
 
 ## ROCm comparison
 
-ROCm 7.2 is functional on kernel 7.1.5 and fully offloads both the 12b (49/49)
-and 31b (61/61). Direct `llama-server` A/B probes used the same build, GGUF,
-4096-token context, and request per model:
+ROCm 7.2 is functional on kernel 7.1.5 and fully offloads the 12b (49/49), 26b
+(31/31), and 31b (61/61). Direct `llama-server` A/B probes used the same build,
+GGUF, 4096-token context, and request per model:
 
 | model / measurement | ROCm | Vulkan | ROCm delta |
 |---|---:|---:|---:|
 | 12b prompt, 2,893 tokens | 498.20 tok/s | 314.00 tok/s | +58.7% |
 | 12b generation, 98 tokens | 20.28 tok/s | 27.10 tok/s | -25.2% |
+| 26b prompt, 2,893 tokens | 883.90 tok/s | 832.47 tok/s | +6.2% |
+| 26b generation, 256 tokens | 38.75 tok/s | 56.23 tok/s | -31.1% |
 | 31b prompt, 2,893 tokens | 164.17 tok/s | 153.24 tok/s | +7.1% |
 | 31b generation, 256 tokens | 7.64 tok/s | 11.19 tok/s | -31.7% |
 
 These are single-run synthetic probes, not a quality benchmark. The 12b chat
-correctness check returned the same answer on both backends.
+check and 26b generation probe produced the same answer on both backends.
 
-Keep the Vulkan service override. On the production-size 31b, ROCm's prompt
-gain was only 7% while generation was 32% slower. ROCm also filled the 20 GiB
-GTT pool and left about 2.8 GiB system memory available after the long prompt;
+Keep the Vulkan service override. On the default 26b seat, ROCm's prompt gain
+was only 6% while generation was 31% slower; it left about 7.8 GiB system
+memory available versus about 12 GiB under Vulkan. On the 31b, ROCm's prompt
+gain was 7% while generation was 32% slower. ROCm also filled the 20 GiB GTT
+pool and left about 2.8 GiB system memory available after the long prompt;
 Vulkan split the allocation across VRAM and GTT and left about 7.1 GiB
 available.
 
