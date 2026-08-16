@@ -1,0 +1,95 @@
+{
+ "model": "gemma4:26b",
+ "n_samples": 5,
+ "total_seconds": 159.5,
+ "results": {
+  "x1": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```",
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```",
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```",
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```",
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```"
+   ],
+   "seconds": 3.9
+  },
+  "x2": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(lst):\n    largest = second = None\n    for x in lst:\n        if largest is None or x > largest:\n            second = largest\n            largest = x\n        elif x != largest and (second is None or x > second):\n            second = x\n    return second\n```",
+    "```python\ndef solve(lst):\n    largest = second = None\n    for x in lst:\n        if largest is None or x > largest:\n            second = largest\n            largest = x\n        elif x != largest and (second is None or x > second):\n            second = x\n    return second\n```",
+    "```python\ndef solve(lst):\n    largest = second = None\n    for x in lst:\n        if largest is None or x > largest:\n            second = largest\n            largest = x\n        elif x != largest and (second is None or x > second):\n            second = x\n    return second\n```",
+    "```python\ndef solve(lst):\n    largest = second = None\n    for x in lst:\n        if largest is None or x > largest:\n            second = largest\n            largest = x\n        elif x != largest and (second is None or x > second):\n            second = x\n    return second\n```",
+    "```python\ndef solve(lst):\n    largest = second = None\n    for x in lst:\n        if largest is None or x > largest:\n            second = largest\n            largest = x\n        elif x != largest and (second is None or x > second):\n            second = x\n    return second\n```"
+   ],
+   "seconds": 8.5
+  },
+  "x3": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping:\n            if not stack or stack.pop() != mapping[char]:\n                return False\n        else:\n            stack.append(char)\n    return not stack\n```",
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping:\n            if not stack or stack.pop() != mapping[char]:\n                return False\n        else:\n            stack.append(char)\n    return not stack\n```",
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping:\n            top = stack.pop() if stack else None\n            if top != mapping[char]:\n                return False\n        else:\n            stack.append(char)\n    return not stack\n```",
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping.values():\n            stack.append(char)\n        elif char in mapping:\n            if not stack or stack.pop() != mapping[char]:\n                return False\n        else:\n            return False\n    return not stack\n```",
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping.values():\n            stack.append(char)\n        elif char in mapping:\n            if not stack or stack.pop() != mapping[char]:\n                return False\n        else:\n            return False\n    return not stack\n```"
+   ],
+   "seconds": 10.4
+  },
+  "x4": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```",
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```",
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```",
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```",
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```"
+   ],
+   "seconds": 9.1
+  },
+  "x5": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(n):\n    count = 0\n    num = 1\n    while count < n:\n        num += 1\n        for i in range(2, int(num**0.5) + 1):\n            if num % i == 0:\n                break\n        else:\n            count += 1\n    return num\n```",
+    "```python\ndef solve(n):\n    primes = []\n    num = 2\n    while len(primes) < n:\n        for p in primes:\n            if num % p == 0:\n                break\n        else:\n            primes.append(num)\n        num += 1\n    return primes[-1]\n```",
+    "```python\ndef solve(n):\n    primes = []\n    candidate = 2\n    while len(primes) < n:\n        for p in primes:\n            if p * p > candidate: break\n            if candidate % p == 0: break\n        else:\n            primes.append(candidate)\n        candidate += 1\n    return primes[-1]\n```",
+    "```python\ndef solve(n):\n    primes = []\n    candidate = 2\n    while len(primes) < n:\n        for p in primes:\n            if candidate % p == 0:\n                break\n        else:\n            primes.append(candidate)\n        candidate += 1\n    return primes[-1]\n```",
+    "```python\ndef solve(n):\n    primes = []\n    num = 2\n    while len(primes) < n:\n        for p in primes:\n            if num % p == 0:\n                break\n        else:\n            primes.append(num)\n        num += 1\n    return primes[-1]\n```"
+   ],
+   "seconds": 9.4
+  },
+  "L1": {
+   "category": "longctx",
+   "samples": [
+    "To find the budget code for shipment SH-093, we follow these steps:\n\n1.  **Locate the shipment in the log:** Scan the records for \"SH-093\".\n    *   Record 093: shipment SH-093, depot DAMSON, units 148.\n2.  **Identify the depot:** The depot associated with SH-093 is **DAMSON**.\n3.  **Look up the depot in the depot table:**\n    *   Depot ALDER: Okonjo, BX-11\n    *   Depot BIRCH: Lindqvist, BX-27\n    *   Depot CEDAR: Ferreira, BX-38\n    *   **Depot DAMSON: Nakamura, BX-42**\n    *   Depot ELDER: Haddad, BX-55\n    *   Depot FIRTH: Whitlock, BX-63\n4.  **Extract the budget code:** The budget code for the DAMSON depot is **BX-42**.\n\nANSWER: BX-42",
+    "To find the budget code for shipment SH-093, we follow these steps:\n\n1.  **Locate the shipment in the log:**\n    Looking through the records, Record 093 contains: `Record 093: shipment SH-093, depot DAMSON, units 148`.\n\n2.  **Identify the depot:**\n    The depot for shipment SH-093 is **DAMSON**.\n\n3.  **Find the budget code for that depot in the depot table:**\n    The provided depot table states: `Depot DAMSON is managed by Nakamura, budget code BX-42`.\n\nThe budget code that applies to shipment SH-093 is BX-42.\n\nANSWER: BX-42",
+    "To find the budget code for shipment SH-093, we follow these steps:\n\n1.  **Locate the shipment in the log:**\n    Looking through the records, Record 093 contains: `Record 093: shipment SH-093, depot DAMSON, units 148`.\n\n2.  **Identify the associated depot:**\n    The depot for shipment SH-093 is **DAMSON**.\n\n3.  **Look up the depot information in the depot table:**\n    The table states: `Depot DAMSON is managed by Nakamura, budget code BX-42`.\n\nThe budget code for shipment SH-093 is BX-42.\n\nANSWER: BX-42",
+    "To find the budget code for shipment SH-093, we follow these steps:\n\n1.  **Locate the shipment in the log:** Scan the records for SH-093.\n    *   Record 093: shipment SH-093, depot DAMSON, units 148.\n2.  **Identify the depot:** The depot associated with SH-093 is **DAMSON**.\n3.  **Consult the depot table:** Look up the management details for the DAMSON depot.\n    *   Depot DAMSON is managed by Nakamura, budget code **BX-42**.\n\nThe budget code that applies to shipment SH-093 is BX-42.\n\nANSWER: BX-42",
+    "To find the budget code for shipment SH-093, follow these steps:\n\n1.  **Locate the shipment in the log:** Find the record for SH-093.\n    *   `Record 093: shipment SH-093, depot DAMSON, units 148`\n2.  **Identify the depot:** The depot for SH-093 is **DAMSON**.\n3.  **Consult the depot table:** Look up the information for the DAMSON depot.\n    *   `Depot DAMSON is managed by Nakamura, budget code BX-42`\n4.  **Extract the budget code:** The budget code associated with DAMSON is **BX-42**.\n\nANSWER: BX-42"
+   ],
+   "seconds": 24.7
+  },
+  "L2": {
+   "category": "longctx",
+   "samples": [
+    "To find the total number of units for the CEDAR depot, we sum the units from every record associated with it:\n\n1.  Record 002: 321\n2.  Record 008: 353\n3.  Record 014: 145\n4.  Record 020: 497\n5.  Record 026: 209\n6.  Record 032: 81\n7.  Record 038: 463\n8.  Record 044: 55\n9.  Record 050: 207\n10. Record 056: 169\n11. Record 062: 391\n12. Record 068: 473\n13. Record 074: 415\n14. Record 080: 367\n15. Record 086: 129\n16. Record 092: 151\n17. Record 098: 133\n18. Record 104: 225\n19. Record 110: 77\n20. Record 116: 89\n21. Record 122: 361\n22. Record 128: 143\n23. Record 134: 135\n\n**Calculation:**\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n\nTotal units for CEDAR: 5589\n\nANSWER: 5589",
+    "To find the total number of units for the CEDAR depot, we identify all records where the depot is CEDAR and sum their units:\n\n1.  Record 002: 321\n2.  Record 008: 353\n3.  Record 014: 145\n4.  Record 020: 497\n5.  Record 026: 209\n6.  Record 032: 81\n7.  Record 038: 463\n8.  Record 044: 55\n9.  Record 050: 207\n10. Record 056: 169\n11. Record 062: 391\n12. Record 068: 473\n13. Record 074: 415\n14. Record 080: 367\n15. Record 086: 129\n16. Record 092: 151\n17. Record 098: 133\n18. Record 104: 225\n19. Record 110: 77\n20. Record 116: 89\n21. Record 122: 361\n22. Record 128: 143\n23. Record 134: 135\n\nSumming these values:\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n\nTotal units for CEDAR: 5589\n\nANSWER: 5589",
+    "To find the total number of units for all shipments assigned to the CEDAR depot, we identify and sum the units from every record associated with that depot:\n\n1.  Record 002: 321\n2.  Record 008: 353\n3.  Record 014: 145\n4.  Record 020: 497\n5.  Record 026: 209\n6.  Record 032: 81\n7.  Record 038: 463\n8.  Record 044: 55\n9.  Record 050: 207\n10. Record 056: 169\n11. Record 062: 391\n12. Record 068: 473\n13. Record 074: 415\n14. Record 080: 367\n15. Record 086: 129\n16. Record 092: 151\n17. Record 098: 133\n18. Record 104: 225\n19. Record 110: 77\n20. Record 116: 89\n21. Record 122: 361\n22. Record 128: 143\n23. Record 134: 135\n\nCalculation:\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n\nANSWER: 5589",
+    "To find the total number of units for the depot CEDAR, we must identify every record associated with that depot and sum their units.\n\n1.  Record 002: 321\n2.  Record 008: 353\n3.  Record 014: 145\n4.  Record 020: 497\n5.  Record 026: 209\n6.  Record 032: 81\n7.  Record 038: 463\n8.  Record 044: 55\n9.  Record 050: 207\n10. Record 056: 169\n11. Record 062: 391\n12. Record 068: 473\n13. Record 074: 415\n14. Record 080: 367\n15. Record 086: 129\n16. Record 092: 151\n17. Record 098: 133\n18. Record 104: 225\n19. Record 110: 77\n20. Record 116: 89\n21. Record 122: 361\n22. Record 128: 143\n23. Record 134: 135\n24. Record 140: 137\n\nSumming these values:\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n5589 + 137 = 5726\n\nTotal units for CEDAR: 5726\n\nANSWER: 5726",
+    "To find the total number of units for the depot CEDAR, we must sum the units from every record associated with that depot.\n\n1.  Record 002: 321\n2.  Record 008: 353\n3.  Record 014: 145\n4.  Record 020: 497\n5.  Record 026: 209\n6.  Record 032: 81\n7.  Record 038: 463\n8.  Record 044: 55\n9.  Record 050: 207\n10. Record 056: 169\n11. Record 062: 391\n12. Record 068: 473\n13. Record 074: 415\n14. Record 080: 367\n15. Record 086: 129\n16. Record 092: 151\n17. Record 098: 133\n18. Record 104: 225\n19. Record 110: 77\n20. Record 116: 89\n21. Record 122: 361\n22. Record 128: 143\n23. Record 134: 135\n24. Record 140: 137\n\nCalculation:\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n5589 + 137 = 5726\n\nTotal units for CEDAR: 5726\n\nANSWER: 5726"
+   ],
+   "seconds": 77.1
+  },
+  "L3": {
+   "category": "longctx",
+   "samples": [
+    "To find the sum of the units in Record 012 and Record 128, we first locate the specific records in the provided log:\n\n1.  **Record 012**: \"Record 012: shipment SH-012, depot ALDER, units **241**\"\n2.  **Record 128**: \"Record 128: shipment SH-128, depot CEDAR, units **143**\"\n\nNext, we calculate the sum of the units from these two records:\n241 + 143 = 384\n\nANSWER: 384",
+    "To find the sum of the units in Record 012 and Record 128, we first locate the specific values in the provided log:\n\n1.  **Record 012**: \"Record 012: shipment SH-012, depot ALDER, units **241**\"\n2.  **Record 128**: \"Record 128: shipment SH-128, depot CEDAR, units **143**\"\n\nNow, we add the two values together:\n241 + 143 = 384\n\nANSWER: 384",
+    "To find the sum of the units in Record 012 and Record 128, we first locate the values in the provided log:\n\n1.  **Identify units in Record 012:**\n    \"Record 012: shipment SH-012, depot ALDER, units 241\"\n    Units = 241\n\n2.  **Identify units in Record 128:**\n    \"Record 128: shipment SH-128, depot CEDAR, units 143\"\n    Units = 143\n\n3.  **Calculate the sum:**\n    241 + 143 = 384\n\nANSWER: 384",
+    "To find the sum of the units in Record 012 and Record 128, we first locate the specific values in the provided log:\n\n1.  **Record 012**: \"Record 012: shipment SH-012, depot ALDER, units **241**\"\n2.  **Record 128**: \"Record 128: shipment SH-128, depot CEDAR, units **143**\"\n\nNext, we calculate the sum:\n241 + 143 = 384\n\nANSWER: 384",
+    "To find the sum of the units in Record 012 and Record 128, we first locate the specific values in the provided log:\n\n1.  **Record 012**: shipment SH-012, depot ALDER, units **241**\n2.  **Record 128**: shipment SH-128, depot CEDAR, units **143**\n\nNow, add the two values together:\n241 + 143 = 384\n\nANSWER: 384"
+   ],
+   "seconds": 16.4
+  }
+ }
+}

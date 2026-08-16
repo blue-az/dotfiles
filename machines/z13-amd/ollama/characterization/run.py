@@ -24,7 +24,8 @@ def ask(model, prompt, temp, seed):
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
         "stream": False, "think": False, "keep_alive": "15m",
-        "options": {"temperature": temp, "seed": seed, "num_predict": 900},
+        "options": {"temperature": temp, "seed": seed, "num_predict": 900,
+                    "num_ctx": 8192},
     }).encode()
     req = urllib.request.Request(API, data=body,
                                  headers={"Content-Type": "application/json"})

@@ -1,0 +1,210 @@
+{
+ "model": "gemma4:31b",
+ "n_samples": 1,
+ "total_seconds": 629.5,
+ "results": {
+  "r1": {
+   "category": "reasoning",
+   "samples": [
+    "1. Departure time: 09:15\n2. First leg: 09:15 + 3h 40m = 12:55\n3. Wait time: 12:55 + 25m = 13:20\n4. Second leg: 13:20 + 1h 50m = 15:10\n\nCalculation check:\nTotal travel/wait time = 3h 40m + 25m + 1h 50m\n= 4h 115m\n= 5h 55m\n09:15 + 5h 55m = 15:10\n\nANSWER: 15:10"
+   ],
+   "seconds": 16.8
+  },
+  "r2": {
+   "category": "reasoning",
+   "samples": [
+    "1. **Calculate the initial cost for 14 widgets:**\n   - Price per widget: $12\n   - Total before discount: $14 \\times 12 = \\$168$\n\n2. **Apply the discount:**\n   - Since 14 is more than 10, Sam gets 15% off.\n   - Discount amount: $168 \\times 0.15 = \\$25.20$\n   - Total paid initially: $168 - 25.20 = \\$142.80$\n\n3. **Determine the discounted unit price:**\n   - Discounted price per widget: $12 \\times (1 - 0.15) = 12 \\times 0.85 = \\$10.20$\n   - (Alternatively: $142.80 / 14 = \\$10.20$)\n\n4. **Calculate the refund for 3 widgets:**\n   - Refund amount: $3 \\times 10.20 = \\$30.60$\n\n5. **Calculate the final total paid:**\n   - Final cost: $142.80 - 30.60 = \\$112.20$\n\nANSWER: $112.20"
+   ],
+   "seconds": 27.8
+  },
+  "r3": {
+   "category": "reasoning",
+   "samples": [
+    "To find the total number of handshakes, we first determine how many people were originally in the room.\n\nThe number of handshakes among $n$ people is given by the formula:\n$$\\frac{n(n-1)}{2} = 66$$\n$$n(n-1) = 132$$\nSolving for $n$, we find $12 \\times 11 = 132$, so there were originally 12 people in the room.\n\nThen, 3 more people arrive. The total number of people in the room is now $12 + 3 = 15$.\n\nSince every person in the room has now shaken hands with every other person exactly once, we can calculate the total number of handshakes for 15 people using the same formula:\n$$\\text{Total Handshakes} = \\frac{15(15-1)}{2}$$\n$$\\text{Total Handshakes} = \\frac{15 \\times 14}{2}$$\n$$\\text{Total Handshakes} = 15 \\times 7$$\n$$\\text{Total Handshakes} = 105$$\n\nAlternatively, we can add the new handshakes to the original 66:\n- Each of the 3 newcomers shakes hands with the 12 original people: $3 \\times 12 = 36$ handshakes.\n- The 3 newcomers shake hands with each other: $\\frac{3 \\times 2}{2} = 3$ handshakes.\n- Total = $66 + 36 + 3 = 105$.\n\nANSWER: 105"
+   ],
+   "seconds": 34.1
+  },
+  "r4": {
+   "category": "reasoning",
+   "samples": [
+    "To find the total capacity of the tank, we first determine the fraction of the tank that the 45 litres represents.\n\n1.  The tank goes from $\\frac{3}{8}$ full to $\\frac{3}{4}$ full.\n2.  Convert $\\frac{3}{4}$ to a fraction with a denominator of 8: $\\frac{3}{4} = \\frac{6}{8}$.\n3.  The difference is $\\frac{6}{8} - \\frac{3}{8} = \\frac{3}{8}$.\n4.  Therefore, $\\frac{3}{8}$ of the total capacity is 45 litres.\n5.  To find the total capacity ($C$):\n    $\\frac{3}{8}C = 45$\n    $C = 45 \\times \\frac{8}{3}$\n    $C = 15 \\times 8 = 120$ litres.\n\nNext, we find how many litres are still needed to fill the tank from $\\frac{3}{4}$ full.\n1.  The remaining fraction is $1 - \\frac{3}{4} = \\frac{1}{4}$.\n2.  The remaining volume is $\\frac{1}{4}$ of 120 litres:\n    $120 \\times \\frac{1}{4} = 30$ litres.\n\nThe total capacity is 120 and the amount still needed is 30.\n\nANSWER: 120,30"
+   ],
+   "seconds": 32.2
+  },
+  "r5": {
+   "category": "reasoning",
+   "samples": [
+    "Let $A$ be Alice's current age and $B$ be Bob's current age.\n\n1.  **Identify the time gap:**\n    The phrase \"when Alice was as old as Bob is now\" refers to a point in time $x$ years ago.\n    The difference in their ages is $A - B$. So, Alice was Bob's current age $A - B$ years ago.\n\n2.  **Determine Bob's age at that time:**\n    $x = A - B$.\n    Bob's age at that time was $B - x = B - (A - B) = 2B - A$.\n\n3.  **Set up the first equation:**\n    The problem states: \"Alice [now] is twice as old as Bob was [then].\"\n    $A = 2(2B - A)$\n    $A = 4B - 2A$\n    $3A = 4B$\n    $A = \\frac{4}{3}B$\n\n4.  **Set up the second equation:**\n    The sum of their current ages is 63.\n    $A + B = 63$\n\n5.  **Solve for B:**\n    Substitute $A = \\frac{4}{3}B$ into the sum equation:\n    $\\frac{4}{3}B + B = 63$\n    $\\frac{7}{3}B = 63$\n    $7B = 189$\n    $B = 27$\n\n6.  **Verify:**\n    If $B = 27$, then $A = \\frac{4}{3}(27) = 36$.\n    Sum: $36 + 27 = 63$.\n    Difference: $36 - 27 = 9$ years.\n    When Alice was 27 (9 years ago), Bob was $27 - 9 = 18$.\n    Is Alice (36) twice Bob's age then (18)? Yes, $36 = 2 \\times 18$.\n\nANSWER: 27"
+   ],
+   "seconds": 45.1
+  },
+  "r6": {
+   "category": "reasoning",
+   "samples": [
+    "To determine the number of small cubes with exactly two red faces and no red faces, we analyze the structure of the $3 \\times 3 \\times 3$ cube.\n\n1.  **Total Cubes**: $3^3 = 27$.\n2.  **Cubes with exactly two red faces**: These are the cubes located on the edges of the large cube, excluding the corners.\n    *   A cube has 12 edges.\n    *   On each edge of length 3, there is 1 cube that is not a corner.\n    *   Calculation: $12 \\text{ edges} \\times 1 \\text{ cube/edge} = 12$.\n3.  **Cubes with no red faces**: These are the cubes located in the interior (the core) of the large cube.\n    *   The interior forms a smaller cube of dimensions $(n-2) \\times (n-2) \\times (n-2)$.\n    *   Calculation: $(3-2)^3 = 1^3 = 1$.\n\nThe number of cubes with exactly two red faces is 12, and the number of cubes with no red faces is 1.\n\nANSWER: 12,1"
+   ],
+   "seconds": 26.3
+  },
+  "m1": {
+   "category": "mixed",
+   "samples": [
+    "To determine the output, let's trace the loop for `i` from 0 to 4:\n\n1.  **`i = 0`**: `i % 3` is `0`. `d[0] = d.get(0, 0) + 0` $\\rightarrow$ `d = {0: 0}`\n2.  **`i = 1`**: `i % 3` is `1`. `d[1] = d.get(1, 0) + 1` $\\rightarrow$ `d = {0: 0, 1: 1}`\n3.  **`i = 2`**: `i % 3` is `2`. `d[2] = d.get(2, 0) + 2` $\\rightarrow$ `d = {0: 0, 1: 1, 2: 2}`\n4.  **`i = 3`**: `i % 3` is `0`. `d[0] = d.get(0, 0) + 3` $\\rightarrow$ `0 + 3 = 3`. `d = {0: 3, 1: 1, 2: 2}`\n5.  **`i = 4`**: `i % 3` is `1`. `d[1] = d.get(1, 0) + 4` $\\rightarrow$ `1 + 4 = 5`. `d = {0: 3, 1: 5, 2: 2}`\n\nThe final dictionary is `{0: 3, 1: 5, 2: 2}`.\n`d.items()` returns a view of the tuples: `[(0, 3), (1, 5), (2, 2)]`.\n`sorted()` sorts these tuples by their first element (the keys). Since the keys are already 0, 1, and 2, the order remains the same.\n\nANSWER: [(0, 3), (1, 5), (2, 2)]"
+   ],
+   "seconds": 44.5
+  },
+  "m2": {
+   "category": "mixed",
+   "samples": [
+    "1. `let x = [1,2,3].reduce((a,b)=>a+b, 0);`\n   The `reduce` function sums the elements of the array: $1 + 2 + 3 = 6$. So, `x` is `6`.\n\n2. `x = x * 2;`\n   $6 \\times 2 = 12$. So, `x` is `12`.\n\n3. `x = x.toString().split('').reverse().join('');`\n   - `x.toString()` converts the number `12` to the string `\"12\"`.\n   - `.split('')` splits the string into an array: `[\"1\", \"2\"]`.\n   - `.reverse()` reverses the array: `[\"2\", \"1\"]`.\n   - `.join('')` joins the array back into a string: `\"21\"`.\n\nANSWER: \"21\""
+   ],
+   "seconds": 20.4
+  },
+  "m3": {
+   "category": "mixed",
+   "samples": [
+    "To determine the result of the query `SELECT COUNT(DISTINCT v) FROM t WHERE v > 10;`, let's follow the steps of execution:\n\n1.  **Filter (`WHERE v > 10`)**: The table contains values `(1,10), (2,20), (3,20), (4,30)`. The condition `v > 10` filters out the row where `v = 10`. The remaining values for `v` are `20, 20, 30`.\n2.  **Distinct (`DISTINCT v`)**: From the set `{20, 20, 30}`, the distinct values are `20` and `30`.\n3.  **Count (`COUNT(...)`)**: There are 2 distinct values.\n\nANSWER: 2"
+   ],
+   "seconds": 18.5
+  },
+  "m4": {
+   "category": "mixed",
+   "samples": [
+    "To compute the expression `(0b1011 XOR 0b0110) AND 0b1110`, we follow the order of operations:\n\n**Step 1: Perform the XOR operation**\nThe XOR (exclusive OR) operation returns 1 if the bits are different and 0 if they are the same.\n```\n  1011 (11 in decimal)\nXOR 0110 (6 in decimal)\n  ----\n  1101 (13 in decimal)\n```\nCalculation:\n- 1 XOR 0 = 1\n- 0 XOR 1 = 1\n- 1 XOR 1 = 0\n- 1 XOR 0 = 1\nResult: `0b1101`\n\n**Step 2: Perform the AND operation**\nThe AND operation returns 1 only if both bits are 1.\n```\n  1101 (Result from Step 1)\nAND 1110 (14 in decimal)\n  ----\n  1100\n```\nCalculation:\n- 1 AND 1 = 1\n- 1 AND 1 = 1\n- 0 AND 1 = 0\n- 1 AND 0 = 0\nResult: `0b1100`\n\n**Step 3: Convert the binary result to decimal**\nThe binary result is `1100`.\n- (1 * 2^3) + (1 * 2^2) + (0 * 2^1) + (0 * 2^0)\n- 8 + 4 + 0 + 0 = 12\n\nANSWER: 12"
+   ],
+   "seconds": 36.1
+  },
+  "c1": {
+   "category": "constraints",
+   "samples": [
+    "The coffee bean is small.\nEach bean tastes bold.\nRoast the bean well."
+   ],
+   "seconds": 3.1
+  },
+  "c2": {
+   "category": "constraints",
+   "samples": [
+    "- Finch\n- Robin\n- Swift\n- Owlly\n- Heron\n\nWait, \"Owlly\" is not a standard bird. Let me re-evaluate.\n\n- Finch (5) - No 'a'\n- Robin (5) - No 'a'\n- Swift (5) - No 'a'\n- Heron (5) - No 'a'\n- Pipit (5) - No 'a'\n\nCheck starting letters: F, R, S, H, P. (All unique).\nCheck length: 5, 5, 5, 5, 5.\nCheck 'a': None.\n\n- Finch\n- Robin\n- Swift\n- Heron\n- Pipit"
+   ],
+   "seconds": 15.2
+  },
+  "c3": {
+   "category": "constraints",
+   "samples": [
+    "Grey clouds hide the bright day.\nCold winds blow the mist away.\nSoft snow falls in a spray.\nSun beams bring a warm ray."
+   ],
+   "seconds": 4.1
+  },
+  "c4": {
+   "category": "constraints",
+   "samples": [
+    "{\"name\": \"Example\", \"year\": 1995, \"tags\": [\"blue\", \"fast\", \"soft\"]}"
+   ],
+   "seconds": 4.0
+  },
+  "c5": {
+   "category": "constraints",
+   "samples": [
+    "Tall brown trunks stand high up in a dark fog.\nSmall birds fly past soft moss and old rocks in a humid air."
+   ],
+   "seconds": 3.5
+  },
+  "h1": {
+   "category": "hard-reasoning",
+   "samples": [
+    "To find out how much Ben paid, let's represent the amounts paid by each person using variables.\n\n1.  Let **$B$** be the amount Ben paid.\n2.  Ann paid 40% more than Ben:\n    $A = B + 0.40B = 1.4B$\n3.  Cal paid 25% less than Ann:\n    $C = A - 0.25A = 0.75A$\n    Substitute the value of $A$ in terms of $B$:\n    $C = 0.75(1.4B) = 1.05B$\n4.  The total bill is the sum of what Ann, Ben, and Cal paid:\n    $A + B + C = 310.50$\n    $1.4B + B + 1.05B = 310.50$\n5.  Combine the terms:\n    $3.45B = 310.50$\n6.  Solve for $B$:\n    $B = \\frac{310.50}{3.45}$\n    $B = 90$\n\nVerification:\nBen = $90.00\nAnn = $90 \\times 1.4 = $126.00\nCal = $126 \\times 0.75 = $94.50\nTotal = $90 + $126 + $94.50 = $310.50\n\nANSWER: $90.00"
+   ],
+   "seconds": 34.2
+  },
+  "h2": {
+   "category": "hard-reasoning",
+   "samples": [
+    "1. The green house is at position 1.\n2. There is exactly one house between the green house (pos 1) and the red house. This means the red house must be at position 3.\n3. The red house is immediately left of the blue house. Since the red house is at position 3, the blue house must be at position 4.\n4. Check the constraint: \"The blue house is not at position 3.\" Position 4 satisfies this.\n\nPositions:\n1: Green\n2: [Empty/Other]\n3: Red\n4: Blue\n5: [Empty/Other]\n\nANSWER: 4"
+   ],
+   "seconds": 14.2
+  },
+  "h3": {
+   "category": "hard-reasoning",
+   "samples": [
+    "To find $7^{100} \\pmod{13}$, we can use Fermat's Little Theorem.\n\n1.  **Fermat's Little Theorem** states that if $p$ is a prime number and $a$ is an integer not divisible by $p$, then $a^{p-1} \\equiv 1 \\pmod{p}$.\n2.  In this case, $a = 7$ and $p = 13$. Since 13 is prime and does not divide 7, we have:\n    $7^{13-1} \\equiv 7^{12} \\equiv 1 \\pmod{13}$.\n3.  We want to find $7^{100} \\pmod{13}$. We can express the exponent 100 in terms of 12:\n    $100 = 12 \\times 8 + 4$.\n4.  Using the properties of exponents:\n    $7^{100} = (7^{12})^8 \\times 7^4$.\n5.  Substituting the result from Fermat's Little Theorem:\n    $7^{100} \\equiv (1)^8 \\times 7^4 \\pmod{13}$\n    $7^{100} \\equiv 7^4 \\pmod{13}$.\n6.  Now we calculate $7^4 \\pmod{13}$:\n    $7^1 \\equiv 7 \\pmod{13}$\n    $7^2 = 49$. Since $49 = 13 \\times 3 + 10$, $7^2 \\equiv 10 \\equiv -3 \\pmod{13}$.\n    $7^4 = (7^2)^2 \\equiv (-3)^2 \\pmod{13}$\n    $7^4 \\equiv 9 \\pmod{13}$.\n\nTherefore, $7^{100} \\equiv 9 \\pmod{13}$.\n\nANSWER: 9"
+   ],
+   "seconds": 41.8
+  },
+  "h4": {
+   "category": "hard-reasoning",
+   "samples": [
+    "To determine the output of the code, let's trace the function `f(n, memo={})`.\n\n1.  **Function Logic**: The function implements a recursive calculation with memoization.\n2.  **Base Case**: If `n < 2`, it returns `1`.\n3.  **Recursive Step**: If `n >= 2`, it returns `f(n-1) + f(n-2)`.\n4.  **Sequence Identification**: This is the definition of the Fibonacci sequence, but with a slight shift in starting values.\n    *   `f(0) = 1`\n    *   `f(1) = 1`\n    *   `f(2) = f(1) + f(0) = 1 + 1 = 2`\n    *   `f(3) = f(2) + f(1) = 2 + 1 = 3`\n    *   `f(4) = f(3) + f(2) = 3 + 2 = 5`\n    *   `f(5) = f(4) + f(3) = 5 + 3 = 8`\n    *   `f(6) = f(5) + f(4) = 8 + 5 = 13`\n    *   `f(7) = f(6) + f(5) = 13 + 8 = 21`\n    *   `f(8) = f(7) + f(6) = 21 + 13 = 34`\n    *   `f(9) = f(8) + f(7) = 34 + 21 = 55`\n    *   `f(10) = f(9) + f(8) = 55 + 34 = 89`\n\nThe memoization dictionary ensures that each value is calculated only once, but it does not change the mathematical result.\n\nANSWER: 89"
+   ],
+   "seconds": 43.4
+  },
+  "h5": {
+   "category": "hard-constraints",
+   "samples": [
+    "Big dogs chase small cats.\nGreen frogs jump past thin brown logs.\nRed birds sing loud songs."
+   ],
+   "seconds": 3.3
+  },
+  "h6": {
+   "category": "hard-constraints",
+   "samples": [
+    "ABC=7\nDEF=16\nGHI=25\nJKL=34"
+   ],
+   "seconds": 3.1
+  },
+  "x1": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(n):\n    return sum(map(int, str(n)))\n```"
+   ],
+   "seconds": 3.2
+  },
+  "x2": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(lst):\n    first = second = None\n    for x in lst:\n        if first is None or x > first:\n            second, first = first, x\n        elif x < first and (second is None or x > second):\n            second = x\n    return second\n```"
+   ],
+   "seconds": 7.5
+  },
+  "x3": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(s):\n    stack = []\n    mapping = {')': '(', ']': '[', '}': '{'}\n    for char in s:\n        if char in mapping.values():\n            stack.append(char)\n        elif char in mapping:\n            if not stack or stack.pop() != mapping[char]:\n                return False\n    return not stack\n```"
+   ],
+   "seconds": 9.2
+  },
+  "x4": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(m):\n    n = len(m)\n    res = [[0] * n for _ in range(n)]\n    for r in range(n):\n        for c in range(n):\n            res[c][n - 1 - r] = m[r][c]\n    return res\n```"
+   ],
+   "seconds": 8.2
+  },
+  "x5": {
+   "category": "codegen",
+   "samples": [
+    "```python\ndef solve(n):\n    count, num = 0, 1\n    while count < n:\n        num += 1\n        for i in range(2, int(num**0.5) + 1):\n            if num % i == 0: break\n        else: count += 1\n    return num\n```"
+   ],
+   "seconds": 8.3
+  },
+  "L1": {
+   "category": "longctx",
+   "samples": [
+    "To find the budget code for shipment SH-093, we follow these steps:\n\n1.  **Locate shipment SH-093 in the log:**\n    Looking through the records, we find: \"Record 093: shipment SH-093, depot DAMSON, units 148\".\n2.  **Identify the depot for SH-093:**\n    The shipment SH-093 is associated with depot DAMSON.\n3.  **Find the budget code for depot DAMSON in the depot table:**\n    The table states: \"Depot DAMSON is managed by Nakamura, budget code BX-42\".\n\nThe budget code for shipment SH-093 is BX-42.\n\nANSWER: BX-42"
+   ],
+   "seconds": 39.1
+  },
+  "L2": {
+   "category": "longctx",
+   "samples": [
+    "To calculate the total number of units for depot CEDAR, we identify every record associated with that depot and sum the units:\n\n*   Record 002: 321\n*   Record 008: 353\n*   Record 014: 145\n*   Record 020: 497\n*   Record 026: 209\n*   Record 032: 81\n*   Record 038: 463\n*   Record 044: 55\n*   Record 050: 207\n*   Record 056: 169\n*   Record 062: 391\n*   Record 068: 473\n*   Record 074: 415\n*   Record 080: 367\n*   Record 086: 129\n*   Record 092: 151\n*   Record 098: 133\n*   Record 104: 225\n*   Record 110: 77\n*   Record 116: 89\n*   Record 122: 361\n*   Record 128: 143\n*   Record 134: 135\n*   Record 140: 137\n\nCalculation:\n321 + 353 = 674\n674 + 145 = 819\n819 + 497 = 1316\n1316 + 209 = 1525\n1525 + 81 = 1606\n1606 + 463 = 2069\n2069 + 55 = 2124\n2124 + 207 = 2331\n2331 + 169 = 2500\n2500 + 391 = 2891\n2891 + 473 = 3364\n3364 + 415 = 3779\n3779 + 367 = 4146\n4146 + 129 = 4275\n4275 + 151 = 4426\n4426 + 133 = 4559\n4559 + 225 = 4784\n4784 + 77 = 4861\n4861 + 89 = 4950\n4950 + 361 = 5311\n5311 + 143 = 5454\n5454 + 135 = 5589\n5589 + 137 = 5726\n\nANSWER: 5726"
+   ],
+   "seconds": 69.8
+  },
+  "L3": {
+   "category": "longctx",
+   "samples": [
+    "To find the sum of the units in Record 012 and Record 128, we first locate the specific records in the log:\n\n1.  **Record 012**: shipment SH-012, depot ALDER, units **241**\n2.  **Record 128**: shipment SH-128, depot CEDAR, units **143**\n\nNow, we add the units together:\n241 + 143 = 384\n\nANSWER: 384"
+   ],
+   "seconds": 12.5
+  }
+ }
+}

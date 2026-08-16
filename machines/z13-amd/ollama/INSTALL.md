@@ -103,6 +103,16 @@ Unnecessary at 61/61 offload, since there are no CPU-side weights to place.
 
 ## Which model to actually use
 
-See `characterization/RESULTS.md`. Short version: the 26b MoE beats the dense
-31b on a 21-task graded set *and* runs 3.3x faster, so the 31b has no
-demonstrated use case on this machine.
+See `characterization/RESULTS.md`. Short version, over 29 graded tasks:
+
+- **26b MoE** for almost everything — 3.5x faster and equal on all short-form
+  reasoning, mixed-domain and constraint work.
+- **31b dense** for long-context aggregation over many records, and tight
+  multi-constraint code generation. It scores 1.00 to the 26b's 0.81 on the
+  tier-3 set built for those two axes.
+
+Spending the 31b's wall clock on 26b best-of-5 instead does *not* close the
+gap (1.00 vs 0.84 at matched time): the 26b's long-context errors are
+systematic, not random, so majority voting reproduces the same wrong answer.
+That is the reason to keep the 31b installed, and the reason the GTT change
+above matters.

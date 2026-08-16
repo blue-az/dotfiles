@@ -244,7 +244,13 @@ HARD_CONSTRAINTS = [
 TASKS_HARD = ([("hard-reasoning", *t) for t in HARD_REASON]
               + [("hard-constraints", *t) for t in HARD_CONSTRAINTS])
 
-ALL_TASKS = TASKS + TASKS_HARD
+import tasks_tier3 as T3  # noqa: E402  (imported late: needs exact() defined)
+
+TASKS_TIER3 = ([("codegen", tid, p, fn) for tid, p, fn in T3.CODEGEN]
+               + [("longctx", tid, p, exact(e)) for tid, p, e in T3.LONGCTX])
+
+ALL_TASKS = TASKS + TASKS_HARD + TASKS_TIER3
 
 VOTE_MODE = {"reasoning": "majority", "mixed": "majority", "constraints": "best",
-             "hard-reasoning": "majority", "hard-constraints": "best"}
+             "hard-reasoning": "majority", "hard-constraints": "best",
+             "codegen": "best", "longctx": "majority"}
