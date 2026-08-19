@@ -11,9 +11,41 @@ desktop's `62.72 GiB` predates two RAM sticks being pulled (now 32 GB), and its
 750W PSU has since blown. Trust `parts/README.md` over the blocks below for
 anything component-level.
 
+
+## Status
+
+Which machines are actually in use. Commit dates are **not** a reliable proxy —
+the Mac Mini is inactive yet still maintained, and its dotfiles simply have not
+needed changes.
+
+| Status | Meaning |
+|--------|---------|
+| **Active** | In regular use. Changes are written and tested here. |
+| **Inactive** | Not in regular use, still maintained, expected to return. |
+| **Frozen** | Not in use. Docs kept as a dated snapshot; no changes expected. |
+
+| Machine | OS | Status |
+|---------|----|--------|
+| Desktop | Fedora 43 | **Active** |
+| Z13 AMD | Fedora 43 | **Active** |
+| Mac Mini | macOS Sequoia | **Inactive** |
+| Desktop (Windows) | Windows 11 | Frozen (same hardware as Desktop) |
+| Z13 AMD (Windows) | Windows 11 | Frozen (same hardware as Z13) |
+| IdeaPad U400 | Debian 12 | Frozen |
+| Chromebook Lenovo | Debian 12 (Crostini) | Frozen |
+| Chromebook Kevin | Debian 12 | Frozen |
+| PinePhone | postmarketOS | Frozen |
+| Raspberry Pi | Raspberry Pi OS | Frozen |
+
+Two active machines, both Fedora running sway — which is why the shared sway
+defaults in `sway/.config/sway/config` target Fedora, not the Debian machines.
+
 ---
 
 ## Desktop (Fedora)
+
+Status: **Active** — Fedora 43, sway. Primary machine; config changes land here.
+
 ```
 blueaz@desktop
 --------------
@@ -42,6 +74,9 @@ Local IP (eno1): 192.168.x.x/24
 ---
 
 ## Desktop (Windows 11)
+
+Status: **Frozen** — dual-boot install on the Desktop hardware, not a separate machine.
+
 ```
 efehn@windows
 -------------
@@ -59,6 +94,9 @@ Packages: winget, Chocolatey
 ---
 
 ## Z13 AMD (Fedora)
+
+Status: **Active** — Fedora 43, sway. Primary laptop; config changes land here.
+
 ```
 blueaz@fedora
 -------------
@@ -86,6 +124,9 @@ Battery: Yes
 ---
 
 ## Z13 AMD (Windows 11)
+
+Status: **Frozen** — dual-boot install on the Z13 hardware, not a separate machine.
+
 ```
 efehn@z13
 ---------
@@ -107,6 +148,9 @@ Battery: Yes
 ---
 
 ## Mac Mini (macOS)
+
+Status: **Inactive** — not in regular use, but still maintained and expected back. Not frozen.
+
 ```
 blueaz@Mac-mini
 ---------------
@@ -134,6 +178,9 @@ Local IP (en1): 192.168.x.x/24
 ---
 
 ## Chromebook Lenovo (Debian/Crostini)
+
+Status: **Frozen** — Debian. Snapshot only.
+
 ```
 blueaz@penguin
 --------------
@@ -152,6 +199,9 @@ Note: Runs in Crostini container (no WM)
 ---
 
 ## IdeaPad U400 (Debian)
+
+Status: **Frozen** — Debian. Snapshot only.
+
 ```
 blueaz@debian
 -------------
@@ -174,6 +224,9 @@ Battery: Yes
 ---
 
 ## Chromebook Kevin (Debian)
+
+Status: **Frozen** — Debian. Snapshot only.
+
 ```
 OS: Debian GNU/Linux 12.12 (bookworm) aarch64
 Host: Google Kevin (Samsung Chromebook Plus v1)
@@ -193,6 +246,9 @@ Battery: Yes
 ---
 
 ## PinePhone (postmarketOS)
+
+Status: **Frozen** — snapshot only.
+
 ```
 Host: PINE64 PinePhone (Convergence Edition, 3 GB RAM / 32 GB eMMC)
 OS: postmarketOS v25.12 (Phosh)
@@ -206,6 +262,9 @@ Role: Mobile Linux device / testing recovery target
 ---
 
 ## Raspberry Pi (Raspberry Pi OS)
+
+Status: **Frozen** — snapshot only.
+
 ```
 Host: raspberrypi
 Hardware: Raspberry Pi 3 family (ARM)
