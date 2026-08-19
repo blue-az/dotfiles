@@ -27,8 +27,11 @@ input type:touchpad {
 include ~/.config/sway/config.d/outputs.conf
 
 # Machine-specific overrides (symlink to config.d/machine.conf.*)
+# Defaults target the active Fedora machines (desktop, z13); wofi is the
+# Debian-only fallback and is not installed on either, so it must not be the
+# default here -- a missing machine.conf symlink would silently kill $mod+d.
 set $term_cmd foot
-set $launcher_cmd "wofi --show drun"
+set $launcher_cmd "wmenu-run"
 set $file_manager_cmd dolphin
 set $swayidle_lock_timeout 1800
 set $swayidle_off_timeout 1830
