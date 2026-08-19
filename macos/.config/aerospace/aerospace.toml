@@ -53,7 +53,7 @@ alt-equal = 'balance-sizes'
 alt-shift-q = 'close'
 
 # Open terminal (mod + return)
-alt-return = 'exec-and-forget open -na Terminal'
+alt-enter = 'exec-and-forget open -na Terminal'
 
 # Reload config (mod + shift + r)
 alt-shift-r = 'reload-config'
