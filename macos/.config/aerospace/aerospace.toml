@@ -1,0 +1,91 @@
+# Aerospace config - i3 equivalent for macOS
+# Mod key = alt (Caps Lock on physical keyboard via KeyRemapping).
+# Caps Lock is remapped to LEFT OPTION by com.local.KeyRemapping.plist, not to
+# Command. Binding these to cmd- would put the WM on top of macOS Command
+# shortcuts (cmd-f, cmd-l, cmd-1..5) and swallow them -- the exact failure that
+# made skhd unusable. alt- is what Caps Lock actually produces.
+# Replaces yabai + skhd
+
+start-at-login = true
+
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+key-mapping.preset = 'qwerty'
+
+[gaps]
+inner.horizontal = 8
+inner.vertical   = 8
+outer.left       = 8
+outer.right      = 8
+outer.top        = 8
+outer.bottom     = 8
+
+[mode.main.binding]
+# Focus window (mod + hjkl)
+alt-h = 'focus left'
+alt-j = 'focus down'
+alt-k = 'focus up'
+alt-l = 'focus right'
+
+# Move/swap window (mod + shift + hjkl)
+alt-shift-h = 'move left'
+alt-shift-j = 'move down'
+alt-shift-k = 'move up'
+alt-shift-l = 'move right'
+
+# Enter resize mode (mod + r) — like i3
+alt-r = 'mode resize'
+
+# Toggle fullscreen (mod + f)
+alt-f = 'fullscreen'
+
+# Toggle float (mod + shift + t — avoids macOS Spotlight conflict)
+alt-shift-t = 'layout floating tiling'
+
+# Cycle split direction (mod + e)
+alt-e = 'layout tiles horizontal vertical'
+
+# Balance windows (mod + =)
+alt-equal = 'balance-sizes'
+
+# Close window (mod + shift + q)
+alt-shift-q = 'close'
+
+# Open terminal (mod + return)
+alt-return = 'exec-and-forget open -na Terminal'
+
+# Reload config (mod + shift + r)
+alt-shift-r = 'reload-config'
+
+# Switch workspace (mod + 1-5)
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+
+# Move window to workspace (mod + shift + 1-5)
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
+alt-shift-5 = 'move-node-to-workspace 5'
+
+[mode.resize.binding]
+h     = 'resize width -50'
+j     = 'resize height +50'
+k     = 'resize height -50'
+l     = 'resize width +50'
+enter = 'mode main'
+esc   = 'mode main'
+
+# Float system windows (equivalent to yabai rules)
+[[on-window-detected]]
+if.app-name-regex-substring = 'System Preferences|System Settings|Calculator'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Finder'
+if.window-title-regex-substring = 'Copy|Move|Delete|Connecting'
+run = ['layout floating']

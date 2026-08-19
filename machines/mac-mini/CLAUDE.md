@@ -65,12 +65,11 @@ This Mac mini is configured to behave similarly to the Fedora desktop/laptop and
 - Python dev setup with IPython cell support
 - `jk` to escape insert mode
 
-## Window Management (yabai + skhd)
+## Window Management (Aerospace)
 
-Tiling window manager similar to sway/i3 on Linux.
+Tiling window manager — i3 equivalent for macOS. Single TOML config, no separate keybinding daemon.
 
-- **yabai**: `~/.yabairc` - tiling WM with focus-follows-mouse
-- **skhd**: `~/.skhdrc` - keybindings
+- **aerospace**: `~/.config/aerospace/aerospace.toml`
 
 ### Key Bindings (Caps Lock = mod key)
 
@@ -78,30 +77,37 @@ Tiling window manager similar to sway/i3 on Linux.
 |---------|--------|
 | `Caps + hjkl` | Focus window |
 | `Caps + Shift + hjkl` | Move/swap window |
-| `Caps + Ctrl + hjkl` | Resize window |
-| `Caps + 1-5` | Switch to space |
-| `Caps + Shift + 1-5` | Move window to space |
+| `Caps + r` | Enter resize mode (then hjkl to resize, Enter/Esc to exit) |
+| `Caps + 1-5` | Switch workspace |
+| `Caps + Shift + 1-5` | Move window to workspace |
 | `Caps + f` | Toggle fullscreen |
-| `Caps + Shift + Space` | Toggle float |
+| `Caps + Shift + t` | Toggle float |
+| `Caps + e` | Cycle split direction |
+| `Caps + =` | Balance windows |
 | `Caps + Return` | Open terminal |
 | `Caps + Shift + q` | Close window |
-| `Caps + Shift + r` | Restart yabai |
+| `Caps + Shift + r` | Reload config |
 
 ### Services
 
 ```bash
-yabai --start-service    # start
-yabai --stop-service     # stop
-yabai --restart-service  # restart (same for skhd)
+brew install nikitabobko/tap/aerospace
+# Grant accessibility permissions in:
+# System Settings → Privacy & Security → Accessibility
+aerospace reload-config
 ```
-
-Logs: `/tmp/yabai_blueaz.[out|err].log`, `/tmp/skhd_blueaz.[out|err].log`
 
 ## Keyboard Remapping
 
-Caps Lock and Cmd keys are swapped (like xkb config on Linux):
-- **Caps Lock** → Cmd (Super)
-- **Left/Right Cmd** → Caps Lock
+Caps Lock becomes the WM mod key by mapping to **Left Option**, not Command
+(`com.local.KeyRemapping.plist`, applied via hidutil):
+- **Caps Lock** → Left Option  ← this is the mod key AeroSpace binds (`alt-`)
+- **Left Option** → Caps Lock
+- **Right Command** → Caps Lock
+
+Left Command is deliberately untouched, so macOS shortcuts (Cmd+F, Cmd+L,
+Cmd+1-5) stay free. Binding the WM to `cmd-` instead would swallow them --
+that is what made skhd unusable.
 
 Persisted via LaunchAgent: `~/Library/LaunchAgents/com.local.KeyRemapping.plist`
 
@@ -112,6 +118,9 @@ Persisted via LaunchAgent: `~/Library/LaunchAgents/com.local.KeyRemapping.plist`
 | `ll` | `ls -halF` |
 | `la` | `ls -A` |
 | `cl` | `claude` |
+| `UC` | `brew upgrade --cask claude-code` |
+| `UG` | `brew upgrade gemini-cli` |
+| `PP` | `cd ~/Python/project-phoenix` |
 | `ff` | `fastfetch` |
 | `ffp` | `fastfetch` with IP addresses redacted |
 | `jn` | `jupyter notebook` |
@@ -126,7 +135,7 @@ cd ~/dotfiles
 
 # Install tools
 brew install neovim fzf stow
-brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
+brew install nikitabobko/tap/aerospace
 
 # Deploy configs
 stow macos
@@ -137,10 +146,9 @@ $(brew --prefix)/opt/fzf/install
 # Install nvim plugins
 nvim --headless +PlugInstall +qall
 
-# Grant accessibility permissions to yabai and skhd in:
+# Grant accessibility permissions to aerospace in:
 # System Settings → Privacy & Security → Accessibility
 
-# Start services
-yabai --start-service
-skhd --start-service
+# Start aerospace (or set start-at-login = true in config)
+aerospace reload-config
 ```
