@@ -18,20 +18,46 @@ num() {
     printf '%.0f' "$v" 2>/dev/null || echo "${2:-0}"
 }
 
+# True when the GPU at this nvidia-smi PCI bus id has at least one connected
+# display. nvidia-smi reports 00000000:01:00.0; sysfs uses 0000:01:00.0.
+drives_display() {
+    local bus_id="${1// /}"
+    local pci card dev
+    pci="0000:${bus_id#*:}"
+    for card in /sys/class/drm/card[0-9]*; do
+        [ -e "$card/device" ] || continue
+        dev=$(basename "$(readlink -f "$card/device")")
+        [ "$dev" = "$pci" ] || continue
+        for conn in "$card"-*; do
+            [ -r "$conn/status" ] || continue
+            [ "$(cat "$conn/status")" = "connected" ] && return 0
+        done
+    done
+    return 1
+}
+
 if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
     # One query for every GPU rather than four per card.
     mapfile -t ROWS < <(nvidia-smi \
-        --query-gpu=gpu_name,utilization.gpu,temperature.gpu,power.draw,power.limit \
+        --query-gpu=gpu_name,utilization.gpu,temperature.gpu,power.draw,power.limit,pci.bus_id \
         --format=csv,noheader,nounits 2>/dev/null)
 
     TEXT=""
     CLASS="normal"
     for ROW in "${ROWS[@]}"; do
-        IFS=',' read -r NAME UTIL TEMPC WATTS LIMIT <<< "$ROW"
+        IFS=',' read -r NAME UTIL TEMPC WATTS LIMIT BUS_ID <<< "$ROW"
 
         # "NVIDIA GeForce RTX 3090" -> "3090"; "... RTX 4070 Ti" -> "4070-Ti"
         NAME=$(awk '{sub(/^ +/, ""); sub(/^NVIDIA +/, ""); sub(/^GeForce +/, "");
                      sub(/^(RTX|GTX|GT) +/, ""); gsub(/ +/, "-"); print}' <<< "$NAME")
+
+        # Suffix "-D" when this GPU is actually driving a display. Two identical
+        # 3090s are otherwise indistinguishable in the bar. Resolve it per GPU
+        # from its own PCI address -- never by DRM card number, which the kernel
+        # reassigns (the audio side of this machine had cards renumber under it).
+        if drives_display "$BUS_ID"; then
+            NAME="${NAME}-D"
+        fi
         [ -z "$NAME" ] && NAME="GPU"
 
         UTIL=$(num "$UTIL" 0)
