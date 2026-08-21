@@ -9,17 +9,22 @@
 # Refresh after a hardware change with:
 #   swaymsg -t get_outputs -r | jq -r '.[] | "\(.make) \(.model) \(.serial)"'
 
-# Display configuration - boot default is the 2s layout (left Acer + main Acer).
+# Display configuration - all four panels, ordered left to right:
+#   Main LG (4K)  |  LG (1080p)  |  left Acer  |  Predator (main)
 # Every display must be named explicitly: any output not listed here gets
 # auto-placed by sway at scale 1, which parks the 4K TV to the right of main.
-output "LG Electronics LG TV SSCR2 0x01010101" disable
-output "Acer Technologies Acer AL2216W L92080554231" pos 0 390 res 1680x1050
-output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 1680 0 mode 2560x1440@60Hz
+#
+# Panels are bottom-aligned on a common baseline at y=2160, so x positions
+# butt each panel against the next with no dead gap between them:
+#   0 + 3840 = 3840 + 1920 = 5760 + 1680 = 7440 + 2560 = 10000
+output "LG Electronics LG TV SSCR2 0x01010101" pos 0 0 mode 3840x2160
+output "LG Electronics LG TV 0x01010101" pos 3840 1080 mode 1920x1080
+output "Acer Technologies Acer AL2216W L92080554231" pos 5760 1110 res 1680x1050
+output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 7440 720 mode 2560x1440@60Hz
 
-# The 1080p LG TV is not plugged into the RTX 2080 (HDMI-A-2 is free for it), so
-# its identifier is unknown and it cannot be named here yet. Connect it, run the
-# command above, then add a `disable` line for it and hand workspaces 3 and 4
-# back their preferred output (TV only, no XB fallback).
+# Both LG panels report serial 0x01010101 (a placeholder LG ships rather than a
+# real serial), so the model string is the only thing separating them: "LG TV"
+# is the 1080p set, "LG TV SSCR2" the 4K. Do not try to match these by serial.
 
 # Workspace assignments. Sway sends a workspace to the first *active* output
 # in its list. If every listed output is off, or the workspace has no
@@ -28,6 +33,6 @@ output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 1680 0 mode 2560x1440@60Hz
 # the left Acer.
 workspace 1 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
 workspace 2 output "Acer Technologies Acer AL2216W L92080554231"
-# workspace 3 output "<1080p TV identifier>"   # when TV1080 is known
-# workspace 4 output "<1080p TV identifier>"   # when TV1080 is known
+workspace 3 output "LG Electronics LG TV 0x01010101"
+workspace 4 output "LG Electronics LG TV 0x01010101"
 workspace 6 output "LG Electronics LG TV SSCR2 0x01010101"
