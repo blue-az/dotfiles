@@ -88,9 +88,9 @@ for_window [title="PhoenixRouter"] floating enable, resize set 800 600
 bindsym $mod+Shift+f exec firefox
 
 # Cycle through audio sources
-bindsym $mod+Mod1+F11 exec ~/.config/shared/scripts/cycle-audio-source.sh
+bindsym $mod+Mod1+F11 exec ~/.config/shared/scripts/cycle-audio-output.sh
 
-bindsym $mod+Mod1+F2 exec ~/.config/i3/scripts/cycle-video-audio.sh
+bindsym $mod+Mod1+F2 exec ~/.config/shared/scripts/cycle-audio-output.sh
 
 # Change focus (vim-style)
 bindsym $mod+h focus left
