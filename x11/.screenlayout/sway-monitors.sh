@@ -19,11 +19,10 @@ LEFT='"Acer Technologies Acer AL2216W L92080554231"'
 MAIN='"Acer Technologies XB271HU #ASP2u3xvGwHd"'
 TV4K='"LG Electronics LG TV SSCR2 0x01010101"'
 
-# The 1080p LG TV is not plugged into the RTX 2080 (HDMI-A-2 is free for it).
-# Its identifier is therefore unknown, and layouts that place it skip it while
-# this stays empty - 3s and 4s reserve its slot but come up without it. Connect
-# it, run the command above, and fill this in to restore both layouts.
-TV1080=''
+# The 1080p LG TV. Note both LG sets report serial 0x01010101 and differ only by
+# model string - the 4K is "LG TV SSCR2", this one is plain "LG TV". Do not drop
+# the model word or the two become indistinguishable.
+TV1080='"LG Electronics LG TV 0x01010101"'
 
 # out <identifier> <args...> - configure one output, skipping unknown monitors
 # so a missing identifier degrades the layout instead of erroring.
