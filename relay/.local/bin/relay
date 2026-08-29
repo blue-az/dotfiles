@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# relay — low-ceremony cross-machine message drop for agent sessions.
+#
+# Deliberately dumb: ssh/scp only. No git, no operator ledger, no daemon.
+# Nothing here can fail closed, because nothing here checks anything.
+# Cross-machine governance goes through the ledger; this just moves bytes.
+set -euo pipefail
+
+INBOX="$HOME/handoffs/inbox"
+READ="$INBOX/read"
+ME="$(hostname -s)"
+
+usage() {
+    cat <<'USAGE'
+relay — cross-machine message drop (ssh/scp only, no git, no ledger)
+
+  relay send <host> <file>       copy a file into <host>'s inbox
+  relay send <host> -m "text"    send a one-line message
+  relay inbox                    list unread messages here
+  relay read <n|name>            print a message, mark it read
+  relay peek <n|name>            print without marking read
+  relay hosts                    hosts reachable from here
+  relay notify <host>            what to tell that box's agent
+
+Messages land in ~/handoffs/inbox/ as <ts>-from-<host>-<name>.
+Read ones move to ~/handoffs/inbox/read/. Nothing is ever deleted.
+USAGE
+}
+
+# resolve an argument that may be an index from `relay inbox` or a filename
+resolve() {
+    local arg="$1" f
+    if [[ "$arg" =~ ^[0-9]+$ ]]; then
+        f="$(ls -1 "$INBOX"/*.* 2>/dev/null | sed -n "${arg}p" || true)"
+    else
+        f="$INBOX/$arg"
+        [[ -f "$f" ]] || f="$(ls -1 "$INBOX"/*"$arg"* 2>/dev/null | head -1 || true)"
+    fi
+    [[ -n "$f" && -f "$f" ]] || { echo "relay: no such message: $arg" >&2; exit 1; }
+    printf '%s\n' "$f"
+}
+
+cmd="${1:-}"; shift || true
+case "$cmd" in
+    send)
+        host="${1:?relay send <host> <file|-m text>}"; shift
+        ts="$(date -u +%Y%m%dT%H%M%SZ)"
+        if [[ "${1:-}" == "-m" ]]; then
+            shift
+            body="$*"
+            src="$(mktemp)"; printf '%s\n' "$body" > "$src"
+            name="$ts-from-$ME-message.md"
+            cleanup=1
+        else
+            src="${1:?need a file}"
+            [[ -f "$src" ]] || { echo "relay: no such file: $src" >&2; exit 1; }
+            name="$ts-from-$ME-$(basename "$src")"
+            cleanup=0
+        fi
+        ssh -o BatchMode=yes "$host" "mkdir -p ~/handoffs/inbox"
+        scp -q -o BatchMode=yes "$src" "$host:handoffs/inbox/$name"
+        [[ "$cleanup" == 1 ]] && rm -f "$src"
+        echo "sent → $host:~/handoffs/inbox/$name"
+        echo "tell that box's agent:  relay inbox"
+        ;;
+    inbox)
+        mkdir -p "$INBOX"
+        n=0
+        shopt -s nullglob
+        for f in "$INBOX"/*.*; do
+            [[ -f "$f" ]] || continue
+            n=$((n+1))
+            b="$(basename "$f")"
+            # timestamp is the filename prefix (20260829T025051Z) - portable, no stat/date
+            if [[ "$b" =~ ^([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2})([0-9]{2}) ]]; then
+                when="${BASH_REMATCH[2]}-${BASH_REMATCH[3]} ${BASH_REMATCH[4]}:${BASH_REMATCH[5]}Z"
+            else
+                when="  ?        "
+            fi
+            printf '%2d  %s  %s\n' "$n" "$when" "$b"
+        done
+        [[ "$n" == 0 ]] && echo "inbox empty"
+        exit 0
+        ;;
+    read)
+        f="$(resolve "${1:?relay read <n|name>}")"
+        echo "--- $(basename "$f") ---"
+        cat "$f"
+        mkdir -p "$READ" && mv "$f" "$READ/"
+        echo "--- marked read ---"
+        ;;
+    peek)
+        f="$(resolve "${1:?relay peek <n|name>}")"
+        echo "--- $(basename "$f") ---"
+        cat "$f"
+        ;;
+    hosts)
+        grep -i '^Host ' "$HOME/.ssh/config" 2>/dev/null | awk '{print $2}' | grep -v '\*' || true
+        ;;
+    notify)
+        echo "On ${1:-that box}, tell the agent:  relay inbox   (then: relay read 1)"
+        ;;
+    -h|--help|help|"") usage ;;
+    *) echo "relay: unknown command: $cmd" >&2; usage; exit 1 ;;
+esac
