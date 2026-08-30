@@ -21,5 +21,19 @@
 #       ~/.dotfiles/machines/desktop/operator-verify-rerun \
 #       /usr/local/sbin/operator-verify-rerun
 
+# Two verifier accounts, deliberately:
+#
+#   operator-verifier (uid 966) -- the account OPERATIONS_RUNBOOK.md documents for
+#     this purpose, provisioned long before uid-971. Use this one for new work.
+#
+#   uid-971 -- created 2026-08-29 before checking whether a verifier account
+#     already existed. It is registered in .operator/identity.yaml as
+#     luna-review-ffsi001-rowa and appears in existing claim history, so it stays
+#     permitted for continuity. It is NOT the account to reach for: it carries a
+#     harness name, and operator-verify-rerun refuses it on any task that harness
+#     was issued a builder brief for.
+
+blueaz ALL=(operator-verifier) NOPASSWD: /usr/local/sbin/operator-verify-rerun
+blueaz ALL=(operator-verifier) NOPASSWD: /usr/local/sbin/operator-verify-retract
 blueaz ALL=(uid-971) NOPASSWD: /usr/local/sbin/operator-verify-rerun
 blueaz ALL=(uid-971) NOPASSWD: /usr/local/sbin/operator-verify-retract
