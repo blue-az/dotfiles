@@ -39,12 +39,29 @@ fi
 
 [ -d "$LEDGER" ] || { echo "no ledger at $LEDGER" >&2; exit 1; }
 
-# Grant on the directory AND a default entry, so records and SQLite's -wal/-shm
-# created later inherit it. Missing defaults are what locked blueaz out of z13's
-# ledger on 2026-08-28 ("attempt to write a readonly database") when the WAL was
-# created by a different identity.
-setfacl -m "u:${VERIFIER_USER}:rwx" -m "d:u::rwx" -m "d:u:${VERIFIER_USER}:rwx" \
-        -m "d:g::r-x" -m "d:m::rwx" -m "d:o::r-x" "$LEDGER"
+# The grant must be RECIPROCAL and RECURSIVE. Both halves were learned the hard
+# way on 2026-08-30, on the seat ledger, within an hour of writing this script:
+#
+#   reciprocal -- a one-way "d:u:uid-971:rwx" covers files the OWNER creates. It
+#     says nothing about files uid-971 creates, and SQLite makes the -wal/-shm as
+#     whoever opens the database first. uid-971 opened it, the WAL came out owned
+#     by 971 mode 0664, and blueaz -- now merely "other" -- got exactly the z13
+#     error this script was written to prevent: "attempt to write a readonly
+#     database". Grant both identities, in both directions.
+#
+#   recursive -- default entries apply only to entries created AFTER they are
+#     set. Subdirectories that already exist inherit nothing, so evidence/<task>/
+#     stayed unwritable and evidence-attach died with PermissionError. -R fixes
+#     existing content; the d: entries cover future content.
+#
+# Recovery note if a WAL is already misowned: setfacl cannot touch a file you do
+# not own ("Operation not permitted"). With no process holding the database open
+# and the WAL at 0 bytes, remove ledger.sqlite3-wal and -shm; SQLite recreates
+# them. Back up ledger.sqlite3 first.
+OWNER_USER="$(stat -c %U "$LEDGER")"
+setfacl -R -m "u:${OWNER_USER}:rwX" -m "u:${VERIFIER_USER}:rwX" \
+           -m "d:u:${OWNER_USER}:rwX" -m "d:u:${VERIFIER_USER}:rwX" \
+           -m "d:u::rwx" -m "d:g::r-x" -m "d:m::rwx" -m "d:o::r-x" "$LEDGER"
 echo "acl set on $LEDGER:"
 getfacl -p "$LEDGER" 2>/dev/null | grep -E "^(user|default:user):"
 

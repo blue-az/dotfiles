@@ -53,6 +53,27 @@ if [ "$ME" = "$AUTHOR_UID" ]; then
   exit 3
 fi
 
+# UID isolation and harness independence are different properties, and enforcing
+# only the first produced a circular verification on claim-0115 (2026-08-30): a
+# distinct uid running the harness that had built the task. Refuse when the
+# registry name for this uid was issued a builder brief on this task.
+MYNAME=$(python3 -c "
+import sys,yaml
+d=yaml.safe_load(open(sys.argv[1])) or {}
+e=(d.get('uids') or {}).get(int(sys.argv[2])) or {}
+print(e.get('name','') if isinstance(e,dict) else (e or ''))
+" "$REPO/.operator/identity.yaml" "$ME" 2>/dev/null || true)
+
+if [ -n "$MYNAME" ] && [ -n "$TASK" ]; then
+  BRIEF="$REPO/.operator/briefs/$TASK.$MYNAME.export.md"
+  if [ -e "$BRIEF" ]; then
+    echo "refusing: '$MYNAME' was issued a builder brief for task $TASK" >&2
+    echo "  ($BRIEF)" >&2
+    echo "  A different uid is not a different reviewer if it runs the harness that built the work." >&2
+    exit 4
+  fi
+fi
+
 echo "claim:      $CLAIM"
 echo "repo:       $REPO"
 echo "verify_cmd: $CMD"
