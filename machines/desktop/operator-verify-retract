@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# operator-verify-retract — withdraw a verification. Quarantine only.
+#
+#   sudo -u uid-971 operator-verify-retract <repo> <claim-id> <reason-file>
+#
+# WHY THIS EXISTS
+# Under mode: enforced, any --status write requires the verifier role
+# (operator.py require_executor_role, called from evidence-attach). On this seat
+# uid 1000 is builder-only, so the operator cannot retract a verification at all,
+# and uid 971 is reachable only through operator-verify-rerun, which takes no
+# status argument. A bad verification could be created and never undone.
+#
+# The alternative was granting uid 1000 the verifier role, which would have ended
+# UID isolation on this seat in order to fix one claim. This adds a narrow power
+# instead of widening a broad one.
+#
+# WHAT IT CAN AND CANNOT DO
+# It writes --status quarantined and nothing else. The status is hardcoded below,
+# not taken from the caller. It cannot verify, and it cannot mark a claim false --
+# "false" asserts the claim is wrong, which is a judgment; "quarantined" asserts
+# the verification is unproven, which is a fact about the record. Judgment stays
+# with a human, for the same reason doctor never executes a stored gate.
+#
+# VERIFIED_BY_GUARD_SPEC.md:42 makes quarantine exempt from the self-verification
+# Error, so an identity retracting its own verification is explicitly allowed.
+set -euo pipefail
+
+REPO="${1:?usage: operator-verify-retract <repo> <claim-id> <reason-file>}"
+CLAIM="${2:?missing claim id}"
+REASON="${3:?missing reason file}"
+
+[ -d "$REPO/.operator" ] || { echo "no ledger at $REPO/.operator" >&2; exit 2; }
+[ -r "$REASON" ]         || { echo "cannot read reason file: $REASON" >&2; exit 2; }
+[ "$(wc -c < "$REASON")" -ge 120 ] || {
+  echo "reason file is under 120 bytes; a retraction needs a stated reason" >&2; exit 2; }
+
+CLAIM_FILE="$REPO/.operator/claims/$CLAIM.yaml"
+[ -r "$CLAIM_FILE" ] || { echo "no such claim: $CLAIM" >&2; exit 2; }
+
+ME=$(id -u)
+read -r TASK CURRENT <<<"$(python3 -c "
+import sys,yaml
+d=yaml.safe_load(open(sys.argv[1])) or {}
+print(d.get('task_id',''), d.get('verification_outcome') or d.get('verification_status'))
+" "$CLAIM_FILE")"
+
+VERIFIER=$(python3 -c "
+import sys,yaml
+d=yaml.safe_load(open(sys.argv[1])) or {}
+e=(d.get('uids') or {}).get(int(sys.argv[2])) or {}
+name=e.get('name') if isinstance(e,dict) else e
+roles=e.get('roles',[]) if isinstance(e,dict) else []
+print(name if (name and 'verifier' in roles) else '')
+" "$REPO/.operator/identity.yaml" "$ME")
+
+[ -n "$VERIFIER" ] || { echo "uid $ME has no verifier role in this ledger" >&2; exit 3; }
+
+echo "claim:      $CLAIM (task $TASK)"
+echo "current:    $CURRENT"
+echo "retracting as: uid $ME ($VERIFIER)"
+echo "reason:     $REASON"
+
+exec "$REPO/operator" evidence-attach "$REASON" \
+  --claim "$CLAIM" --task "$TASK" --type external_doc \
+  --by "$VERIFIER" --verified-by "$VERIFIER" \
+  --status quarantined \
+  --verdict "Verification withdrawn by uid $ME ($VERIFIER). Quarantined, not refuted: the claim is unproven, not shown false. See attached reason." \
+  --notes "Retraction via operator-verify-retract. Status is hardcoded to quarantined; this tool cannot verify."

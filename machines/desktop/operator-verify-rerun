@@ -36,6 +36,7 @@ print('' if v is None else v)
 CLAIM=$(field claim_id)
 REPO=$(field repo_root)
 CMD=$(field verify_cmd)
+TASK=$(field task_id)
 AUTHOR_UID=$(python3 -c "
 import sys,yaml
 d=yaml.safe_load(open(sys.argv[1]))
@@ -66,10 +67,55 @@ set -e
 printf '%s\n' "$OUT"
 echo "--- exit: $RC ---"
 
-# The result is a fact about the run, not a request from the caller.
+# --- record the result in the ledger -------------------------------------
+# The verifier identity is read from the ledger's own registry, keyed on the
+# uid actually executing. Never from the bundle: a caller controls the bundle,
+# and --verified-by must name the identity that really ran the gate.
+VERIFIER=$(python3 -c "
+import sys,yaml
+d=yaml.safe_load(open(sys.argv[1])) or {}
+e=(d.get('uids') or {}).get(int(sys.argv[2])) or {}
+name=e.get('name') if isinstance(e,dict) else e
+roles=e.get('roles',[]) if isinstance(e,dict) else []
+print(name if (name and 'verifier' in roles) else '')
+" "$REPO/.operator/identity.yaml" "$ME" 2>/dev/null || true)
+
+if [ -z "$VERIFIER" ]; then
+  echo "NOT RECORDED: uid $ME has no verifier role in $REPO/.operator/identity.yaml" >&2
+  exit "$RC"
+fi
+
+LOG=$(mktemp /tmp/verify-rerun-XXXXXX.txt)
+{
+  echo "Deterministic re-run of the pinned gate for $CLAIM"
+  echo "executed_by_uid: $ME ($VERIFIER)"
+  echo "claim_author_uid: $AUTHOR_UID"
+  echo "verify_cmd: $CMD"
+  echo "exit_code: $RC"
+  echo "run_at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "--- output ---"
+  printf '%s\n' "$OUT"
+} > "$LOG"
+
 if [ "$RC" -eq 0 ]; then
   echo "VERDICT: gate passed under uid $ME"
+  "$REPO/operator" evidence-attach "$LOG" \
+    --claim "$CLAIM" --task "$TASK" --type test_output \
+    --by "$VERIFIER" --verified-by "$VERIFIER" --status verified \
+    --verify-cmd "$CMD" \
+    --verdict "Deterministic re-run of the pinned gate by uid $ME ($VERIFIER), distinct from claim author uid $AUTHOR_UID. Command exited 0." \
+    --notes "Re-run with no model and no credentials; verdict is the process exit code."
 else
+  # A failed gate is recorded, but NOT as a refutation. One re-run can fail for
+  # reasons that are not the claim being false (flaky test, environment). Marking
+  # a claim false is a judgment, and judgment stays with a human -- the same
+  # reason doctor never executes a stored verification_command.
   echo "VERDICT: gate FAILED under uid $ME (exit $RC)"
+  echo "Attaching as DRAFT evidence, not marking the claim false."
+  "$REPO/operator" evidence-attach "$LOG" \
+    --claim "$CLAIM" --task "$TASK" --type test_output \
+    --by "$VERIFIER" --verify-cmd "$CMD" \
+    --notes "Pinned gate FAILED (exit $RC) on re-run by uid $ME. Draft evidence: a single failed re-run is not a refutation."
 fi
+rm -f "$LOG"
 exit "$RC"
