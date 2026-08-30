@@ -15,3 +15,8 @@ openai/
 *.bak.*
 # Scratch space — nothing here should ever be committed
 temp/
+
+# Python bytecode from the tests/ suite and the stowed audio scripts
+__pycache__/
+*.py[co]
+.pytest_cache/

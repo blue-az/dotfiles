@@ -6,13 +6,18 @@
 # card sorts first -- which on this machine is the GPU with no displays plugged
 # into it, so every entry in the cycle was a dead sink.
 #
-# This asks PipeWire which ports have a display present, and labels each by the
-# EDID name the port reports. Nothing here keys on a sink index, a channel pair,
-# an ALSA card number, or a PCI path: the kernel reassigns all of those.
+# The real work is in the sibling audio_cycle.py / audio_ports.py, which ask
+# PipeWire which ports have a display present and label each by the EDID name
+# the port reports. Nothing there keys on a sink index, a channel pair, an ALSA
+# card number, or a PCI path: the kernel reassigns all of those.
+#
+# Those modules used to live in operator-control-plane and were reached through
+# $OPERATOR_REPO. That coupling broke this binding twice -- once because the
+# wrapper shipped before the Python existed, once because an operator reorg
+# moved it into scripts/ -- so they now live here, next to their only caller.
 set -uo pipefail
 
-REPO="${OPERATOR_REPO:-$HOME/operator-control-plane}"
-label=$(python3 "$REPO/audio_cycle.py" 2>/dev/null)
+label=$(python3 "$(dirname "$(readlink -f "$0")")/audio_cycle.py" 2>/dev/null)
 
 if [ -z "$label" ] || [ "$label" = "no live audio output" ]; then
     command -v notify-send >/dev/null && notify-send -t 2000 "Audio" "No live audio output"

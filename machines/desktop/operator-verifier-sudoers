@@ -1,0 +1,24 @@
+# /etc/sudoers.d/operator-verifier
+#
+# Install with:
+#   sudo install -m 0440 -o root -g root \
+#       ~/.dotfiles/machines/desktop/operator-verifier-sudoers \
+#       /etc/sudoers.d/operator-verifier
+#   sudo visudo -c        # verify syntax before trusting it
+#
+# Permits exactly one command, as exactly one user, with no password. Not ALL,
+# not a shell, not the operator CLI directly -- only the re-run wrapper, which
+# takes a delegation bundle and executes the verify_cmd that bundle pins.
+#
+# Why this narrowly: a NOPASSWD rule for arbitrary commands as uid-971 would let
+# an agent running as blueaz manufacture its own uid_isolated verification,
+# which is the exact thing UID isolation exists to prevent. The wrapper never
+# accepts a verdict from its caller; the exit code comes from the kernel.
+#
+# The wrapper must NOT be writable by blueaz once this is installed, or the rule
+# is equivalent to granting arbitrary execution as uid-971. Stage it root-owned:
+#   sudo install -m 0755 -o root -g root \
+#       ~/.dotfiles/machines/desktop/operator-verify-rerun \
+#       /usr/local/sbin/operator-verify-rerun
+
+blueaz ALL=(uid-971) NOPASSWD: /usr/local/sbin/operator-verify-rerun

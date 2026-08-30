@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+# operator-verify-rerun — the one command uid-971 is permitted to run.
+#
+# Deterministic re-verification. Reads a review-delegate bundle, executes the
+# verify_cmd that bundle pins, and reports the real exit code. No model, no
+# credentials, no judgment.
+#
+#   sudo -u uid-971 operator-verify-rerun <bundle.yaml>
+#
+# WHAT THIS DEFENDS AGAINST
+# The caller chooses which bundle to re-run. It cannot choose the verdict: the
+# command comes from the bundle, the exit code comes from the kernel, and this
+# script never accepts a status argument. An agent running as the claim author
+# therefore cannot manufacture a uid_isolated "verified" by asking for one.
+#
+# WHAT IT DOES NOT DEFEND AGAINST
+# A vacuous gate. If the claim's verify_cmd is `true` or a test that asserts
+# nothing, this will faithfully report success. That limitation is already named
+# in the repo README ("structural validity is not semantic truth") and is not
+# made worse here. Re-running a bad gate honestly is still the job.
+#
+# It also does not defend against the human operator, who is the trust root and
+# can sudo anywhere. The boundary is against an *agent* running as uid 1000.
+set -euo pipefail
+
+BUNDLE="${1:?usage: operator-verify-rerun <delegation-bundle.yaml>}"
+[ -r "$BUNDLE" ] || { echo "cannot read bundle: $BUNDLE" >&2; exit 2; }
+
+field() { python3 -c "
+import sys,yaml
+d=yaml.safe_load(open(sys.argv[1]))
+v=d.get(sys.argv[2])
+print('' if v is None else v)
+" "$BUNDLE" "$1"; }
+
+CLAIM=$(field claim_id)
+REPO=$(field repo_root)
+CMD=$(field verify_cmd)
+AUTHOR_UID=$(python3 -c "
+import sys,yaml
+d=yaml.safe_load(open(sys.argv[1]))
+print((d.get('author_executor') or {}).get('uid',''))
+" "$BUNDLE")
+
+[ -n "$CLAIM" ] || { echo "bundle has no claim_id" >&2; exit 2; }
+[ -n "$CMD" ]   || { echo "claim $CLAIM has no verify_cmd; nothing to re-run" >&2; exit 2; }
+[ -d "$REPO" ]  || { echo "repo_root does not exist: $REPO" >&2; exit 2; }
+
+ME=$(id -u)
+if [ "$ME" = "$AUTHOR_UID" ]; then
+  echo "refusing: executing uid $ME is the claim author; this would not be uid_isolated" >&2
+  exit 3
+fi
+
+echo "claim:      $CLAIM"
+echo "repo:       $REPO"
+echo "verify_cmd: $CMD"
+echo "running as: uid $ME ($(id -un 2>/dev/null || echo "uid-$ME")), author was uid $AUTHOR_UID"
+echo "--- output ---"
+
+set +e
+OUT=$(cd "$REPO" && eval "$CMD" 2>&1)
+RC=$?
+set -e
+
+printf '%s\n' "$OUT"
+echo "--- exit: $RC ---"
+
+# The result is a fact about the run, not a request from the caller.
+if [ "$RC" -eq 0 ]; then
+  echo "VERDICT: gate passed under uid $ME"
+else
+  echo "VERDICT: gate FAILED under uid $ME (exit $RC)"
+fi
+exit "$RC"
