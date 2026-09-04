@@ -33,7 +33,7 @@ Rosewill 850W stays in System 1 indefinitely.
 | 65W cooler, LGA115x | ✅ mounted, fits |
 | W01 open-air frame + 2-pin momentary switch | ✅ in use |
 | ASUS RTX 2080 | ✅ **installed 2026-09-04** |
-| Network | wired ethernet only — see the WiFi section |
+| Network | wired ethernet plus working AIC8800 USB WiFi on Debian — see WiFi section |
 
 ## Gotchas discovered during this build — read before diagnosing anything
 
@@ -138,10 +138,15 @@ build.** Kernel 7.x changed the `cfg80211` API so every callback takes
 `cfg80211_new_sta`, `cfg80211_del_sta` all fail. Upstream's most recent
 compatibility work targets **kernel 6.17**.
 
-**It may well work on Debian**, which ships a 6.x kernel — the older distro is
-the advantage here. Try it *after* the machine is online over ethernet; never
-make it the only path to network, or you have a driver you cannot download
-without the network it provides.
+**It works on this Debian install**: kernel `6.1.0-52-amd64`, RicknotDev
+`aic8800d80` commit `99822dc`. The adapter starts as `a69c:5721` USB Mass
+Storage, then switches to `368b:8d81 AICSemi AIC 8800D80`; modules loaded are
+`aic_load_fw` and `aic8800_fdrv`; NetworkManager interface is
+`wlx8c773b23c4e9`. With ethernet unplugged it held about **250 Mbps**, roughly
+40 Mbps below wired in the same location.
+
+Keep wired ethernet as the recovery path anyway: this remains out-of-tree
+kernel-space code and may break on kernel updates.
 
 Note that this is out-of-tree kernel-space code from an unvetted repository.
 Acceptable on a bench; think before putting it on a machine holding real work.
@@ -152,8 +157,8 @@ Acceptable on a bench; think before putting it on a machine holding real work.
   BIOS/OS; display has not yet been recorded from the installed OS.
 - Board and RAM still recorded from build spec rather than from the machine.
 - PM981a SMART never read — OEM drive, unknown hours.
-- WiFi adapter unusable until either Debian's kernel proves compatible or
-  upstream ports to 7.x.
+- WiFi adapter works on Debian 6.1 via out-of-tree DKMS; verify again after
+  kernel updates. Fedora/kernel 7.x remains unsupported until upstream ports it.
 - Machine directory created as `machines/testbench/` on 2026-09-04 **before the
   hostname was confirmed**. If Debian was installed under a different hostname,
   rename the directory and update `machines/machine-overview.md`.

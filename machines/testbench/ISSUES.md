@@ -1,19 +1,21 @@
 # Test Bench — Issues
 
-## OPEN — No working WiFi. Wired ethernet only.
+## RESOLVED 2026-09-04 — AIC8800 USB WiFi works on Debian 6.1
 
 **The board has no onboard WiFi.** The MSI MPG Z390 **Gaming Plus** has none —
 that is the *Gaming Edge AC* / *Pro Carbon AC* variants. A USB adapter was bought
-to cover it and does not currently work.
+to cover it. It **does work on this Debian install** with the RicknotDev
+`aic8800d80` DKMS driver.
 
 ### The adapter
 
 | | |
 |---|---|
 | Chipset | **aicsemi AIC8800** family |
-| USB ID | `a69c:5721` |
-| Enumerates as | `bInterfaceClass 8` — **USB Mass Storage**, not a network device |
-| Mainline kernel support | **none** |
+| Initial USB ID | `a69c:5721` — fake USB mass-storage / driver-CD mode |
+| Working USB ID | `368b:8d81` — `AICSemi AIC 8800D80` |
+| Interface | `wlx8c773b23c4e9` |
+| Mainline kernel support | **none** — out-of-tree DKMS driver required |
 
 It ships in driver-CD mode and must be **mode-switched** before it presents as a
 network interface — `usb_modeswitch`, or the udev rules the driver packages
@@ -21,6 +23,16 @@ install. The documented pattern for this family is
 `usb_modeswitch -K -v a69c -p 5722`.
 
 ### Driver status, measured 2026-09-04
+
+**Works here:** Debian 12, kernel `6.1.0-52-amd64`, using
+`RicknotDev/aic8800d80` at commit `99822dc`. The adapter mode-switches from
+`a69c:5721` to `368b:8d81`, loads `aic_load_fw` and `aic8800_fdrv`, and connects
+through NetworkManager. With ethernet unplugged it held about **250 Mbps**, only
+~40 Mbps below wired in the same spot.
+
+Local setup helper kept at `~/setup-aic8800-wifi.sh`; source repo cloned at
+`~/src/aic8800d80`.
+
 
 Community DKMS drivers exist and are actively maintained:
 
@@ -39,12 +51,6 @@ not a patch.
 Upstream's most recent compatibility work is a **kernel-6.17** merge
 (2026-08-17).
 
-### Why it may still work *here*
-
-**Debian ships a 6.x kernel**, which is inside the range this driver already
-supports. The older distro is the advantage. Worth trying on this machine even
-though it is dead on the desktop.
-
 ### Rules
 
 1. **Try it only after the machine is online over ethernet.** Never make this
@@ -56,15 +62,14 @@ though it is dead on the desktop.
    kernel bump until upstream catches up, and DKMS will rebuild it against a
    kernel it may not support.
 
-### Resolution paths
+### Maintenance notes
 
-- **Now:** wired ethernet.
-- **Likely:** the driver builds on Debian's 6.x kernel. Untested.
-- **Eventually:** upstream ports to 7.x. The repo tracked 6.17 within weeks of
-  release, so a 7.x port is plausible but unscheduled.
-- **Alternative:** a dongle with mainline support — Realtek `rtl8812au`/`88x2bu`
-  class parts and most Mediatek `mt7921u` devices work without out-of-tree code.
-  Cheaper than fighting this one if WiFi ever becomes load-bearing here.
+- Keep wired ethernet as the recovery path.
+- DKMS should rebuild on Debian kernel updates, but this driver is out-of-tree:
+  verify WiFi after any kernel bump.
+- Fedora/desktop kernel 7.x still needs an upstream port.
+- If this ever becomes load-bearing, a dongle with mainline support is still the
+  safer long-term answer.
 
 ---
 
