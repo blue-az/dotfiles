@@ -1,0 +1,10 @@
+# Test Bench - generic single-monitor setup
+# Link as ~/.config/sway/config.d/outputs.conf on machines/testbench.
+# The i3-9100F has no iGPU; outputs are provided by the installed NVIDIA card.
+
+# Keep this intentionally minimal until the actual connector name and monitor
+# layout are recorded from `swaymsg -t get_outputs` on the bench.
+output * scale 1
+
+# No workspace-to-output assignments yet: a nonexistent connector name would be
+# misleading on a machine whose GPU may be swapped during bench work.

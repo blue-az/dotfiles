@@ -33,12 +33,14 @@ needed changes.
 | Z13 AMD (Windows) | Windows 11 | Frozen (same hardware as Z13) |
 | IdeaPad U400 | Debian 12 | Frozen |
 | Chromebook Lenovo | Debian 12 (Crostini) | Frozen |
+| **Test Bench** | **Debian** | **Active** (built 2026-09-04) |
 | Chromebook Kevin | Debian 12 | Frozen |
 | PinePhone | postmarketOS | Frozen |
 | Raspberry Pi | Raspberry Pi OS | Frozen |
 
-Two active machines, both Fedora running sway — which is why the shared sway
-defaults in `sway/.config/sway/config` target Fedora, not the Debian machines.
+Three active machines: Desktop and Z13 AMD are Fedora sway daily drivers, while
+Test Bench is an active Debian hardware bench. The shared sway defaults in
+`sway/.config/sway/config` still target Fedora, not the Debian machines.
 
 ---
 
