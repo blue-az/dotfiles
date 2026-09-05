@@ -55,12 +55,23 @@ Erik accepted an alternate model:
 |---|---|
 | Warranty replacement | **Corsair RMx Series RM1000x, 1000W, fully modular** — part `CP-9020271-NA` |
 | Interim unit | **Rosewill 850W** — approved for temporary use, currently running System 1, earmarked for System 2 afterward |
-| Return tracking | UPS `1Z966E659098549741`, prepaid label |
+| Return tracking | UPS `1Z966E659098549741`, prepaid label (outbound leg — the dead unit) |
 | Replacement ships | only *after* Corsair receives the dead unit |
+| **Inbound tracking** | UPS, from CORSAIR C/O GXO — number is in the Corsair store email "Your order 2009087410 is on its way" (2026-09-02). Deliberately not recorded here: this repo is public and a tracking lookup discloses the delivery address. |
 
-> ⏳ **The 30-day RMA window closes around 2026-08-28.** The replacement does not
-> ship until the return arrives, so if the dead HX750i has not gone out yet, that
-> is the clock to watch.
+> ✅ **RMA COMPLETE — the RM1000x shipped 2026-09-02 and arrives 09/03 or 09/04.**
+> The window concern below is resolved: the return arrived in time and Corsair
+> dispatched the replacement. Source: Corsair store email "Your order 2009087410
+> is on its way" (2026-09-02, expected 3 September), plus UPS delivery notices.
+>
+> ⚠️ **Date is genuinely ambiguous.** Two UPS reschedule notices arrived **58
+> seconds apart** on 2026-09-03 ~01:37-01:38 UTC — the earlier says Friday
+> **09/04**, the later says Thursday **09/03**. Message order is thin evidence.
+> Check the tracking page rather than trusting whichever email landed last.
+>
+> ~~The 30-day RMA window closes around 2026-08-28. The replacement does not ship
+> until the return arrives, so if the dead HX750i has not gone out yet, that is
+> the clock to watch.~~ *(Superseded — resolved as above.)*
 
 **Knock-on effects:**
 
@@ -115,13 +126,34 @@ Until that is settled, the four shelf `TODO`s below cannot be filled from the
 >
 > System 2 needs **two** things to fall, and neither is about acquiring parts:
 >
-> 1. **The RM1000x lands.** System 2's PSU is the 850W currently running
->    System 1 on approved temporary use. It only frees up when the warranty
->    replacement takes over.
-> 2. **The dual-3090 benchmark completes.** System 2's GPU — expected to be the
->    Zotac — stays in System 1 until the dual numbers are captured. The
->    benchmark may also change *which* card System 2 gets; see the allocation
->    branch below.
+> 1. ~~**The RM1000x lands.**~~ **GATE REMOVED 2026-09-03 — sequence changed
+>    by Erik: the RM1000x goes into the TEST BENCH first, not System 1.**
+>
+>    The recorded plan was RM1000x → System 1, freeing the Rosewill 850W →
+>    System 2. The new plan is simply RM1000x → System 2 directly. **This is
+>    strictly better and removes a dependency:**
+>
+>    - System 2's PSU gate falls the moment the unit arrives, instead of
+>      waiting on a swap in another machine.
+>    - **System 1 is never disturbed.** It is mid-benchmark-program and stays
+>      on the 850W, which already exceeds the ~500-550W that plan budgeted.
+>    - The new PSU and the new build get validated *together*, so a fault in
+>      either is isolated to a machine that nothing depends on.
+>
+>    The 850W then stays in System 1 indefinitely rather than migrating.
+> 2. **The dual-3090 benchmark completes. STILL OPEN as of 2026-09-02** —
+>    confirmed ongoing, and now the *sole* remaining gate. System 2's GPU —
+>    expected to be the Zotac — stays in System 1 until the dual numbers are
+>    captured. The benchmark may also change *which* card System 2 gets; see
+>    the allocation branch below.
+>
+>    Context on why this one will not close quickly: the `local_lane_ladder`
+>    program is mid-flight on instrument problems, not model results. As of
+>    2026-09-02 the E9 battery is saturated at L2, discriminates at L1 through
+>    exactly one confirmed cell, and L0 turned out to be an exploration-budget
+>    floor (600s timeouts, 56-72 tool calls, never reaching an edit). Several
+>    prior results dissolved on re-measurement under a better harness. Treat
+>    "benchmark completes" as an open-ended milestone, not a date.
 >
 > The benchmark is **not** gated on the RM1000x — 850W is more headroom than the
 > ~500–550W the original plan budgeted against a 750W unit. Nor is it blocked on
@@ -133,13 +165,37 @@ Until that is settled, the four shelf `TODO`s below cannot be filled from the
 to the low end rather than balanced — the 3090 does the work, everything else
 just has to not get in its way.
 
+> ### First-boot checklist (added 2026-09-03, bench-first sequence)
+>
+> **Validate the bench with the shelf RTX 2080, not a 3090.** The 9100F has no
+> integrated graphics, so this machine cannot POST to a display without a card
+> in it. Using the 2080 means neither 3090 has to leave System 1 during
+> bring-up, so a bench fault cannot cost you the benchmark program's hardware.
+> Swap a 3090 in only *after* the bench is known good.
+>
+> Order:
+> 1. RM1000x + board + CPU + cooler + RAM + NVMe + **RTX 2080**, open air.
+> 2. **Power button:** no case means no front-panel header. Jumper the
+>    `PWR_SW` pins with a screwdriver, or the ~$5 bench button already
+>    budgeted in row 5.
+> 3. POST → BIOS. A Z390 shipped before 9th-gen may want a BIOS flash;
+>    System 1's 9900KF is the same socket, so there is no chicken-and-egg
+>    risk if it does.
+> 4. **Confirm the one unverified link in the compatibility chain:** the 65W
+>    cooler's LGA1151 bracket. Everything else is validated on paper.
+> 5. `sudo dmidecode -t baseboard -t memory` to confirm board and RAM match
+>    what is written here, and `smartctl -a` on the PM981a (OEM, no consumer
+>    warranty — check Power On Hours and Percentage Used).
+> 6. Only then: 2080 out, 3090 in, and start on GPU configurations.
+
 | # | Part | Status | Spec | Notes |
 |---|---|---|---|---|
-| 1 | PSU | gated | **Rosewill 850W** | Ample for one 3090. Frees up only when the RM1000x lands. |
+| 1 | PSU | **UNGATED 2026-09-03** | **Corsair RM1000x, 1000W** (`CP-9020271-NA`) | Sequence changed: the RMA replacement goes straight into this bench, not System 1. The Rosewill 850W stays in System 1. 1000W is ample headroom for one 3090 and leaves room to test two. |
 | 2 | Motherboard | arrives 2026-08-10 | **MSI MPG Z390 Gaming Plus, LGA1151** — same board as System 1 | Confirmed against the 2019 build spec. Validates the whole chain below. |
-| 3 | CPU cooler | in hand | **65W-rated cooler** (model unrecorded) — a second unit, bought for this build | ⚠️ **This is the binding constraint on part 6.** The Scythe Ninja 5 is System 1's and stays there. |
+| 3 | CPU cooler | in hand | **65W-rated cooler, LGA115x** — listed as "i3/i5/i7 LGA115x CPU Heatsink, compatible with Intel CPU Cooler for LGA 1151". A second unit, bought for this build | ✅ **LGA1151 confirmed 2026-09-03 — this closes the last unverified link in the compatibility chain.** Still the binding constraint on part 6's 65W ceiling. The Scythe Ninja 5 is System 1's and stays there. |
 | 4 | RAM | in hand | **Corsair Vengeance LPX 16 GB (2x8GB) DDR4-3200** | System 1's *original* 2019 kit, displaced by the TEAMGROUP upgrade. This is where the "16 GB max" ceiling comes from — it is the kit itself, not a board or plan limit. |
-| 5 | Case | **deferred (decided 2026-08-09)** | none for now | Runs open-air. Budget **~$5 for a bench power button**, or jumper the `PWR_SW` header. Revisit only if System 1 gets a roomier case and the Define R6 becomes available as a hand-me-down. |
+| 5 | Case / frame | **open-air bench frame, 2026-09-03** | **W01 DIY Portable Test Bench** — open-air frame, fits ATX / mATX / ITX | Supersedes "no case, runs on the motherboard box". The board is ATX and fits. **If the frame has not arrived, do not wait for it** — the board's own box is a valid non-conductive surface for bring-up, and the frame can be transferred to later. Revisit a real case only if System 1 gets a roomier one and the Define R6 becomes a hand-me-down. |
+| 5a | Power switch | **IN HAND — included with the W01 bench kit** | 2-pin momentary push button (does not latch) | Plugs onto the `PWR_SW` pair of `JFP1`; polarity irrelevant for a switch. **No longer a blocker** — the separately ordered external button (2 m lead, `Power SW` + `Power LED`) is now a spare. Confirm the pin pair against the board manual, since `JFP1` also carries reset and both LEDs. |
 | 6 | CPU | **bought 2026-08-09** | **Intel i3-9100F** `SRF6N` — 4C/4T, 3.6 GHz, 65W, **no iGPU**. $17.99 used, kcliquidation (99.8%, 22.9K) | Meets the 65W ceiling. Weakest of the shortlist: fine GPU-bound, bottlenecks CPU-bound work. Accepted trade at the price. **No integrated graphics — this machine cannot produce video without a card installed.** |
 | 7 | Drive | **bought 2026-08-09** | **Samsung PM981a 512 GB NVMe** (`MZVLB512HBJQ`), used | OEM sibling of System 1's 970 EVO — same M.2 2280 / PCIe 3.0 x4 class, half the capacity. OEM means **no consumer warranty**. Check SMART on arrival (`smartctl -a`): Power On Hours and Percentage Used. Still the wrong size if System 2 ever does inference. |
 
@@ -155,7 +211,7 @@ System 1, every downstream part checks out:
 | Board → RAM | DDR4 ✅ |
 | Board → SSD | Z390 has M.2; PM981a is M.2 2280 PCIe 3.0 x4 ✅ |
 | Board → GPU | PCIe 3.0 x16 ✅ |
-| Cooler → socket | 65W unit must have LGA1151 mounting — **the one link still unverified**; confirm the bracket set when it goes on |
+| Cooler → socket | **LGA115x / LGA1151 ✅ — confirmed 2026-09-03 from the part listing.** The chain is now fully validated on paper; nothing remains unverified until first boot. |
 
 > **Two coolers, do not conflate them.** The **Scythe Ninja 5 belongs to
 > System 1** and stays there — it is in the 2019 build spec and the dual-3090

@@ -70,9 +70,10 @@ connector names are recorded from the installed OS:
   ports are permanently dead. A black screen with no card installed is a
   *successful* POST, not a failure. Never diagnose display problems here without
   a card seated.
-- **No onboard WiFi.** The Gaming Plus has none. See `ISSUES.md` — the USB
-  adapter bought for it does not currently work. **Wired ethernet is the only
-  reliable network path.**
+- **No onboard WiFi.** The Gaming Plus has none. The AIC8800 USB adapter **does
+  work** (proven on Debian 12 / kernel 6.1) but only via an out-of-tree DKMS
+  driver with a hard kernel ceiling — see `ISSUES.md`. **Keep wired ethernet as
+  the recovery path.**
 - **Open air, no case.** Nothing braces the GPU; a ~300 mm card needs support.
   Nothing filters dust. Nothing stops a dropped screwdriver.
 - **Power switch is a bare 2-pin momentary** on `JFP1`. There is no case power

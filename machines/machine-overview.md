@@ -38,9 +38,8 @@ needed changes.
 | PinePhone | postmarketOS | Frozen |
 | Raspberry Pi | Raspberry Pi OS | Frozen |
 
-Three active machines: Desktop and Z13 AMD are Fedora sway daily drivers, while
-Test Bench is an active Debian hardware bench. The shared sway defaults in
-`sway/.config/sway/config` still target Fedora, not the Debian machines.
+Two active machines, both Fedora running sway — which is why the shared sway
+defaults in `sway/.config/sway/config` target Fedora, not the Debian machines.
 
 ---
 
