@@ -736,3 +736,43 @@ time instead of toggling a systemd override on the desktop.
 
 Worth doing early: install the desktop's SSH key so this machine is reachable
 from there without walking over to it. Command is in the SSH section above.
+
+---
+
+## Making the bench a benchmark host — the setup nobody documented (2026-09-05)
+
+Five blockers stood between a working Debian install and a machine that can run
+`local_lane_ladder`. All fixes are **user-local, no root**, so a distro upgrade
+will not fight them.
+
+| blocker | fix |
+|---|---|
+| `pi` absent | `npm install --prefix ~/.local/npm-global @earendil-works/pi-coding-agent@0.85.0`, then symlink `dist/bundle/cli.js` to `~/.local/bin/pi`. **Version-match the desktop** — the dispatcher is part of the measurement. |
+| `pi` crashes on Debian's Node | needs **Node >= 22.19** (`node:fs` `globSync`). Debian 12 ships 18.20.4. Untar the Node 22 linux-x64 build into `~/.local`. |
+| `runner.py`: `No module named yaml` | Debian ships **no `pip` and no `ensurepip`**. Fetch the PyYAML wheel and `unzip` it into `~/.local/lib/python3.11/site-packages`. |
+| `Error: Unknown provider "ollama"` | `pi` needs `~/.pi/agent/models.json`. |
+| ollama itself | user-local tarball from GitHub releases (`.tar.zst`, not `.tgz`), run as a `systemd --user` unit so it survives logout. Replicate the desktop's `OLLAMA_FLASH_ATTENTION=1` and `OLLAMA_KV_CACHE_TYPE=q8_0`. |
+
+### ⛔ Do not copy `~/.pi/agent/auth.json`
+
+It holds **`openai-codex` credentials**. Only `models.json` should ever cross
+machines, and only after confirming its providers carry no real secrets — on
+this stack its sole provider is `ollama` with the dummy key `"ollama"`.
+
+`scp -r ~/.pi` is the obvious move and it is wrong.
+
+### Portability bug this exposed
+
+`runner.py` hardcoded the contract-v1 prompt to `/home/blueaz/...`. The bench
+runs as `ef-tb`, so `measure_tok_s` hit its "return None, never fail a cell"
+guard and **an entire run's decode column came back empty with no error.** Fixed
+to resolve from `Path.home()`. If you add a machine with a different username,
+check for other absolute paths first.
+
+### Confidential source artifacts
+
+The Alignerr lane needs `sources.local.json` and the documents it points at.
+Those may live on this machine — that is what it is for. **They must never reach
+a public repo.** `runs/` and `sources.local.json` are gitignored in
+`operator-control-plane`; verify those rules survive on any clone before
+generating a run here. See that repo's `evals/alignerr_usecase_benchmark/FINDING.md`.
