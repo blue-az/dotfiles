@@ -195,3 +195,6 @@ export PATH="$HOME/.grok/bin:$PATH"
 
 # opencode
 [ -d "$HOME/.opencode/bin" ] && export PATH="$HOME/.opencode/bin:$PATH"
+
+# Use KDE askpass for sudo in non-TTY agent/tool contexts.
+export SUDO_ASKPASS=/usr/bin/ksshaskpass
