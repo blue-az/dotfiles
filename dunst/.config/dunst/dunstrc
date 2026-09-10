@@ -1,0 +1,27 @@
+[global]
+    # Show on the output that has keyboard focus (DP-6 while you work there).
+    # Default /etc/xdg/dunst/dunstrc has follow=none + monitor=0, which
+    # parks toasts on another head in this 3-monitor layout.
+    follow = keyboard
+    origin = top-center
+    offset = (0, 48)
+    width = (300, 600)
+    timeout = 8
+    font = monospace 11
+    frame_width = 3
+    frame_color = "#aaaaaa"
+
+[urgency_normal]
+    background = "#285577"
+    foreground = "#ffffff"
+    timeout = 8
+
+[urgency_critical]
+    background = "#900000"
+    foreground = "#ffffff"
+    timeout = 10
+
+# CLIP preview: stay until click or Super+c replaces it.
+[clip-preview]
+    appname = clip-preview
+    timeout = 0

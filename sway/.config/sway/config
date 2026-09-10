@@ -87,6 +87,11 @@ for_window [title="PhoenixRouter"] floating enable, resize set 800 600
 # Launch Firefox
 bindsym $mod+Shift+f exec firefox
 
+# On-demand CLIP / PRIM preview (dunst). $mod+0 stays workspace 10.
+# Physical ; is keyd->rightcontrol, so Super+; arrives as $mod+Control_R.
+bindsym $mod+c exec ~/.config/waybar/scripts/popup-clip.sh clip
+bindsym $mod+Control_R exec ~/.config/waybar/scripts/popup-clip.sh prim
+
 # Cycle through audio sources
 bindsym $mod+Mod1+F11 exec ~/.config/shared/scripts/cycle-audio-output.sh
 
