@@ -239,11 +239,8 @@ bindsym $mod+F7 exec swaymsg create_output && swaymsg output HEADLESS-1 enable r
 # Destroy virtual output
 bindsym $mod+Shift+F7 exec swaymsg output HEADLESS-1 disable
 
-# Status bar (waybar)
-exec_always sh -c 'pkill -x waybar || true; sleep 0.5; waybar'
+# Status bar (waybar) + overlays
+exec_always ~/.config/waybar/waybar-start.sh
 
 # Network Manager applet (for tray)
 exec nm-applet --indicator
-
-# System overlay (replaces conky)
-exec_always ~/.config/waybar/start-overlay.sh
