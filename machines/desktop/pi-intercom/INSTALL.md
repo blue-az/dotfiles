@@ -13,6 +13,8 @@ a second broker.
 - The `ef-tb` account must have `~/.pi/agent/intercom/` created before the
   forward starts.
 - The Desktop broker must be running before Testbench sessions start.
+- Testbench sshd should install `testbench-sshd-intercom.conf` before relying
+  on sleep/wake reconnects.
 
 Install the matching Pi and intercom package on Testbench (with the user's
 Node 22 on `PATH`):
@@ -38,6 +40,15 @@ install -m644 ~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-*.service \
 systemctl --user daemon-reload
 systemctl --user enable --now pi-intercom-desktop-sentinel.service
 systemctl --user enable --now pi-intercom-testbench-forward.service
+```
+
+On Testbench, install the sshd hardening snippet and reload sshd (requires
+local sudo access):
+
+```sh
+scp ~/.dotfiles/machines/desktop/pi-intercom/testbench-sshd-intercom.conf \
+  testbench:/tmp/90-pi-intercom.conf
+ssh -t testbench 'sudo install -m644 /tmp/90-pi-intercom.conf /etc/ssh/sshd_config.d/90-pi-intercom.conf && sudo sshd -t && sudo systemctl reload ssh'
 ```
 
 Inspect it with:
