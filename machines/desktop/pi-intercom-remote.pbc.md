@@ -16,6 +16,10 @@ tags:
 A decision brief for extending `pi-intercom` beyond its current same-machine
 IPC boundary so sessions on Desktop and Testbench can exchange targeted messages.
 
+**Audience:** Operator and supervisor reviewing a prototype before production
+use. This document names no implementation owner; ownership is assigned during
+review.
+
 ## Decision
 
 **Single broker on Desktop. Testbench sessions attach to it through an
@@ -109,7 +113,7 @@ Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
   consequence: No protocol changes are required.
 - id: no-testbench-broker
   statement: Testbench must never start its own broker.
-  consequence: Broker auto-spawn is disabled on Testbench; see Verified risks.
+  consequence: The prototype depends on the forwarded socket being present; an explicit no-auto-spawn mode remains a production requirement.
 - id: least-privilege
   statement: The SSH key is used for the socket forward only, not for shell access or other forwarding.
   consequence: Use a dedicated key restricted to forwarding, and log connection events without message contents.
@@ -146,7 +150,7 @@ Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
 ```
 
 ```pbc:trigger
-- Operator or agent lists sessions or sends an intercom message to a session on the other machine.
+- Operator or Pi session lists sessions or sends an intercom message to a session on the other machine.
 ```
 
 ```pbc:outcomes
@@ -165,16 +169,31 @@ Both read from the `pi-intercom` 0.13.0 source installed at
    (`index.ts`), and a starting broker runs `unlinkSync` on its socket path
    (`broker/broker.ts`). If the forward is down when a Testbench session starts,
    that session spawns a local broker, deletes the forwarded socket, and drops
-   off the shared session list with no error. Mitigations: disable broker
-   spawn on Testbench through `config.brokerCommand`, and let SSH replace a
-   stale socket file when the forward comes back (`StreamLocalBindUnlink yes`).
+   off the shared session list with no error. The prototype avoids this only
+   while the forward remains present. `config.brokerCommand` does not disable
+   spawning; an explicit no-auto-spawn mode is required for production. SSH
+   can replace a stale socket when the forward comes back
+   (`StreamLocalBindUnlink yes`).
 2. **No machine identity.** `SessionInfo` (`types.ts`) exposes `name`, `cwd`
    and `pid`. Names can collide across machines and a pid means nothing off
    its own host. Mitigation: machine-prefixed session names on Testbench.
 
+## Prototype status
+
+Verified 2026-09-15:
+
+- Desktop user service maintains the SSH reverse Unix-socket forward.
+- Testbench has Pi 0.85.0, Node 22.23.2, and `pi-intercom` installed.
+- A Testbench Pi RPC session appeared in the Desktop broker's session list.
+- A health probe through the forwarded socket returned protocol version 1.
+- The temporary RPC session was stopped after verification.
+
+Not yet verified: an actual cross-machine `send`, `ask`, and `reply`; reconnect
+after sleep; restricted SSH-key behavior; and startup while the forward is down.
+
 ## Implementation notes
 
-Proposed, not yet tested:
+Prototype implementation:
 
 - **Forward from Desktop** with a remote Unix-socket forward, so the existing
   `testbench` SSH config is reused and the forward lives exactly as long as
@@ -199,12 +218,12 @@ Proposed, not yet tested:
 
 ## Success criteria
 
-- [ ] Desktop can list a Testbench Pi session.
+- [x] Desktop can list a Testbench Pi session.
 - [ ] `send`, `ask`, and `reply` work across machines with preserved threading.
 - [ ] Desktop local messaging works with the forward stopped or Testbench off.
 - [ ] Testbench never starts its own broker, including when the forward is down.
 - [ ] After Desktop sleeps and wakes, the forward re-establishes without manual cleanup.
-- [ ] Testbench session names are distinguishable from Desktop names.
+- [x] Testbench session names are distinguishable from Desktop names.
 - [ ] Revoking the SSH key stops Testbench delivery without reinstalling Pi.
 - [ ] No message contents are written to ordinary logs by default.
 - [ ] The setup lives outside the `pi-intercom` package, so upstream updates do not overwrite it.

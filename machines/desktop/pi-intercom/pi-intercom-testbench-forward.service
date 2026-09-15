@@ -1,0 +1,20 @@
+[Unit]
+Description=Forward Testbench pi-intercom socket to Desktop broker
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ssh -N \
+  -o BatchMode=yes \
+  -o ExitOnForwardFailure=yes \
+  -o ServerAliveInterval=30 \
+  -o ServerAliveCountMax=3 \
+  -o StreamLocalBindUnlink=yes \
+  -R /home/ef-tb/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock \
+  testbench
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
