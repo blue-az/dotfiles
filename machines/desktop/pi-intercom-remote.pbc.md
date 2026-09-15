@@ -230,7 +230,9 @@ Prototype implementation:
   The sentinel only prevents the split while Desktop is online; production still
   requires an explicit no-auto-spawn mode.
 - [ ] After Desktop sleeps and wakes, the forward re-establishes without manual cleanup.
-- [x] Testbench session names are distinguishable from Desktop names.
+- [ ] Testbench session names are distinguishable from Desktop names.
+  The current distinction is only the displayed cwd; no machine-prefixed naming
+  mechanism has been implemented.
 - [ ] Revoking the SSH key stops Testbench delivery without reinstalling Pi.
 - [ ] No message contents are written to ordinary logs by default.
 - [ ] The setup lives outside the `pi-intercom` package, so upstream updates do not overwrite it.
