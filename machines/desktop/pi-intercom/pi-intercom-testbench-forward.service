@@ -1,8 +1,5 @@
 [Unit]
 Description=Forward Testbench pi-intercom socket to Desktop broker
-Wants=network-online.target
-After=network-online.target
-
 [Service]
 Type=simple
 ExecStart=/usr/bin/ssh -N \

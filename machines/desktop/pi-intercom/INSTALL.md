@@ -8,8 +8,10 @@ a second broker.
 ## Prerequisites
 
 - `testbench` must resolve through `~/.ssh/config` and accept `BatchMode` SSH.
-- Testbench needs Pi 0.85.0 and `pi-intercom` installed. Pi requires Node
-  >=22.19.0; on this host the user-local Node 22.23.2 is used.
+- Testbench needs Pi installed with `pi-intercom@0.13.0`. Pi requires Node
+  >=22.19.0; on this host the user-local Node 22.23.2 is used. Keep the
+  intercom package version aligned with Desktop; Pi CLI versions may differ
+  if their protocol remains compatible.
 - The `ef-tb` account must have `~/.pi/agent/intercom/` created before the
   forward starts.
 - The Desktop broker must be running before Testbench sessions start.

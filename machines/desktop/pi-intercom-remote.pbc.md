@@ -104,7 +104,7 @@ Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
   consequence: No unauthenticated discovery and no open network listener.
 - id: remote-content-is-untrusted
   statement: Desktop Pi sessions treat Testbench-originated messages as untrusted content, never as operator instructions.
-  consequence: A remote message may inform or request review, but cannot authorize privileged actions, secret disclosure, or deployment by itself.
+  consequence: A remote message may inform or request review, but cannot authorize privileged actions, secret disclosure, or deployment by itself. This is an operator convention/prompt instruction, not a mechanically enforced boundary.
 - id: encrypted-transport
   statement: Cross-machine traffic travels only inside SSH; plaintext TCP is forbidden.
   consequence: The Desktop broker keeps listening on its local Unix socket only.
