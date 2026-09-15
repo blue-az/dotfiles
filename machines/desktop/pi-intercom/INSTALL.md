@@ -18,7 +18,7 @@ Install the matching Pi and intercom package on Testbench (with the user's
 Node 22 on `PATH`):
 
 ```sh
-ssh testbench 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom'
+ssh testbench 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom@0.13.0'
 ```
 
 Create the remote socket directory once:
@@ -27,13 +27,16 @@ Create the remote socket directory once:
 ssh testbench 'mkdir -p ~/.pi/agent/intercom && chmod 700 ~/.pi/agent ~/.pi/agent/intercom'
 ```
 
-Install and start the Desktop-side service:
+Install and start the Desktop-side services. The sentinel is required for the
+prototype: it keeps a Desktop broker alive even when no interactive Desktop Pi
+session is open, preventing Testbench from silently spawning a split broker.
 
 ```sh
 mkdir -p ~/.config/systemd/user
-install -m644 ~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-testbench-forward.service \
+install -m644 ~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-*.service \
   ~/.config/systemd/user/
 systemctl --user daemon-reload
+systemctl --user enable --now pi-intercom-desktop-sentinel.service
 systemctl --user enable --now pi-intercom-testbench-forward.service
 ```
 
@@ -45,9 +48,9 @@ ssh testbench 'stat -c "%F %a" ~/.pi/agent/intercom/broker.sock'
 ```
 
 The current package still auto-spawns a broker if the forwarded socket is
-absent. Do not start Testbench Pi sessions while disconnected until an explicit
-no-auto-spawn mode is implemented and tested; otherwise a local broker could
-split the session roster.
+absent. The Desktop sentinel prevents this split while Desktop is online. Do
+not treat that as the production solution: an explicit no-auto-spawn mode is
+still required before relying on this across sleep, boot, or network outages.
 
 Stop/disable the prototype with:
 

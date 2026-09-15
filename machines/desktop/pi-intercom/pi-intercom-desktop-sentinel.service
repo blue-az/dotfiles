@@ -1,0 +1,12 @@
+[Unit]
+Description=Keep the Desktop pi-intercom broker alive for remote sessions
+
+[Service]
+Type=simple
+# An idle RPC client keeps the broker registered without invoking a model.
+ExecStart=/bin/sh -c 'tail -f /dev/null | exec pi --mode rpc'
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

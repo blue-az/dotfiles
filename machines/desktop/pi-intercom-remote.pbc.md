@@ -182,11 +182,14 @@ Both read from the `pi-intercom` 0.13.0 source installed at
 
 Verified 2026-09-15:
 
-- Desktop user service maintains the SSH reverse Unix-socket forward.
+- Desktop user services maintain the SSH reverse Unix-socket forward and an
+  idle RPC sentinel keeps the Desktop broker alive when no interactive session
+  is open.
 - Testbench has Pi 0.85.0, Node 22.23.2, and `pi-intercom` installed.
 - A Testbench Pi RPC session appeared in the Desktop broker's session list.
 - A health probe through the forwarded socket returned protocol version 1.
-- The temporary RPC session was stopped after verification.
+- The temporary RPC session was stopped after verification; the persistent
+  sentinel now prevents the default-case broker split while Desktop is online.
 
 Not yet verified: an actual cross-machine `send`, `ask`, and `reply`; reconnect
 after sleep; restricted SSH-key behavior; and startup while the forward is down.
@@ -199,7 +202,9 @@ Prototype implementation:
   `testbench` SSH config is reused and the forward lives exactly as long as
   the Desktop side that hosts the broker:
   `ssh -N -R /home/ef-tb/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock testbench`
-- Keep it running with a user systemd unit that restarts on failure.
+- Keep the forward running with a user systemd unit that restarts on failure.
+- Keep a Desktop idle RPC sentinel running with a second user systemd unit so
+  the broker exists before any Testbench client starts.
 - Testbench `sshd` must allow stream-local forwarding and have
   `StreamLocalBindUnlink yes`, or a stale socket file blocks reconnection.
 - Paths are absolute because the users differ (`blueaz` on Desktop, `ef-tb`
@@ -222,6 +227,8 @@ Prototype implementation:
 - [ ] `send`, `ask`, and `reply` work across machines with preserved threading.
 - [ ] Desktop local messaging works with the forward stopped or Testbench off.
 - [ ] Testbench never starts its own broker, including when the forward is down.
+  The sentinel only prevents the split while Desktop is online; production still
+  requires an explicit no-auto-spawn mode.
 - [ ] After Desktop sleeps and wakes, the forward re-establishes without manual cleanup.
 - [x] Testbench session names are distinguishable from Desktop names.
 - [ ] Revoking the SSH key stops Testbench delivery without reinstalling Pi.
