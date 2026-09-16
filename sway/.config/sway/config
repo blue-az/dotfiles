@@ -63,11 +63,13 @@ exec dunst
 exec swaymsg 'workspace 2; workspace 1'
 
 # ============ KEYBINDINGS ============
-# Start a terminal (Super+Enter, Ctrl+Alt+T, Super+T, Alt+Enter)
+# Start a terminal (Super+Enter, Ctrl+Alt+T, Alt+Enter)
 bindsym $mod+Return exec $term_cmd
 bindsym Ctrl+Alt+t exec $term_cmd
-bindsym $mod+t exec $term_cmd
 bindsym Mod1+Return exec $term_cmd
+
+# Peek the smaller wallpaper overlay (HEADLESS MONITOR) on the focused output.
+bindsym --no-repeat $mod+t exec ~/.config/waybar/scripts/toggle-overlay-popup.sh
 
 # Kill focused window
 bindsym $mod+Shift+q kill
