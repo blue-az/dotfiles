@@ -183,7 +183,7 @@ Both read from the `pi-intercom` 0.13.0 source installed at
 
 ## Prototype status
 
-Verified 2026-09-15:
+Verified 2026-09-16:
 
 - Desktop user services maintain the SSH reverse Unix-socket forward and an
   idle RPC sentinel keeps the Desktop broker alive when no interactive session
@@ -193,9 +193,14 @@ Verified 2026-09-15:
 - A health probe through the forwarded socket returned protocol version 1.
 - The temporary RPC session was stopped after verification; the persistent
   sentinel now prevents the default-case broker split while Desktop is online.
+- In an isolated scratch agent directory, the sentinel-only broker stayed alive
+  beyond seven seconds and exited within seven seconds after the sentinel was
+  stopped. This establishes the sentinel causation without touching live sessions.
 
 Not yet verified: an actual cross-machine `send`, `ask`, and `reply`; reconnect
 after sleep; restricted SSH-key behavior; and startup while the forward is down.
+The isolated test does not prove the live Desktop broker has no other registered
+sessions, nor does it prove the production no-auto-spawn requirement.
 
 ## Implementation notes
 
