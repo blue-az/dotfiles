@@ -172,11 +172,17 @@ Both read from the `pi-intercom` 0.13.0 source installed at
    (`index.ts`), and a starting broker runs `unlinkSync` on its socket path
    (`broker/broker.ts`). If the forward is down when a Testbench session starts,
    that session spawns a local broker, deletes the forwarded socket, and drops
-   off the shared session list with no error. The prototype avoids this only
-   while the forward remains present. `config.brokerCommand` does not disable
-   spawning; an explicit no-auto-spawn mode is required for production. SSH
-   can replace a stale socket when the forward comes back
-   (`StreamLocalBindUnlink yes`).
+   off the shared session list with no error. This split actually occurred on
+   2026-09-15 at 19:31:19 during a forward interruption. `broker.ts` also calls
+   `unlinkSync` on its listen target during shutdown, not only in its
+   constructor. Consequently, an orphaned Testbench broker can delete the
+   live forwarded socket when it exits: the SSH process keeps its descriptor
+   and the unit remains active, making the failure silent and able to fire long
+   after the interruption. The prototype avoids this only while the forward
+   remains present. `config.brokerCommand` does not disable spawning; explicit
+   no-auto-spawn is a demonstrated hazard deferred for attended use and
+   required for unattended operation. SSH can replace a stale socket when the
+   forward comes back (`StreamLocalBindUnlink yes`).
 2. **No machine identity.** `SessionInfo` (`types.ts`) exposes `name`, `cwd`
    and `pid`. Names can collide across machines and a pid means nothing off
    its own host. Mitigation: machine-prefixed session names on Testbench.
@@ -225,6 +231,9 @@ Prototype implementation:
   on Testbench).
 - Confirm whether OpenSSH can restrict the dedicated key to this Unix-socket
   forward; if it cannot, record the residual privilege.
+- Optional watchdog: probe the forwarded socket for a protocol health response,
+  rather than trusting systemd's active state, which can remain true while the
+  remote socket is stale or points at a split broker.
 
 ## Disposition
 
@@ -232,9 +241,10 @@ Prototype implementation:
 demonstrated: remote discovery, Testbench attachment without a local broker,
 cross-machine send and ask/reply, sentinel causation, and abrupt-forward recovery.
 
-Production backlog (non-blocking for attended use): explicit no-auto-spawn mode,
-the sentinel restart gap, a restricted SSH key, silent-peer reconnect after the
-next real sleep, and key-revocation behavior.
+The demonstrated no-auto-spawn hazard is deferred for attended use but is
+required before unattended operation. Other production backlog items are the
+sentinel restart gap, a restricted SSH key, silent-peer reconnect after the next
+real sleep, and key-revocation behavior.
 
 ## Deferred alternatives
 
