@@ -183,7 +183,7 @@ Both read from the `pi-intercom` 0.13.0 source installed at
 
 ## Prototype status
 
-Verified 2026-09-16:
+Verified 2026-09-15:
 
 - Desktop user services maintain the SSH reverse Unix-socket forward and an
   idle RPC sentinel keeps the Desktop broker alive when no interactive session
@@ -197,7 +197,7 @@ Verified 2026-09-16:
   beyond seven seconds and exited within seven seconds after the sentinel was
   stopped. This establishes the sentinel causation without touching live sessions.
 
-Verified 2026-09-16: Desktop sent a message to a named Testbench Pi session;
+Verified 2026-09-15: Desktop sent a message to a named Testbench Pi session;
 Testbench returned `TESTBENCH_ACK`; and a Desktop `ask` received the threaded
 reply `TESTBENCH_ASK_REPLY`. Broker delivery metadata preserved receiver and
 injection timestamps across the forward. The temporary Testbench session was
@@ -226,6 +226,16 @@ Prototype implementation:
 - Confirm whether OpenSSH can restrict the dedicated key to this Unix-socket
   forward; if it cannot, record the residual privilege.
 
+## Disposition
+
+**Prototype complete for attended use.** The design commitments are
+demonstrated: remote discovery, Testbench attachment without a local broker,
+cross-machine send and ask/reply, sentinel causation, and abrupt-forward recovery.
+
+Production backlog (non-blocking for attended use): explicit no-auto-spawn mode,
+the sentinel restart gap, a restricted SSH key, silent-peer reconnect after the
+next real sleep, and key-revocation behavior.
+
 ## Deferred alternatives
 
 1. **Bridge between two brokers:** keeps a broker on each machine and restores
@@ -248,5 +258,5 @@ Prototype implementation:
   The current distinction is only the displayed cwd; no machine-prefixed naming
   mechanism has been implemented.
 - [ ] Revoking the SSH key stops Testbench delivery without reinstalling Pi.
-- [ ] No message contents are written to ordinary logs by default.
+- [x] No message contents are written to ordinary logs by default.
 - [ ] The setup lives outside the `pi-intercom` package, so upstream updates do not overwrite it.
