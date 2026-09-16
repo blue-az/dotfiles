@@ -197,7 +197,13 @@ Verified 2026-09-16:
   beyond seven seconds and exited within seven seconds after the sentinel was
   stopped. This establishes the sentinel causation without touching live sessions.
 
-Not yet verified: an actual cross-machine `send`, `ask`, and `reply`; reconnect
+Verified 2026-09-16: Desktop sent a message to a named Testbench Pi session;
+Testbench returned `TESTBENCH_ACK`; and a Desktop `ask` received the threaded
+reply `TESTBENCH_ASK_REPLY`. Broker delivery metadata preserved receiver and
+injection timestamps across the forward. The temporary Testbench session was
+stopped after the test.
+
+Not yet verified: reconnect
 after sleep; restricted SSH-key behavior; and startup while the forward is down.
 The isolated test does not prove the live Desktop broker has no other registered
 sessions, nor does it prove the production no-auto-spawn requirement.
@@ -232,7 +238,7 @@ Prototype implementation:
 ## Success criteria
 
 - [x] Desktop can list a Testbench Pi session.
-- [ ] `send`, `ask`, and `reply` work across machines with preserved threading.
+- [x] `send`, `ask`, and `reply` work across machines with preserved threading.
 - [ ] Desktop local messaging works with the forward stopped or Testbench off.
 - [ ] Testbench never starts its own broker, including when the forward is down.
   The sentinel only prevents the split while Desktop is online; production still
