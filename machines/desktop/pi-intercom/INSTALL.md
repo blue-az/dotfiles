@@ -65,8 +65,78 @@ absent. The Desktop sentinel prevents this split while Desktop is online. Do
 not treat that as the production solution: an explicit no-auto-spawn mode is
 still required before relying on this across sleep, boot, or network outages.
 
+## Mac (same pattern)
+
+`Host mac` in `~/.ssh/config` (`Mac-mini.local`, user `blueaz`). Same Desktop
+broker; a second reverse Unix-socket forward. Mac sessions are untrusted
+remote content, like Testbench.
+
+```sh
+ssh mac 'export PATH="$HOME/.local/bin:/opt/homebrew/bin:$PATH"; pi install npm:pi-intercom@0.13.0'
+ssh mac 'mkdir -p ~/.pi/agent/intercom && chmod 700 ~/.pi/agent ~/.pi/agent/intercom'
+```
+
+```sh
+install -m644 ~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-*.service \
+  ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now pi-intercom-mac-forward.service
+```
+
+Mac sshd snippet (local sudo on the Mac):
+
+```sh
+scp ~/.dotfiles/machines/desktop/pi-intercom/mac-sshd-intercom.conf \
+  mac:/tmp/90-pi-intercom.conf
+ssh -t mac 'sudo install -m644 /tmp/90-pi-intercom.conf /etc/ssh/sshd_config.d/90-pi-intercom.conf && sudo sshd -t && sudo launchctl kickstart -k system/com.openssh.sshd'
+```
+
+Inspect:
+
+```sh
+systemctl --user status pi-intercom-mac-forward.service
+ssh mac 'stat -f "%HT %Lp" ~/.pi/agent/intercom/broker.sock'
+```
+
+## z13 (same pattern)
+
+`Host z13` in `~/.ssh/config` (`z13.local`, user `blueaz`). Same Desktop
+broker; a third reverse Unix-socket forward. z13 sessions are untrusted
+remote content, like Testbench and Mac. The path string matches Desktop
+(`/home/blueaz/.pi/agent/intercom/broker.sock`) but is the **remote**
+filesystem; do not confuse the two hosts.
+
+```sh
+ssh z13 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom@0.13.0'
+ssh z13 'mkdir -p ~/.pi/agent/intercom && chmod 700 ~/.pi/agent ~/.pi/agent/intercom'
+```
+
+```sh
+install -m644 ~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-*.service \
+  ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now pi-intercom-z13-forward.service
+```
+
+z13 sshd snippet (local sudo on z13):
+
+```sh
+scp ~/.dotfiles/machines/desktop/pi-intercom/z13-sshd-intercom.conf \
+  z13:/tmp/90-pi-intercom.conf
+ssh -t z13 'sudo install -m644 /tmp/90-pi-intercom.conf /etc/ssh/sshd_config.d/90-pi-intercom.conf && sudo sshd -t && sudo systemctl reload ssh'
+```
+
+Inspect:
+
+```sh
+systemctl --user status pi-intercom-z13-forward.service
+ssh z13 'stat -c "%F %a" ~/.pi/agent/intercom/broker.sock'
+```
+
 Stop/disable the prototype with:
 
 ```sh
 systemctl --user disable --now pi-intercom-testbench-forward.service
+systemctl --user disable --now pi-intercom-mac-forward.service
+systemctl --user disable --now pi-intercom-z13-forward.service
 ```

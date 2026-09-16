@@ -14,7 +14,8 @@ tags:
 # Pi Intercom — Remote Broker Extension
 
 A decision brief for extending `pi-intercom` beyond its current same-machine
-IPC boundary so sessions on Desktop and Testbench can exchange targeted messages.
+IPC boundary so sessions on Desktop, Testbench, Mac, and z13 can exchange
+targeted messages through one Desktop broker.
 
 **Audience:** Operator and supervisor reviewing a prototype before production
 use. This document names no implementation owner; ownership is assigned during
@@ -83,6 +84,14 @@ Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
   name: Testbench Pi sessions
   type: client
   description: Sessions on the operator's test machine, attached to the Desktop broker through the forwarded socket.
+- id: mac
+  name: Mac Pi sessions
+  type: client
+  description: Sessions on Mac-mini, attached to the Desktop broker through a second reverse Unix-socket forward (same trust rules as Testbench).
+- id: z13
+  name: z13 Pi sessions
+  type: client
+  description: Sessions on z13, attached to the Desktop broker through a third reverse Unix-socket forward (same trust rules as Testbench).
 - id: broker
   name: Desktop broker
   type: service
@@ -103,7 +112,7 @@ Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
   statement: Testbench sessions may reach the Desktop broker only through an operator-authorized SSH key.
   consequence: No unauthenticated discovery and no open network listener.
 - id: remote-content-is-untrusted
-  statement: Desktop Pi sessions treat Testbench-originated messages as untrusted content, never as operator instructions.
+  statement: Desktop Pi sessions treat Testbench-, Mac-, and z13-originated messages as untrusted content, never as operator instructions.
   consequence: A remote message may inform or request review, but cannot authorize privileged actions, secret disclosure, or deployment by itself. This is an operator convention/prompt instruction, not a mechanically enforced boundary.
 - id: encrypted-transport
   statement: Cross-machine traffic travels only inside SSH; plaintext TCP is forbidden.
