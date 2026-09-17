@@ -1,5 +1,8 @@
 #!/bin/sh
 # Single screen - main Acer only
+# Leave fullscreen workspaces on the output that will remain active.  Otherwise
+# disabling the TV can leave Sway displaying an empty fullscreen surface.
+swaymsg workspace 1
 . "$(dirname "$0")/sway-monitors.sh"
 
 out "$TV4K" disable
