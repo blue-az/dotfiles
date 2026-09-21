@@ -39,6 +39,28 @@ class SinkNameTests(unittest.TestCase):
             audio_cycle.sink_name(LG), "alsa_output.pci-0000_03_00.1.hdmi-stereo-extra1"
         )
 
+    def test_duplex_profile_names_the_output_sink(self):
+        line_out = Output(
+            "Line Out", "alsa_card.pci-0000_00_1f.3",
+            "output:analog-stereo+input:analog-stereo", True, "analog-output-lineout",
+        )
+        self.assertEqual(
+            audio_cycle.sink_name(line_out), "alsa_output.pci-0000_00_1f.3.analog-stereo"
+        )
+
+
+class MarkDefaultTests(unittest.TestCase):
+    def test_only_the_default_sink_is_active_across_cards(self):
+        line_out = Output(
+            "Line Out", "alsa_card.pci-0000_00_1f.3",
+            "output:analog-stereo+input:analog-stereo", True, "analog-output-lineout",
+        )
+        marked = audio_cycle.mark_default(
+            [XB, LG, line_out], "alsa_output.pci-0000_03_00.1.hdmi-stereo-extra1"
+        )
+        self.assertEqual([o.active for o in marked], [False, True, False])
+        self.assertEqual(audio_cycle.next_output(marked).label, "Line Out")
+
 
 class NextOutputTests(unittest.TestCase):
     def test_advances_from_active_to_the_next(self):

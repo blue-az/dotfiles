@@ -1,10 +1,24 @@
+from dataclasses import replace
+
 from audio_ports import Output, discover, parse_cards
 
 
 def sink_name(output) -> str:
     card = output.card.replace("alsa_card.", "alsa_output.")
-    profile = output.profile.removeprefix("output:")
+    # A duplex profile like `output:analog-stereo+input:analog-stereo` still
+    # names its sink after the output half alone.
+    profile = output.profile.removeprefix("output:").split("+", 1)[0]
     return f"{card}.{profile}"
+
+
+def mark_default(outputs, default_sink):
+    """Mark only the output behind the default sink as active.
+
+    Every card holds an active profile, so with the PCH card's Line Out live
+    alongside the HDMI card, the card-profile flag marks two outputs active and
+    the cycle never leaves the first of them.
+    """
+    return [replace(o, active=sink_name(o) == default_sink) for o in outputs]
 
 
 def next_output(outputs):
@@ -28,7 +42,10 @@ def cycle(dry_run=False):
     import subprocess
 
     text = subprocess.run(["pactl", "list", "cards"], capture_output=True, text=True).stdout
-    target = next_output(discover(parse_cards(text)))
+    default_sink = subprocess.run(
+        ["pactl", "get-default-sink"], capture_output=True, text=True
+    ).stdout.strip()
+    target = next_output(mark_default(discover(parse_cards(text)), default_sink))
     if target is None:
         return None
     for cmd in switch_commands(target):
