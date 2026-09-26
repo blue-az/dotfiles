@@ -4,13 +4,15 @@
 # CPU usage
 CPU=$(awk '/^cpu / {printf "%.0f", ($2+$4)*100/($2+$4+$5)}' /proc/stat)
 
-# Headless testbench GPU usage: keep both cards independent.
-mapfile -t TESTBENCH_GPUS < <(timeout 2 ssh -o BatchMode=yes -o ConnectTimeout=1 \
-    -o ConnectionAttempts=1 testbench \
-    'nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits' 2>/dev/null || true)
-# Empty means no reading (testbench unreachable or bad output), never 0%.
-GPU0=$(printf '%s' "${TESTBENCH_GPUS[0]:-}" | tr -cd '0-9')
-GPU1=$(printf '%s' "${TESTBENCH_GPUS[1]:-}" | tr -cd '0-9')
+# GPU usage (NVIDIA or AMD)
+GPU=""
+if command -v nvidia-smi &>/dev/null && nvidia-smi &>/dev/null; then
+    GPU=$(nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits 2>/dev/null)
+else
+    GPU_PATH=$(ls -d /sys/class/drm/card*/device/gpu_busy_percent 2>/dev/null | head -1)
+    [ -n "$GPU_PATH" ] && GPU=$(cat "$GPU_PATH" 2>/dev/null)
+fi
+GPU=${GPU:-0}
 
 # Color thresholds
 cpu_class="normal"
@@ -18,8 +20,8 @@ cpu_class="normal"
 [ "$CPU" -gt 80 ] && cpu_class="critical"
 
 gpu_class="normal"
-[ "${GPU0:-0}" -gt 50 ] || [ "${GPU1:-0}" -gt 50 ] && gpu_class="warning"
-[ "${GPU0:-0}" -gt 80 ] || [ "${GPU1:-0}" -gt 80 ] && gpu_class="critical"
+[ "$GPU" -gt 50 ] && gpu_class="warning"
+[ "$GPU" -gt 80 ] && gpu_class="critical"
 
 # Build visual bar (20 chars wide) using ASCII
 bar() {
@@ -30,18 +32,10 @@ bar() {
     printf '%*s' "$empty" '' | tr ' ' '-'
 }
 
-# "NNN% [bar]", or " n/a [    ]" when the card has no reading.
-gpu_field() {
-    if [ -n "$1" ]; then
-        printf '%3d%% [%s]' "$1" "$(bar "$1")"
-    else
-        printf ' n/a [%20s]' ''
-    fi
-}
-
 CPU_BAR=$(bar "$CPU")
+GPU_BAR=$(bar "$GPU")
 
-TEXT="CPU $(printf '%3d' "$CPU")% [${CPU_BAR}]  EVGA $(gpu_field "$GPU0")  ZOTAC $(gpu_field "$GPU1")"
+TEXT="CPU $(printf '%3d' "$CPU")% [${CPU_BAR}]  GPU $(printf '%3d' "$GPU")% [${GPU_BAR}]"
 
 # Determine overall class (worst of the two)
 CLASS="normal"
