@@ -70,6 +70,33 @@ GPU_TEMPC=${GPU_TEMPC:-}
 [ -n "$GPU_TEMPC" ] && GPU_TEMP=$((GPU_TEMPC * 9 / 5 + 32)) || GPU_TEMP=""
 GPU_W=${GPU_W:-}
 
+# The overlay is the headless monitor: read both testbench cards, not this desktop GPU.
+TESTBENCH_GPU_LINES=""
+CARD_INDEX=0
+while IFS=',' read -r NAME UTIL TEMP WATTS LIMIT USED TOTAL; do
+    NAME=$(printf '%s' "$NAME" | sed 's/^ *//;s/ *$//')
+    UTIL=$(printf '%s' "$UTIL" | sed 's/^ *//;s/ *$//')
+    TEMP=$(printf '%s' "$TEMP" | sed 's/^ *//;s/ *$//')
+    WATTS=$(printf '%s' "$WATTS" | sed 's/^ *//;s/ *$//')
+    LIMIT=$(printf '%s' "$LIMIT" | sed 's/^ *//;s/ *$//')
+    USED=$(printf '%s' "$USED" | sed 's/^ *//;s/ *$//')
+    TOTAL=$(printf '%s' "$TOTAL" | sed 's/^ *//;s/ *$//')
+    [ -n "$NAME" ] || continue
+    # nvidia-smi output is numeric after the fixed label; keep the overlay safe
+    # if a remote command returns unexpected text.
+    case "$UTIL$TEMP$WATTS$LIMIT$USED$TOTAL" in
+        *[!0-9.]*) continue ;;
+    esac
+    VENDOR="ZOTAC"
+    [ "$CARD_INDEX" -eq 0 ] && VENDOR="EVGA"
+    MODEL=$(printf '%s' "$NAME" | sed 's/^NVIDIA GeForce RTX /RTX /')
+    printf -v VENDOR_PAD '%-5s' "$VENDOR"
+    TESTBENCH_GPU_LINES="${TESTBENCH_GPU_LINES}<span color='#50fa7b'>${VENDOR_PAD}</span> ${MODEL} ${UTIL}%  ${TEMP}°C  ${WATTS}W (${USED}/${TOTAL}MiB)\n"
+    CARD_INDEX=$((CARD_INDEX + 1))
+done < <(timeout 2 ssh -o BatchMode=yes -o ConnectTimeout=1 -o ConnectionAttempts=1 testbench \
+    'nvidia-smi --query-gpu=name,utilization.gpu,temperature.gpu,power.draw,power.limit,memory.used,memory.total --format=csv,noheader,nounits' 2>/dev/null || true)
+[ -n "$TESTBENCH_GPU_LINES" ] || TESTBENCH_GPU_LINES="<span color='#50fa7b'>TB GPU</span>  unavailable\n"
+
 # IP (auto-detect first non-loopback)
 if [ -f ~/.config/privacy-mode ]; then
     IP="***.***.***.***"
@@ -84,19 +111,10 @@ DT=$(date '+%Y-%m-%d %I:%M:%S %p')
 CPU_LINE="<span color='#50fa7b'>CPU</span>    ${CPU}%  ${CPU_TEMP}°F"
 [ -n "$CPU_W" ] && CPU_LINE="${CPU_LINE}  ${CPU_W}W"
 
-if [ "$HAS_GPU" -eq 1 ]; then
-    GPU_LINE="<span color='#50fa7b'>GPU</span>   "
-    [ -n "$GPU" ] && GPU_LINE="${GPU_LINE} ${GPU}%"
-    [ -n "$GPU_TEMP" ] && GPU_LINE="${GPU_LINE}  ${GPU_TEMP}°F"
-    [ -n "$GPU_W" ] && GPU_LINE="${GPU_LINE}  ${GPU_W}W"
-    GPU_LINE="${GPU_LINE}
-"
-else
-    GPU_LINE=""
-fi
+GPU_LINE="$TESTBENCH_GPU_LINES"
 
 # Output with Pango markup matching conky style
-TEXT="<span font_weight='bold' color='#50fa7b'>SYSTEM</span>
+TEXT="<span font_weight='bold' color='#50fa7b'>HEADLESS MONITOR</span>
 ────────────────────
 <span color='#50fa7b'>DISK</span>   ${DISK} free
 <span color='#50fa7b'>RAM</span>    ${RAM}
