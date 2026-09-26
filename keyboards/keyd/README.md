@@ -10,6 +10,7 @@ file is installed explicitly rather than symlinked from `$HOME`.
 | --- | --- |
 | `;` | Right Ctrl (the real Right Ctrl is untouched) |
 | `Shift+;` | `:` — unmoved, where vim expects it |
+| `Left Alt+;` | Backspace |
 | `AltGr+;` | `;` — the displaced semicolon, on Right Alt |
 
 ## Why keyd instead of xkb
@@ -39,7 +40,8 @@ applies to the i3/X11 session and the TTY, which the Sway-only `xkb_file` never 
 The destination key later changed from BackSpace to Right Ctrl, but the reason for
 staying below xkb did not: Right Ctrl is equally non-printable, so putting it on
 level 1 of `<AC10>` would leak `VKEY_CONTROL` to Chromium the same way BackSpace
-leaked `VKEY_BACK`.
+leaked `VKEY_BACK`. The Left Alt+; shortcut is also defined in keyd's `[alt]` layer, where it emits
+a real Backspace event without changing the base `;` mapping.
 
 ## Install
 
