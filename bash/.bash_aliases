@@ -33,6 +33,7 @@ alias OW="sudo docker rm -f open-webui || true && sudo docker run -d --network=h
 # Codex
 alias UC="sudo npm install -g @openai/codex" # get latest version
 alias UG="sudo npm install -g @google/gemini-cli@latest"
+alias UP="pi update --all" # update pi and its extensions
 
 # Obsidian
 alias Ob="flatpak run md.obsidian.Obsidian"
@@ -64,6 +65,7 @@ alias TA="cd ~/Python/project-phoenix/domains/TennisAgent"
 
 # Dotfiles directories
 alias dc="cd ~/.dotfiles/machines/desktop"
+alias LI="cd ~/Public/LinkedIn"
 alias zc="cd ~/.dotfiles/machines/z13-amd"
 alias zwc="cd ~/.dotfiles/machines/z13-windows"
 
