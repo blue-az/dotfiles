@@ -48,6 +48,8 @@ alias os="nohup ollama serve >/tmp/ollama.log 2>&1 &"
 alias cl="claude"
 alias OC="opencode"
 alias opr="/home/blueaz/operator-control-plane/opr"
+# Local-only link on generated Operator boards (scripts/operator_project_board.py)
+export OPERATOR_BOARD_EXTRA_LINKS='Magic Command Center=file:///home/blueaz/Python/project-phoenix/magic_bridge/report.html'
 
 # Claude Code mode switches
 # lcc: local Claude Code via Ollama/Gemma
