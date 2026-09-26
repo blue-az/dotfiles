@@ -17,20 +17,21 @@ updated: 2026-09-26
 ## Intent
 
 Provide a calm, persistent desktop display for the headless benchmark
-hardware. Two surfaces show the `testbench` GPUs: the wallpaper overlay Waybar
-instance (`~/.config/waybar/config-overlay` + `~/.config/waybar/sysinfo.sh`) for
-detail, and the compact monitor bar module (`config-monitor` +
-`scripts/monitor.sh`) for utilization at a glance. Not a terminal popup.
+hardware. The implementation target is the wallpaper overlay Waybar instance
+(`~/.config/waybar/config-overlay` + `~/.config/waybar/sysinfo.sh`), not a
+terminal popup. The compact monitor bar (`config-monitor` +
+`scripts/monitor.sh`) shows this desktop's CPU and GPU and must not be changed
+by this work.
 
-Revised 2026-09-26 (owner decision): both surfaces are testbench-only. The
-desktop GPU is no longer shown, and the compact bar module may change. The
-original 2026-09-11 draft kept the bar module unchanged and showed the desktop
-and testbench GPUs together; that is superseded.
+Revised 2026-09-26 (owner decision): the bar is desktop, the overlay is
+testbench. The overlay shows only the `testbench` GPUs; the original
+2026-09-11 draft also put the desktop GPU on the overlay, which is superseded.
 
 ## Scope
 
-- Both surfaces show the remote headless `testbench` GPUs; the desktop GPU is
-  not shown.
+- The overlay shows the remote headless `testbench` GPUs; the desktop GPU is
+  not shown there (the bar already shows it).
+- The bar keeps showing this desktop's CPU and GPU, unchanged.
 - The headless testbench currently has two RTX 3090 cards; both cards must be
   represented independently, not summed into one number.
 - Use the existing dashboard visual language and continuously update without
@@ -42,7 +43,7 @@ and testbench GPUs together; that is superseded.
 
 ## Non-goals
 
-- Do not redesign Waybar beyond these two modules.
+- Do not redesign Waybar or change the bar module.
 - Do not change model routing, Ollama model files, GPU power limits, or CUDA
   visibility on either machine.
 - Do not silently treat unavailable remote telemetry as zero.
@@ -77,13 +78,14 @@ and testbench GPUs together; that is superseded.
 
 ## Status (2026-09-26)
 
-Implemented in dotfiles `f5e67d8`, plus the `n/a` fix that follows it:
+The overlay was implemented in dotfiles `f5e67d8`. That commit also switched
+the bar to the testbench, against this contract; the bar has since been
+restored to the desktop GPU.
 
-- Done: both surfaces read both testbench cards over SSH with a 2 s timeout;
-  the overlay title reads `HEADLESS MONITOR`; the overlay shows name,
-  utilization, temperature, power and memory per card and `TB GPU unavailable`
-  when the testbench is unreachable; the bar shows `n/a` per card instead of
-  `0%` when a reading is missing.
+- Done: the overlay reads both testbench cards over SSH with a 2 s timeout;
+  its title reads `HEADLESS MONITOR`; it shows name, utilization, temperature,
+  power and memory per card, and `TB GPU unavailable` when the testbench is
+  unreachable. The bar shows the desktop CPU and GPU.
 - Open: a timestamp on the unavailable state and stale-data labeling; power
   limit (read but not displayed) and active model/process per card; stable card
   labels (EVGA/ZOTAC are assigned by nvidia-smi row order, not PCI bus ID);
