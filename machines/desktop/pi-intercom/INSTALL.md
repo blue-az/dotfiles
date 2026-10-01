@@ -77,6 +77,29 @@ a unit or registers a session. The peer needs `python3` on its non-interactive
 SSH `PATH`; the check sends the same file over stdin, so nothing is installed
 there.
 
+### Watchdog
+
+`pi-intercom-watchdog.timer` runs `pi-intercom-watchdog` every 5 minutes:
+
+- `STALE`: restarts that forward, at most once per 15 minutes and never within
+  60 seconds of the unit starting. Still `STALE` after a restart: one alert.
+- `SPLIT`, `BROKER-DOWN`: alert only, once per state change. Fixing a split
+  means stopping the peer's broker, which drops its sessions, so that stays a
+  human decision.
+- `DOWN`, `OK`: nothing; the forward units' own restart backoff retries `DOWN`.
+
+Alerts are journal warnings plus `notify-send`. State is kept in
+`$XDG_RUNTIME_DIR/pi-intercom-watchdog.json` and resets at boot.
+
+```sh
+install -m644 ~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-watchdog.{service,timer} \
+  ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now pi-intercom-watchdog.timer
+journalctl --user -u pi-intercom-watchdog.service    # what it did
+~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-watchdog --dry-run
+```
+
 The current package still auto-spawns a broker if the forwarded socket is
 absent. The Desktop sentinel prevents this split while Desktop is online. Do
 not treat that as the production solution: an explicit no-auto-spawn mode is
@@ -156,4 +179,5 @@ Stop/disable the prototype with:
 systemctl --user disable --now pi-intercom-testbench-forward.service
 systemctl --user disable --now pi-intercom-mac-forward.service
 systemctl --user disable --now pi-intercom-z13-forward.service
+systemctl --user disable --now pi-intercom-watchdog.timer
 ```

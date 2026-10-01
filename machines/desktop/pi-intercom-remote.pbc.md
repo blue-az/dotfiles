@@ -243,9 +243,11 @@ Prototype implementation:
   on Testbench).
 - Confirm whether OpenSSH can restrict the dedicated key to this Unix-socket
   forward; if it cannot, record the residual privilege.
-- Optional watchdog: probe the forwarded socket for a protocol health response,
-  rather than trusting systemd's active state, which can remain true while the
-  remote socket is stale or points at a split broker.
+- Watchdog (`pi-intercom/pi-intercom-watchdog`, 5-minute timer): probes each
+  forwarded socket for a protocol health response rather than trusting
+  systemd's active state, which can remain true while the remote socket is
+  stale or points at a split broker. It restarts stale forwards and only
+  alerts on a split or a down Desktop broker.
 
 ## Disposition
 

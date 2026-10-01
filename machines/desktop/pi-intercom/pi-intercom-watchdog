@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Act on pi-intercom-status: restart STALE forwards, alert on the rest.
+
+Run by pi-intercom-watchdog.timer. Policy:
+
+- STALE: restart that forward unit, at most once per COOLDOWN, and never
+  within GRACE of the unit starting (its socket may not be bound yet).
+  If the next check is still STALE after a restart, alert once.
+- SPLIT, BROKER-DOWN: alert only. Fixing a split means stopping a peer's
+  broker, which drops that peer's sessions; that stays a human decision.
+- DOWN, OK: nothing. systemd's restart backoff already retries DOWN.
+
+Alerts go to the journal (warning) and notify-send, once per state change,
+not on every run. State lives in $XDG_RUNTIME_DIR, so it resets at boot.
+--dry-run reports what it would do without restarting or notifying.
+"""
+
+import json
+import os
+import subprocess
+import sys
+import time
+
+HERE = os.path.dirname(os.path.realpath(__file__))
+STATUS = os.path.join(HERE, "pi-intercom-status")
+STATE = os.path.join(
+    os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "pi-intercom-watchdog.json")
+COOLDOWN = 15 * 60
+GRACE = 60
+ALERT = ("STALE", "SPLIT", "BROKER-DOWN")
+
+
+def forward(host):
+    return "pi-intercom-%s-forward.service" % host
+
+
+def read_status():
+    result = subprocess.run(
+        [STATUS, "--json"], capture_output=True, text=True, timeout=120)
+    return json.loads(result.stdout)
+
+
+def seconds_active(unit):
+    """Seconds since the unit last entered active, or None if unknown."""
+    out = subprocess.run(
+        ["systemctl", "--user", "show", unit, "-p", "ActiveEnterTimestampMonotonic"],
+        capture_output=True, text=True).stdout.strip()
+    usec = int(out.split("=", 1)[1] or 0) if "=" in out else 0
+    return time.monotonic() - usec / 1e6 if usec else None
+
+
+def restart(unit):
+    subprocess.run(["systemctl", "--user", "restart", unit], check=True)
+
+
+def notify(summary, body):
+    subprocess.run(["notify-send", "-u", "critical", "-a", "pi-intercom",
+                    summary, body], check=False)
+
+
+def load_state():
+    try:
+        with open(STATE) as handle:
+            return json.load(handle)
+    except (OSError, ValueError):
+        return {}
+
+
+def save_state(state):
+    tmp = STATE + ".tmp"
+    with open(tmp, "w") as handle:
+        json.dump(state, handle)
+    os.replace(tmp, STATE)
+
+
+def log(level, message):
+    # journald reads the <N> prefix as the syslog priority (4 = warning).
+    print("<%d>%s" % (level, message), flush=True)
+
+
+def run(rows, state, now, dry_run=False):
+    """Apply the policy to one status snapshot; return the actions taken."""
+    actions = []
+    for row in rows:
+        host, status, detail = row["host"], row["status"], row["detail"]
+        entry = state.setdefault(host, {})
+        previous = entry.get("status")
+        restarted_at = entry.get("restarted_at", 0)
+
+        if status == "STALE" and host != "desktop":
+            unit = forward(host)
+            age = seconds_active(unit)
+            if previous == "STALE" and restarted_at and not entry.get("alerted"):
+                actions.append(("alert", host, "still STALE after restart: " + detail))
+                entry["alerted"] = True
+            if age is not None and age < GRACE:
+                actions.append(("skip", host, "started %ds ago" % age))
+            elif restarted_at and now - restarted_at < COOLDOWN:
+                actions.append(("skip", host, "restarted %ds ago" % (now - restarted_at)))
+            else:
+                actions.append(("restart", host, detail))
+                entry["restarted_at"] = now
+        elif status in ALERT and previous != status:
+            actions.append(("alert", host, status + ": " + detail))
+        elif status not in ALERT:
+            if previous in ALERT:
+                actions.append(("recovered", host, "%s -> %s" % (previous, status)))
+            entry.pop("restarted_at", None)
+            entry.pop("alerted", None)
+        entry["status"] = status
+
+    for kind, host, message in actions:
+        if kind == "restart":
+            log(4, "%s STALE, restarting %s: %s" % (host, forward(host), message))
+            if not dry_run:
+                restart(forward(host))
+        elif kind == "alert":
+            log(4, "%s %s" % (host, message))
+            if not dry_run:
+                notify("pi-intercom: " + host, message)
+        else:
+            log(6, "%s %s: %s" % (host, kind, message))
+    return actions
+
+
+def main():
+    dry_run = "--dry-run" in sys.argv
+    state = load_state()
+    try:
+        rows = read_status()
+    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+        log(3, "pi-intercom-status failed: %s" % error)
+        return 1
+    run(rows, state, time.time(), dry_run)
+    if not dry_run:
+        save_state(state)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart stale pi-intercom forwards; alert on split or broker down
+
+[Service]
+Type=oneshot
+ExecStart=%h/.dotfiles/machines/desktop/pi-intercom/pi-intercom-watchdog
