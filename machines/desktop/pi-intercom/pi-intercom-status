@@ -1,0 +1,157 @@
+#!/usr/bin/env python3
+"""Report whether each pi-intercom forward actually reaches the Desktop broker.
+
+systemd's "active (running)" is not enough: a forward to a sleeping peer is
+"running" for the seconds before ssh fails, and a forward can stay up while the
+remote socket is stale or served by a split broker. This sends the broker's own
+health request through each socket instead.
+
+Read-only: it never starts, stops or restarts anything, and never registers a
+session with the broker. Stdlib only, so the same file runs on the remote side
+(`ssh <host> python3 - --probe-local < pi-intercom-status`).
+
+Exit 0 when the Desktop broker is healthy and every forward is OK or DOWN
+(peer off or asleep, retrying). Exit 1 on BROKER-DOWN, STALE or SPLIT.
+"""
+
+import json
+import os
+import socket
+import struct
+import subprocess
+import sys
+import uuid
+
+SOCKET = "~/.pi/agent/intercom/broker.sock"
+BROKER_PATTERN = "pi-intercom/broker/broker.ts"
+UNIT_DIR = os.path.expanduser("~/.config/systemd/user")
+SENTINEL = "pi-intercom-desktop-sentinel.service"
+TIMEOUT = 3.0
+
+
+def health(path=SOCKET):
+    """Send one health frame; return None on health_ok, else the failure."""
+    path = os.path.expanduser(path)
+    if not os.path.exists(path):
+        return "no socket"
+    request_id = "status-" + uuid.uuid4().hex
+    payload = json.dumps({"type": "health", "requestId": request_id}).encode()
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+            sock.settimeout(TIMEOUT)
+            sock.connect(path)
+            sock.sendall(struct.pack(">I", len(payload)) + payload)
+            header = _read(sock, 4)
+            reply = json.loads(_read(sock, struct.unpack(">I", header)[0]))
+    except (OSError, ValueError) as error:
+        return type(error).__name__ + ": " + str(error)
+    if (
+        reply.get("type") == "health_ok"
+        and reply.get("requestId") == request_id
+        and reply.get("protocol") == "pi-intercom"
+        and reply.get("version") == 1
+    ):
+        return None
+    return "unexpected reply: " + json.dumps(reply)[:120]
+
+
+def _read(sock, size):
+    data = b""
+    while len(data) < size:
+        chunk = sock.recv(size - len(data))
+        if not chunk:
+            raise OSError("connection closed")
+        data += chunk
+    return data
+
+
+def local_brokers():
+    """PIDs of broker processes on this machine."""
+    out = subprocess.run(
+        ["pgrep", "-f", BROKER_PATTERN], capture_output=True, text=True
+    ).stdout
+    return [int(pid) for pid in out.split()]
+
+
+def probe_local():
+    """Remote side: health of the forwarded socket, plus any local broker."""
+    print(json.dumps({"health": health(), "brokers": local_brokers()}))
+
+
+def unit(name):
+    out = subprocess.run(
+        [
+            "systemctl", "--user", "show", name,
+            "-p", "ActiveState", "-p", "SubState", "-p", "NRestarts",
+        ],
+        capture_output=True, text=True,
+    ).stdout
+    return dict(line.split("=", 1) for line in out.splitlines() if "=" in line)
+
+
+def forward_hosts():
+    prefix, suffix = "pi-intercom-", "-forward.service"
+    names = sorted(os.listdir(UNIT_DIR)) if os.path.isdir(UNIT_DIR) else []
+    return [n[len(prefix):-len(suffix)] for n in names
+            if n.startswith(prefix) and n.endswith(suffix)]
+
+
+def check_forward(host):
+    state = unit("pi-intercom-%s-forward.service" % host)
+    restarts = state.get("NRestarts", "?")
+    if (state.get("ActiveState"), state.get("SubState")) != ("active", "running"):
+        return "DOWN", "%s/%s, %s restarts" % (
+            state.get("ActiveState"), state.get("SubState"), restarts)
+    try:
+        with open(os.path.abspath(__file__), "rb") as source:
+            result = subprocess.run(
+                ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5", host,
+                 "python3", "-", "--probe-local"],
+                stdin=source, capture_output=True, text=True, timeout=20,
+            )
+    except subprocess.TimeoutExpired:
+        return "STALE", "unit running but ssh timed out"
+    try:
+        remote = json.loads(result.stdout.strip().splitlines()[-1])
+    except (ValueError, IndexError):
+        detail = (result.stderr.strip().splitlines() or ["no reply"])[-1]
+        return "STALE", "unit running but probe failed: " + detail
+    if remote["brokers"]:
+        return "SPLIT", "%s runs its own broker (pid %s)" % (
+            host, ", ".join(map(str, remote["brokers"])))
+    if remote["health"]:
+        return "STALE", "unit running, remote socket: " + remote["health"]
+    return "OK", "health_ok through forward, %s restarts" % restarts
+
+
+def main():
+    if "--probe-local" in sys.argv:
+        probe_local()
+        return 0
+    rows, failed = [], False
+
+    error = health()
+    sentinel = unit(SENTINEL)
+    detail = "sentinel %s/%s" % (sentinel.get("ActiveState"), sentinel.get("SubState"))
+    if error:
+        rows.append(("desktop", "BROKER-DOWN", error + "; " + detail))
+        failed = True
+    else:
+        rows.append(("desktop", "OK", "broker health_ok; " + detail))
+
+    for host in forward_hosts():
+        status, detail = check_forward(host)
+        rows.append((host, status, detail))
+        failed = failed or status in ("STALE", "SPLIT")
+
+    if "--json" in sys.argv:
+        print(json.dumps([dict(zip(("host", "status", "detail"), r)) for r in rows]))
+    else:
+        width = max(len(r[0]) for r in rows)
+        for host, status, detail in rows:
+            print("%-*s  %-11s  %s" % (width, host, status, detail))
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

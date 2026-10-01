@@ -169,7 +169,8 @@ Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
 - The recipient receives the message; the sender's machine is identifiable from its session name.
 - `ask` receives a threaded reply or a clear unavailable/timeout result.
 - Desktop sessions keep full local intercom if the forward or Testbench fails.
-- Forward and broker state is inspectable with a status command.
+- Forward and broker state is inspectable with a status command
+  (`pi-intercom/pi-intercom-status`).
 ```
 
 ## Verified risks

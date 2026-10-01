@@ -56,9 +56,26 @@ ssh -t testbench 'sudo install -m644 /tmp/90-pi-intercom.conf /etc/ssh/sshd_conf
 Inspect it with:
 
 ```sh
-systemctl --user status pi-intercom-testbench-forward.service
-ssh testbench 'stat -c "%F %a" ~/.pi/agent/intercom/broker.sock'
+~/.dotfiles/machines/desktop/pi-intercom/pi-intercom-status
 ```
+
+It sends the broker's own `health` request to the Desktop socket and, over
+SSH, to each forwarded socket, and checks the peer for a broker of its own.
+Do not trust `systemctl status` alone: a forward to a sleeping peer reads
+"active (running)" for the seconds before ssh fails.
+
+| Status | Meaning | Exit |
+|---|---|---|
+| `OK` | `health_ok` came back through the forward; the peer runs no broker | 0 |
+| `DOWN` | The forward unit is waiting to retry (peer off or asleep) | 0 |
+| `STALE` | The unit is running but the probe failed (no/stale socket, ssh error) | 1 |
+| `SPLIT` | The peer runs its own broker, so its sessions cannot reach Desktop's | 1 |
+| `BROKER-DOWN` | The Desktop broker itself did not answer | 1 |
+
+`--json` prints the same rows for scripts. It is read-only: it never restarts
+a unit or registers a session. The peer needs `python3` on its non-interactive
+SSH `PATH`; the check sends the same file over stdin, so nothing is installed
+there.
 
 The current package still auto-spawns a broker if the forwarded socket is
 absent. The Desktop sentinel prevents this split while Desktop is online. Do
