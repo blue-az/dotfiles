@@ -11,7 +11,9 @@ ExecStart=/usr/bin/ssh -N \
   -R /home/ef-tb/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock \
   testbench
 Restart=always
-RestartSec=5
+RestartSec=10
+RestartSteps=6
+RestartMaxDelaySec=15min
 
 [Install]
 WantedBy=default.target

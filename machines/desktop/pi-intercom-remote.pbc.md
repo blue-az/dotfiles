@@ -231,7 +231,9 @@ Prototype implementation:
   `testbench` SSH config is reused and the forward lives exactly as long as
   the Desktop side that hosts the broker:
   `ssh -N -R /home/ef-tb/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock testbench`
-- Keep the forward running with a user systemd unit that restarts on failure.
+- Keep the forward running with a user systemd unit that restarts on failure,
+  backing off from 10 s to 15 min (`RestartSteps`, `RestartMaxDelaySec`) so a
+  sleeping or powered-off peer is not retried every few seconds.
 - Keep a Desktop idle RPC sentinel running with a second user systemd unit so
   the broker exists before any Testbench client starts.
 - Testbench `sshd` must allow stream-local forwarding and have
