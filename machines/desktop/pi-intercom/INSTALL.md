@@ -8,10 +8,13 @@ a second broker.
 ## Prerequisites
 
 - `testbench` must resolve through `~/.ssh/config` and accept `BatchMode` SSH.
-- Testbench needs Pi installed with `pi-intercom@0.13.0`. Pi requires Node
+- Testbench needs Pi installed with `pi-intercom@0.16.0`. Pi requires Node
   >=22.19.0; on this host the user-local Node 22.23.2 is used. Keep the
   intercom package version aligned with Desktop; Pi CLI versions may differ
-  if their protocol remains compatible.
+  if their protocol remains compatible. Desktop's `settings.json` lists
+  `npm:pi-intercom` unpinned, so Desktop updates on its own (0.16.0 arrived
+  2026-10-01); peers are pinned. Desktop's running broker keeps the code it
+  started with until it is restarted.
 - The `ef-tb` account must have `~/.pi/agent/intercom/` created before the
   forward starts.
 - The Desktop broker must be running before Testbench sessions start.
@@ -22,7 +25,7 @@ Install the matching Pi and intercom package on Testbench (with the user's
 Node 22 on `PATH`):
 
 ```sh
-ssh testbench 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom@0.13.0'
+ssh testbench 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom@0.16.0'
 ```
 
 Create the remote socket directory once:
@@ -112,7 +115,7 @@ broker; a second reverse Unix-socket forward. Mac sessions are untrusted
 remote content, like Testbench.
 
 ```sh
-ssh mac 'export PATH="$HOME/.local/bin:/opt/homebrew/bin:$PATH"; pi install npm:pi-intercom@0.13.0'
+ssh mac 'export PATH="$HOME/.local/bin:/opt/homebrew/bin:$PATH"; pi install npm:pi-intercom@0.16.0'
 ssh mac 'mkdir -p ~/.pi/agent/intercom && chmod 700 ~/.pi/agent ~/.pi/agent/intercom'
 ```
 
@@ -147,7 +150,7 @@ remote content, like Testbench and Mac. The path string matches Desktop
 filesystem; do not confuse the two hosts.
 
 ```sh
-ssh z13 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom@0.13.0'
+ssh z13 'export PATH="$HOME/.local/bin:$PATH"; pi install npm:pi-intercom@0.16.0'
 ssh z13 'mkdir -p ~/.pi/agent/intercom && chmod 700 ~/.pi/agent ~/.pi/agent/intercom'
 ```
 
