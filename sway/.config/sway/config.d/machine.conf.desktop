@@ -1,3 +1,7 @@
 # Desktop overrides
 
 set $launcher_cmd "wmenu-run"
+
+# Foot pedal: keyd (keyboards/keyd/footpedal.conf) sends F13 (keycode 191);
+# pedal-voice types /voice + Enter for rpiv-voice dictation, debounced.
+bindcode 191 exec $HOME/.local/bin/pedal-voice

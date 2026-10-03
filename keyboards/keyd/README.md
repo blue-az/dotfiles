@@ -13,6 +13,28 @@ file is installed explicitly rather than symlinked from `$HOME`.
 | `Left Alt+;` | Backspace |
 | `AltGr+;` | `;` — the displaced semicolon, on Right Alt |
 
+## Foot pedal (`footpedal.conf`)
+
+`footpedal.conf` is the tracked copy of `/etc/keyd/footpedal.conf`. Its `[ids]`
+names the PCsensor FootSwitch (`1a86:e026`), which is more specific than
+`default.conf`'s `*`, so keyd uses it for the pedal only. The pedal's firmware
+sends Escape; keyd turns that into **F13**, and Sway (`machine.conf.desktop`,
+`bindcode 191`) runs `sway/.local/bin/pedal-voice`, which types `/voice` + Enter
+to start rpiv-voice dictation in the focused pi session.
+
+Two things that did not work:
+
+- A Sway `bindsym --input-device=...FootSwitch_Keyboard Escape` never fires:
+  keyd grabs the pedal and re-emits its keys from `keyd_virtual_keyboard`.
+- A keyd `macro(/voice enter)` works, but a quick double press runs two macros at
+  once and types `/vovoice`. keyd cannot ignore the second press, so the typing
+  moved to `pedal-voice`, which drops presses within 1.5 s.
+
+keyd also grabs the pedal's mouse and joystick-style interfaces (it logs a
+"trackpad" warning for one); nothing uses them.
+
+Install: `sudo install -m644 footpedal.conf /etc/keyd/footpedal.conf && sudo keyd reload`
+
 ## Why keyd instead of xkb
 
 The `;` → BackSpace remap originally lived in `xkb/.config/xkb/symbols/custom` as

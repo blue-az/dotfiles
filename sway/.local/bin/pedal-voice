@@ -1,0 +1,17 @@
+#!/bin/sh
+# Foot pedal -> /voice in the focused pi session (rpiv-voice dictation).
+#
+# keyd (keyboards/keyd/footpedal.conf) turns the pedal's Escape into F13 and
+# Sway runs this on F13. Presses within DEBOUNCE_MS of the last accepted one
+# are dropped: a quick double press (or switch bounce) otherwise ran two
+# keyd macros at once and typed "/vovoice".
+DEBOUNCE_MS=1500
+stamp="${XDG_RUNTIME_DIR:-/tmp}/pedal-voice.last"
+
+exec 9>"$stamp.lock"
+flock -n 9 || exit 0          # one press already being handled
+now=$(date +%s%3N)
+last=$(cat "$stamp" 2>/dev/null || echo 0)
+[ $((now - last)) -lt "$DEBOUNCE_MS" ] && exit 0
+echo "$now" > "$stamp"
+exec wtype '/voice' -k Return
