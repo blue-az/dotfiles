@@ -35,6 +35,47 @@ keyd also grabs the pedal's mouse and joystick-style interfaces (it logs a
 
 Install: `sudo install -m644 footpedal.conf /etc/keyd/footpedal.conf && sudo keyd reload`
 
+## Planned: keyboard triggers for `/voice` (not implemented)
+
+Ideas for firing `pedal-voice` without the pedal, e.g. on the z13 where there is
+none. Both would emit the same F13 the pedal does, so the Sway side stays one
+`bindcode 191`.
+
+**A Windows key → F13.** Super is Sway's `$mod`, so the key can't simply be
+remapped away:
+
+- If the keyboard has a second Win key (`rightmeta`), map that one outright:
+  `rightmeta = f13`. Check with `keyd monitor`; the z13's GZ302EA keyboard may
+  only have the left one.
+- Otherwise overload the only one: `leftmeta = overload(meta, f13)`. Held or
+  chorded it is still Super; tapped alone it sends F13. Risk: an aborted Super
+  shortcut (press Super, change your mind, release) now fires dictation.
+
+**Hold Space → F13.** `space = timeout(space, <ms>, f13)`: tap or roll into
+the next key and it types a space; hold past `<ms>` alone and it sends F13.
+Tradeoffs:
+
+- Space is sent on release rather than press, a small but noticeable lag.
+- Holding Space to auto-repeat spaces stops working, and so does anything else
+  that expects a held Space (video players, games).
+- The threshold needs tuning: too short misfires during slow typing, too long
+  feels sluggish. Start around 400 ms.
+
+**Before either one ships:**
+
+- `pedal-voice` types `/voice` + Enter into *whatever is focused*. A misfire from
+  a keyboard key is far more likely than a pedal misfire, and in a plain shell it
+  runs `/voice` as a command. Consider having `pedal-voice` check that the focused
+  window is a pi session (`swaymsg -t get_tree`) before typing.
+- `default.conf` uses `[ids] *` and is installed on every machine. A laptop-only
+  trigger needs its own file naming the GZ302EA keyboard's id, the same way
+  `footpedal.conf` names the pedal.
+- On the z13: the `bindcode 191` binding lives in `machine.conf.desktop`, so it
+  would need adding to `machine.conf.z13-amd`. `pedal-voice` isn't linked into
+  `~/.local/bin`, and `wtype` isn't installed (`sudo dnf install wtype`). The
+  pedal docs also point rpiv-voice at the PhoneMic input, a desktop-only source,
+  so the z13 would use its built-in mic instead.
+
 ## Why keyd instead of xkb
 
 The `;` → BackSpace remap originally lived in `xkb/.config/xkb/symbols/custom` as
