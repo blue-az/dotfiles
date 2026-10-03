@@ -1,0 +1,18 @@
+[Unit]
+Description=Phone microphone (Galaxy S10e) via scrcpy into PhoneMic
+After=pipewire-pulse.service
+Wants=pipewire-pulse.service
+
+[Service]
+Type=simple
+# PULSE_SINK routes scrcpy's playback into the phonemic null sink.
+Environment=PULSE_SINK=phonemic SDL_AUDIODRIVER=pulseaudio
+ExecStart=%h/.local/bin/scrcpy --serial=RF8M40GB76F --no-video --no-control --no-window --audio-source=mic
+# Phone unplugged or locked: back off instead of retrying every few seconds.
+Restart=always
+RestartSec=10
+RestartSteps=6
+RestartMaxDelaySec=15min
+
+[Install]
+WantedBy=default.target
