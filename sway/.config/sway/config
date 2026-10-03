@@ -26,6 +26,10 @@ input type:touchpad {
 # Machine-specific output config (not in git)
 # Templates in config.d/outputs.conf.*
 include ~/.config/sway/config.d/outputs.conf
+# Last layout picked with the 1s/2s/3s/3sp/4s aliases, so a reload keeps it.
+# Written by ~/.screenlayout/sway-monitors.sh; absent until a layout script runs.
+# Delete it to go back to the outputs.conf boot layout on the next reload.
+include ~/.local/state/sway/layout.conf
 
 # Machine-specific overrides (symlink to config.d/machine.conf.*)
 # Defaults target the active Fedora machines (desktop, z13); wofi is the

@@ -24,6 +24,15 @@ TV4K='"LG Electronics LG TV SSCR2 0x01010101"'
 # the model word or the two become indistinguishable.
 TV1080='"LG Electronics LG TV 0x01010101"'
 
+# The chosen layout is also saved as sway output commands, which the sway config
+# includes after outputs.conf. Without this, `swaymsg reload` re-applies the
+# boot layout in outputs.conf and undoes whichever layout script last ran.
+# Kept outside ~/.config/sway because that directory is the stowed repo.
+LAYOUT_STATE="${XDG_STATE_HOME:-$HOME/.local/state}/sway/layout.conf"
+mkdir -p "$(dirname "$LAYOUT_STATE")"
+echo "# Written by $(basename "$0"); included by the sway config" > "$LAYOUT_STATE.tmp"
+trap 'mv "$LAYOUT_STATE.tmp" "$LAYOUT_STATE"' EXIT
+
 # out <identifier> <args...> - configure one output, skipping unknown monitors
 # so a missing identifier degrades the layout instead of erroring.
 out() {
@@ -31,4 +40,5 @@ out() {
 	id=$1
 	shift
 	swaymsg "output $id $*"
+	echo "output $id $*" >> "$LAYOUT_STATE.tmp"
 }
