@@ -1,0 +1,8 @@
+Temporary SSH host identity for Desktop (fedora)
+
+Host: 192.168.8.171 (LAN)
+User: blueaz
+Host key type: ED25519
+Fingerprint: SHA256:/Eka/U5rO0j+4A4AZHLHbw/X8md/bh01aHpRqSIc/Ww
+
+Verify the fingerprint on first connection before accepting it. This is a host key fingerprint, not a user public key; z13 still needs an authorized user key or another enabled authentication method.
