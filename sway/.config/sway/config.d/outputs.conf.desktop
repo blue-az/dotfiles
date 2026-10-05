@@ -9,30 +9,23 @@
 # Refresh after a hardware change with:
 #   swaymsg -t get_outputs -r | jq -r '.[] | "\(.make) \(.model) \(.serial)"'
 
-# Display configuration - all four panels, ordered left to right:
-#   Main LG (4K)  |  LG (1080p)  |  left Acer  |  Predator (main)
-# Every display must be named explicitly: any output not listed here gets
-# auto-placed by sway at scale 1, which parks the 4K TV to the right of main.
-#
-# Panels are bottom-aligned on a common baseline at y=2160, so x positions
-# butt each panel against the next with no dead gap between them:
-#   0 + 3840 = 3840 + 1920 = 5760 + 1680 = 7440 + 2560 = 10000
-output "LG Electronics LG TV SSCR2 0x01010101" pos 0 0 mode 3840x2160
-output "LG Electronics LG TV 0x01010101" pos 3840 1080 mode 1920x1080
-output "Acer Technologies Acer AL2216W L92080554231" pos 5760 1110 res 1680x1050
-output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 7440 720 mode 2560x1440@60Hz
+# Three-panel desktop layout, ordered left to right:
+#   LG (1080p) | left Acer | Predator (main)
+# The 4K LG is retired from this setup. Explicit positions keep the active
+# desktop compact and avoid Sway placing any output at an unintended location.
+# Panels are bottom-aligned on a common baseline at y=1440:
+#   0 + 1920 = 1920 + 1680 = 3600 + 2560 = 6160
+output "LG Electronics LG TV 0x01010101" pos 0 360 mode 1920x1080
+output "Acer Technologies Acer AL2216W L92080554231" pos 1920 390 res 1680x1050
+output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 3600 0 mode 2560x1440@60Hz
 
-# Both LG panels report serial 0x01010101 (a placeholder LG ships rather than a
-# real serial), so the model string is the only thing separating them: "LG TV"
-# is the 1080p set, "LG TV SSCR2" the 4K. Do not try to match these by serial.
+# The LG reports a placeholder serial; retain the full make/model/serial
+# identifier so this matches only the 1080p TV.
 
-# Workspace assignments. Sway sends a workspace to the first *active* output
-# in its list. If every listed output is off, or the workspace has no
-# assignment, it follows the focused output. Do not give 3/4/6 an XB
-# fallback: that pins them to the Predator, so Super+3/4/6 can never stay on
-# the left Acer.
+# Workspace assignments. Keep workspaces 3/4/6 on the LG rather than letting
+# them follow Sway's focused-output fallback to the Predator.
 workspace 1 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
 workspace 2 output "Acer Technologies Acer AL2216W L92080554231"
 workspace 3 output "LG Electronics LG TV 0x01010101"
 workspace 4 output "LG Electronics LG TV 0x01010101"
-workspace 6 output "LG Electronics LG TV SSCR2 0x01010101"
+workspace 6 output "LG Electronics LG TV 0x01010101"
