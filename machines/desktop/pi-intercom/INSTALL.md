@@ -15,7 +15,7 @@ a second broker.
   `npm:pi-intercom` unpinned, so Desktop updates on its own (0.16.0 arrived
   2026-10-01); peers are pinned. Desktop's running broker keeps the code it
   started with until it is restarted.
-- The `ef-tb` account must have `~/.pi/agent/intercom/` created before the
+- The `eftb` account must have `~/.pi/agent/intercom/` created before the
   forward starts.
 - The Desktop broker must be running before Testbench sessions start.
 - Testbench sshd should install `testbench-sshd-intercom.conf` before relying

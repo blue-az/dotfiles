@@ -43,7 +43,7 @@ machine-prefixed names) carries over if a bridge is ever built.
 
 Why SSH and not a VPN relay: neither Tailscale nor WireGuard is installed, and
 `testbench` is already configured in `~/.ssh/config` (`testbench.local`, user
-`ef-tb`) on the same LAN. A VPN adds infrastructure two machines do not need.
+`eftb`) on the same LAN. A VPN adds infrastructure two machines do not need.
 
 ## Scope
 
@@ -231,7 +231,7 @@ Prototype implementation:
 - **Forward from Desktop** with a remote Unix-socket forward, so the existing
   `testbench` SSH config is reused and the forward lives exactly as long as
   the Desktop side that hosts the broker:
-  `ssh -N -R /home/ef-tb/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock testbench`
+  `ssh -N -R /home/eftb/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock testbench`
 - Keep the forward running with a user systemd unit that restarts on failure,
   backing off from 10 s to 15 min (`RestartSteps`, `RestartMaxDelaySec`) so a
   sleeping or powered-off peer is not retried every few seconds.
@@ -239,7 +239,7 @@ Prototype implementation:
   the broker exists before any Testbench client starts.
 - Testbench `sshd` must allow stream-local forwarding and have
   `StreamLocalBindUnlink yes`, or a stale socket file blocks reconnection.
-- Paths are absolute because the users differ (`blueaz` on Desktop, `ef-tb`
+- Paths are absolute because the users differ (`blueaz` on Desktop, `eftb`
   on Testbench).
 - Confirm whether OpenSSH can restrict the dedicated key to this Unix-socket
   forward; if it cannot, record the residual privilege.

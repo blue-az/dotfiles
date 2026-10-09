@@ -1,15 +1,9 @@
 [Unit]
 Description=Forward Mac pi-intercom socket to Desktop broker
+
 [Service]
 Type=simple
-ExecStart=/usr/bin/ssh -N \
-  -o BatchMode=yes \
-  -o ExitOnForwardFailure=yes \
-  -o ServerAliveInterval=30 \
-  -o ServerAliveCountMax=3 \
-  -o StreamLocalBindUnlink=yes \
-  -R /Users/blueaz/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock \
-  mac
+ExecStart=/usr/bin/ssh -N -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o StreamLocalBindUnlink=yes -R /Users/blueaz/.pi/agent/intercom/broker.sock:/home/blueaz/.pi/agent/intercom/broker.sock mac
 Restart=always
 RestartSec=10
 RestartSteps=6
