@@ -112,8 +112,20 @@ Monitor audio (Acer Predator XB271HU via DisplayPort) occasionally drops out due
 
 Having two separate cycling hotkeys is cumbersome and non-intuitive when monitor DP audio drops out.
 
+#### 2026-10-05: Persistent no-audio incident (cause unconfirmed)
+- XB271HU built-in speakers are silent over the current DisplayPort connection. Cycling monitor power twice did not restore audio; user reports this normally occurs only every few weeks and suspects this may be distinct from the intermittent dropout above.
+- User is almost certain audio worked after “the switch,” but is not fully sure; which switch and the last-known-good point need confirmation.
+- PipeWire routes an active, unmuted Chrome stream to the XB271HU HDMI/DP sink. ALSA ELD reports a valid DisplayPort connection and stereo FL/FR capability. A short test tone sent through PipeWire was inaudible. Monitor speakers were separately confirmed working over HDMI.
+- Current host GPU is TU104 / GeForce RTX 2080 using the `nouveau` driver, not the GA102 / proprietary NVIDIA setup described below. `nvidia-smi` and the proposed memory-clock service are unavailable, so do not assume that workaround applies.
+
+#### Follow-up: HDMI recurrence and monitor-side recovery
+- A later silent-audio episode also occurred over HDMI on the RTX 2080 with `nouveau`. PipeWire selected the XB271HU sink and ALSA ELD reported a valid HDMI stereo connection, but audio was inaudible. Headphones worked.
+- Cycling monitor power restored audio immediately; PC shutdown alone had not cleared the failure. Recovery attempts without cycling monitor power did not work.
+- User disabled DTS in the monitor menu as a possible preventive fix; recurrence is infrequent, so this remains unverified.
+- This broadens the symptom beyond DisplayPort, but does not establish a shared cause with the older dropout reports below.
+
 #### Planned Solution
-- Combine and streamline audio cycling logic into a single smart toggle/script that checks sink health and automatically skips/falls back from broken monitor DP channels.
+- No software recovery has been found that substitutes for cycling monitor power. The desk power button is a reliable workaround; consider external speakers if the issue becomes disruptive.
 
 
 #### Potential Fix: Lock Memory Clocks
@@ -152,6 +164,8 @@ sudo systemctl enable --now nvidia-hdmi-audio-fix.service
 - Card: `alsa_card.pci-0000_01_00.1` using pro-audio profile
 
 #### Sources
+- https://www.reddit.com/r/buildapc/comments/49f2j9/acer_xb271hu_sound_stopped_working/ — XB271HU-specific report; OP deleted.
+- https://linustechtips.com/topic/561150-audio-stopped-working-through-my-xb271hu/ — XB271HU-specific report; suggests turning DTS off (not yet verified here).
 - https://forums.developer.nvidia.com/t/audio-cuts-drops-hdmi-for-some-months-now/289514
 - https://forums.developer.nvidia.com/t/audio-pass-through-via-hdmi-often-interrupted/270808
 - https://wiki.archlinux.org/title/NVIDIA/Troubleshooting
