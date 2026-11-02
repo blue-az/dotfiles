@@ -39,8 +39,8 @@ Originally built **August 2019**; the GPU and RAM have since been replaced.
 | Displays | Acer Predator XB271HU 2560x1440@144 (165 OC) · Acer AL2216W 1680x1050@60 · LG TV 1920x1080@60 | repo |
 
 Sag support: Zotac uses an upHere G195BK; the EVGA is planned to sit on a cut
-wood dowel. The Zotac's fans already suffered real sag damage — do not reinstall
-it unsupported.
+wood dowel. The Zotac's original fans suffered sag damage and have since been
+replaced (operator report); keep the brace installed to prevent recurrence.
 
 ### The PSU failure, and what replaced it
 

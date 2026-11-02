@@ -82,7 +82,7 @@ general compute — is served fully by the weakest card on hand.
 - id: zotac
   name: Zotac RTX 3090 Trinity
   type: gpu
-  description: 24GB, 2.5-slot, 292-320mm. Has prior sag-damaged fans; requires bracing.
+  description: 24GB, 2.5-slot, 292-320mm. Original fans were sag-damaged and have since been replaced (operator report); keep braced.
 - id: evga
   name: EVGA RTX 3090 XC3
   type: gpu
