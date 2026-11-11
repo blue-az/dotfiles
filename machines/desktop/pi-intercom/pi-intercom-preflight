@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Preflight check before launching Pi for cross-machine pi-intercom.
+
+Must be called on the **remote** machine (z13, testbench, mac) before `pi`
+starts. It probes the forwarded Desktop broker socket; if reachable it allows
+Pi to start. If the socket is absent or the broker is unresponsive, it exits
+non-zero so the launcher can refuse to start Pi and avoid auto-spawning a
+split local broker.
+
+Usage:
+    pi-intercom-preflight          # exits 0 on success, 1 on failure
+    pi-intercom-preflight --help
+    pi-intercom-preflight --json   # machine-readable output
+"""
+
+import json
+import os
+import socket
+import struct
+import subprocess
+import sys
+import uuid
+
+SOCKET = os.path.expanduser("~/.pi/agent/intercom/broker.sock")
+TIMEOUT = 3.0
+
+
+def health():
+    """Probe the broker at the local socket path. Return (ok, detail)."""
+    if not os.path.exists(SOCKET):
+        return False, "no socket"
+    request_id = "preflight-" + uuid.uuid4().hex
+    payload = json.dumps({"type": "health", "requestId": request_id}).encode()
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+            sock.settimeout(TIMEOUT)
+            sock.connect(SOCKET)
+            sock.sendall(struct.pack(">I", len(payload)) + payload)
+            header = _read(sock, 4)
+            reply = json.loads(_read(sock, struct.unpack(">I", header)[0]))
+    except (OSError, ValueError) as error:
+        return False, f"{type(error).__name__}: {error}"
+    if (
+        reply.get("type") == "health_ok"
+        and reply.get("requestId") == request_id
+        and reply.get("protocol") == "pi-intercom"
+        and reply.get("version") == 1
+    ):
+        return True, "health_ok"
+    return False, f"unexpected reply: {json.dumps(reply)[:120]}"
+
+
+def _read(sock, size):
+    data = b""
+    while len(data) < size:
+        chunk = sock.recv(size - len(data))
+        if not chunk:
+            raise OSError("connection closed")
+        data += chunk
+    return data
+
+
+def main():
+    if "--help" in sys.argv:
+        print(__doc__)
+        return 0
+    if "--json" in sys.argv:
+        ok, detail = health()
+        print(json.dumps({"ok": ok, "detail": detail, "socket": SOCKET}))
+        return 0 if ok else 1
+
+    ok, detail = health()
+    if ok:
+        return 0
+    else:
+        print(f"pi-intercom-preflight FAIL: {detail}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

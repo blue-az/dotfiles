@@ -198,3 +198,9 @@ export PATH="$HOME/.grok/bin:$PATH"
 
 # Use KDE askpass for sudo in non-TTY agent/tool contexts.
 export SUDO_ASKPASS=/usr/bin/ksshaskpass
+
+# /op:crystal (operator-control-plane pi extension) pins agent-crystallize 0.1.16; installed 2026-10-01.
+export OPERATOR_CRYSTALLIZE_PACKAGE="$HOME/.local/share/agent-crystallize-0.1.16/node_modules/@stewie-sh/agent-crystallize"
+
+# Vite+ bin (https://viteplus.dev)
+. "/home/blueaz/.config/vite-plus/env"

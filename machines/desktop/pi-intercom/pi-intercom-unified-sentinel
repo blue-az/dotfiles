@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""Unified pi-intercom health sentinel.
+
+Works on Desktop (host broker) and remote machines (attach via forward).
+Keeps the broker alive and detects split brokers.
+
+Usage:
+    pi-intercom-unified-sentinel          # foreground, logs to stderr
+    pi-intercom-unified-sentinel --daemon # background as user service
+    pi-intercom-unified-sentinel --status # one-shot health report
+
+Exit 0 when healthy, 1 when issues found.
+"""
+
+import json
+import os
+import socket
+import struct
+import subprocess
+import sys
+import time
+import uuid
+
+SOCKET = os.path.expanduser("~/.pi/agent/intercom/broker.sock")
+TIMEOUT = 3.0
+POLL_INTERVAL = 10  # seconds
+HEALTHY_TIMEOUT = 60  # seconds without a healthy connection before alerting
+
+
+def health():
+    """Probe the broker. Return (ok, detail)."""
+    if not os.path.exists(SOCKET):
+        return False, "no socket"
+    request_id = "sentinel-" + uuid.uuid4().hex
+    payload = json.dumps({"type": "health", "requestId": request_id}).encode()
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+            sock.settimeout(TIMEOUT)
+            sock.connect(SOCKET)
+            sock.sendall(struct.pack(">I", len(payload)) + payload)
+            header = _read(sock, 4)
+            reply = json.loads(_read(sock, struct.unpack(">I", header)[0]))
+    except (OSError, ValueError) as error:
+        return False, f"{type(error).__name__}: {error}"
+    if (
+        reply.get("type") == "health_ok"
+        and reply.get("requestId") == request_id
+        and reply.get("protocol") == "pi-intercom"
+        and reply.get("version") == 1
+    ):
+        return True, "health_ok"
+    return False, f"unexpected reply: {json.dumps(reply)[:120]}"
+
+
+def _read(sock, size):
+    data = b""
+    while len(data) < size:
+        chunk = sock.recv(size - len(data))
+        if not chunk:
+            raise OSError("connection closed")
+        data += chunk
+    return data
+
+
+def local_broker_pids():
+    """Find broker processes on this host."""
+    try:
+        out = subprocess.run(
+            ["pgrep", "-f", "pi-intercom/broker/broker.ts"],
+            capture_output=True, text=True, timeout=10
+        ).stdout.strip()
+        return [int(p) for p in out.split() if p] if out else []
+    except (subprocess.TimeoutExpired, ValueError):
+        return []
+
+
+def get_hostname():
+    try:
+        return subprocess.run(
+            ["hostname"], capture_output=True, text=True, timeout=10
+        ).stdout.strip()
+    except Exception:
+        return ""
+
+def check_socket_state():
+    if not os.path.exists(SOCKET):
+        return "absent"
+    try:
+        os.lstat(SOCKET)
+        return "present"
+    except OSError:
+        return "absent"
+
+
+def status():
+    """One-shot health report."""
+    broker_healthy, detail = health()
+    local_brokers = local_broker_pids()
+    socket_state = check_socket_state()
+    hostname = get_hostname()
+    
+    # Determine if there's a split (local broker present but broker not healthy)
+    has_split = len(local_brokers) > 0 and not broker_healthy
+    
+    return {
+        "broker_healthy": broker_healthy,
+        "detail": detail,
+        "socket_state": socket_state,
+        "local_brokers": local_brokers,
+        "has_split": has_split,
+        "hostname": hostname,
+    }
+
+
+def run_forever():
+    """Main loop: poll health, alert on issues."""
+    last_healthy = time.time()
+    last_alert = 0
+    
+    while True:
+        broker_healthy, detail = health()
+        local_brokers = local_broker_pids()
+        
+        if broker_healthy:
+            last_healthy = time.time()
+            if local_brokers:
+                print(f"[{time.strftime('%H:%M:%S')}] WARNING: local broker present but broker healthy — potential split: PIDs {local_brokers}", file=sys.stderr)
+        else:
+            elapsed = time.time() - last_healthy
+            if elapsed > HEALTHY_TIMEOUT:
+                alert = f"[{time.strftime('%H:%M:%S')}] ALERT: broker unhealthy for {elapsed:.0f}s: {detail}"
+                if local_brokers:
+                    alert += f" + local broker(s): {local_brokers}"
+                print(alert, file=sys.stderr)
+                last_alert = time.time()
+        
+        time.sleep(POLL_INTERVAL)
+
+
+def main():
+    if "--status" in sys.argv:
+        result = status()
+        print(json.dumps(result, indent=2))
+        return 0 if result["broker_healthy"] else 1
+    
+    if "--daemon" in sys.argv:
+        # Fork to background
+        pid = os.fork()
+        if pid > 0:
+            print(f"sentinel started as PID {pid}")
+            return 0
+        # Child: daemonize
+        os.setsid()
+        run_forever()
+    
+    # Foreground mode
+    try:
+        run_forever()
+    except KeyboardInterrupt:
+        return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

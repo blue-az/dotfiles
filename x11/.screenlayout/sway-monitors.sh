@@ -16,7 +16,7 @@
 # inside that string or sway parses each word as a separate argument.
 
 LEFT='"Acer Technologies Acer AL2216W L92080554231"'
-MAIN='"Acer Technologies XB271HU #ASP2u3xvGwHd"'
+MAIN='"Acer Technologies XB271HU T4TAA0088502"'
 TV4K='"LG Electronics LG TV SSCR2 0x01010101"'
 
 # The 1080p LG TV. Note both LG sets report serial 0x01010101 and differ only by

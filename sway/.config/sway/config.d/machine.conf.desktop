@@ -1,6 +1,6 @@
 # Desktop overrides
 
-set $launcher_cmd "wmenu-run"
+set $launcher_cmd "wofi --show drun"
 
 # Foot pedal: keyd (keyboards/keyd/footpedal.conf) sends F13 (keycode 191);
 # pedal-voice types /voice + Enter for rpiv-voice dictation, debounced.

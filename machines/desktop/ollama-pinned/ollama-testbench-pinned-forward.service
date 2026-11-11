@@ -1,0 +1,12 @@
+[Unit]
+Description=SSH forwards for TestBench GPU-pinned Ollama instances
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/ssh -N -o BatchMode=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -L 127.0.0.1:11443:127.0.0.1:18672 -L 127.0.0.1:11444:127.0.0.1:18673 testbench
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

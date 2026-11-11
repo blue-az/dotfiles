@@ -32,9 +32,8 @@ include ~/.config/sway/config.d/outputs.conf
 include ~/.local/state/sway/layout.conf
 
 # Machine-specific overrides (symlink to config.d/machine.conf.*)
-# Defaults target the active Fedora machines (desktop, z13); wofi is the
-# Debian-only fallback and is not installed on either, so it must not be the
-# default here -- a missing machine.conf symlink would silently kill $mod+d.
+# Shared Fedora default; machine-specific configs can override the launcher.
+# Keep the fallback usable if the machine.conf symlink is missing.
 set $term_cmd foot
 set $launcher_cmd "wmenu-run"
 set $file_manager_cmd dolphin
@@ -63,6 +62,10 @@ exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DE
 
 # Notification daemon
 exec dunst
+
+# Apply the desktop's two-monitor default after Sway starts. This overrides any
+# stale saved layout state: XB271HU is output 1, AL2216W output 2, LG TVs off.
+exec ~/.screenlayout/sway-2s.sh
 
 # Start on workspaces 1 and 2
 exec swaymsg 'workspace 2; workspace 1'

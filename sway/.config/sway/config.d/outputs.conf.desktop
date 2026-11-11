@@ -9,22 +9,19 @@
 # Refresh after a hardware change with:
 #   swaymsg -t get_outputs -r | jq -r '.[] | "\(.make) \(.model) \(.serial)"'
 
-# Three-panel desktop layout, ordered left to right:
-#   LG (1080p) | left Acer | Predator (main)
-# The 4K LG is retired from this setup. Explicit positions keep the active
-# desktop compact and avoid Sway placing any output at an unintended location.
-# Panels are bottom-aligned on a common baseline at y=1440:
-#   0 + 1920 = 1920 + 1680 = 3600 + 2560 = 6160
-output "LG Electronics LG TV 0x01010101" pos 0 360 mode 1920x1080
-output "Acer Technologies Acer AL2216W L92080554231" pos 1920 390 res 1680x1050
-output "Acer Technologies XB271HU #ASP2u3xvGwHd" pos 3600 0 mode 2560x1440@60Hz
+# Two active panels, bottom-aligned: left Acer | Predator (XB271HU).
+# The left Acer is 1680x1050 and the Predator is 2560x1440, so their
+# shared bottom edge is at y=1440.
+output "LG Electronics LG TV 0x01010101" disable
+output "Acer Technologies Acer AL2216W L92080554231" pos 0 390 res 1680x1050
+output "Acer Technologies XB271HU T4TAA0088502" pos 1680 0 mode 2560x1440@144Hz
 
 # The LG reports a placeholder serial; retain the full make/model/serial
 # identifier so this matches only the 1080p TV.
 
 # Workspace assignments. Keep workspaces 3/4/6 on the LG rather than letting
 # them follow Sway's focused-output fallback to the Predator.
-workspace 1 output "Acer Technologies XB271HU #ASP2u3xvGwHd"
+workspace 1 output "Acer Technologies XB271HU T4TAA0088502"
 workspace 2 output "Acer Technologies Acer AL2216W L92080554231"
 workspace 3 output "LG Electronics LG TV 0x01010101"
 workspace 4 output "LG Electronics LG TV 0x01010101"

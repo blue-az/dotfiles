@@ -16,3 +16,6 @@ fi
 
 # Added by Antigravity CLI installer
 export PATH="/home/blueaz/.local/bin:$PATH"
+
+# Vite+ bin (https://viteplus.dev)
+. "/home/blueaz/.config/vite-plus/env"

@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+"""Desktop-side service that periodically checks each remote forward and
+stops any local broker that appears on a remote machine when the forward
+is healthy.
+
+This is a safety net, not a primary fix. The primary fix is P1: prevent
+remote Pi from auto-spawning a broker when the forwarded socket is absent.
+
+Run by a systemd user timer (recommended interval: 2 minutes).
+Exits 0 when no split brokers are found or the forward is DOWN.
+Exits 1 when a split broker was found and stopped (operator should start
+a fresh Pi session on that machine).
+"""
+
+import json
+import os
+import subprocess
+import sys
+import time
+
+HERE = os.path.dirname(os.path.realpath(__file__))
+STATUS = os.path.join(HERE, "pi-intercom-status")
+STATE = os.path.join(
+    os.environ.get("XDG_RUNTIME_DIR", "/tmp"), "pi-intercom-split-cleanup.json")
+
+# Machines to check
+HOSTS = ["z13", "testbench", "mac"]
+
+
+def read_status():
+    result = subprocess.run(
+        [STATUS, "--json"], capture_output=True, text=True, timeout=120)
+    return json.loads(result.stdout)
+
+
+def load_state():
+    try:
+        with open(STATE) as handle:
+            return json.load(handle)
+    except (OSError, ValueError):
+        return {}
+
+
+def save_state(state):
+    tmp = STATE + ".tmp"
+    with open(tmp, "w") as handle:
+        json.dump(state, handle)
+    os.replace(tmp, STATE)
+
+
+def stop_remote_broker(host, pid):
+    """Stop the local broker on a remote machine via SSH."""
+    try:
+        result = subprocess.run(
+            ["ssh", host, f"kill {pid}"],
+            capture_output=True, text=True, timeout=30
+        )
+        if result.returncode == 0:
+            return True, f"killed broker PID {pid}"
+        return False, result.stderr.strip()
+    except subprocess.TimeoutExpired:
+        return False, "ssh timeout"
+
+
+def main():
+    dry_run = "--dry-run" in sys.argv
+    notify = "--notify" in sys.argv
+
+    state = load_state()
+    now = time.time()
+
+    try:
+        rows = read_status()
+    except (OSError, ValueError, subprocess.TimeoutExpired) as error:
+        print(f"status check failed: {error}", file=sys.stderr)
+        return 1
+
+    found_split = False
+    for row in rows:
+        host = row["host"]
+        status = row["status"]
+
+        if host == "desktop" or status in ("OK", "DOWN"):
+            continue
+
+        if status == "SPLIT":
+            # Find the broker PID on the remote
+            try:
+                pid_out = subprocess.run(
+                    ["ssh", host, "pgrep -f 'pi-intercom/broker/broker.ts'"],
+                    capture_output=True, text=True, timeout=30
+                ).stdout.strip()
+                pid = int(pid_out.split()[0]) if pid_out else 0
+            except (ValueError, IndexError, subprocess.TimeoutExpired):
+                pid = 0
+
+            if pid > 0:
+                key = f"{host}:{pid}"
+                last_cleaned = state.get(key, 0)
+                if now - last_cleaned > 300:  # 5 min cooldown
+                    if not dry_run:
+                        success, msg = stop_remote_broker(host, pid)
+                        if success:
+                            state[key] = now
+                            print(f"CLEANUP {host}: {msg}", file=sys.stderr)
+                            found_split = True
+                            if notify:
+                                subprocess.run(
+                                    ["notify-send", "-u", "critical",
+                                     "-a", "pi-intercom",
+                                     "pi-intercom split broker stopped",
+                                     f"{host}: PID {pid} ({msg})"],
+                                    check=False, timeout=10
+                                )
+                        else:
+                            print(f"CLEANUP {host}: failed to kill {pid}: {msg}", file=sys.stderr)
+                    else:
+                        print(f"DRY-RUN {host}: would stop broker PID {pid}", file=sys.stderr)
+                        found_split = True
+
+    save_state(state)
+    return 1 if found_split else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

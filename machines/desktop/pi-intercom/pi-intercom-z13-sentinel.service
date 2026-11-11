@@ -1,0 +1,17 @@
+[Unit]
+Description=Unified pi-intercom health sentinel for Z13
+After=network.target
+
+[Service]
+Type=simple
+Environment=PATH=/home/blueaz/.local/bin:/usr/local/bin:/usr/bin
+Environment=PI_INTERCOM_NO_AUTO_BROKER=1
+ExecStart=/home/blueaz/.local/bin/pi-intercom-unified-sentinel --daemon
+Restart=always
+RestartSec=10
+# Log to journal
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

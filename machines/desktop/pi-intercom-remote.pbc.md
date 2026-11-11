@@ -219,6 +219,14 @@ reply `TESTBENCH_ASK_REPLY`. Broker delivery metadata preserved receiver and
 injection timestamps across the forward. The temporary Testbench session was
 stopped after the test.
 
+Follow-up 2026-10-21: the Desktop user services for the sentinel and all three
+forwards (z13, Testbench, Mac) were installed, enabled, and active, but user
+lingering was disabled (`Linger=no`), so those services were not guaranteed to
+survive logout or start at boot without an active login. Enabled lingering for
+`blueaz` and installed/enabled the documented watchdog timer. Verified lingering
+is `yes` and all five units report active. A reconnect after sleep and an actual
+message after this repair remain unverified.
+
 Not yet verified: reconnect
 after sleep; restricted SSH-key behavior; and startup while the forward is down.
 The isolated test does not prove the live Desktop broker has no other registered

@@ -32,6 +32,9 @@
   - Prefer generalized scripts in `waybar/.config/waybar/scripts/`.
 - Power:
   - Brightness DDC helper lives at `~/.config/shared/scripts/brightness-ddc.sh`.
+- Keyboard:
+  - Use the shared keyd map in `keyboards/keyd/default.conf`, matching the Z13 binding: physical `;` emits Right Ctrl, `Shift+;` emits `:`, `Left Alt+;` emits Backspace, and `Right Alt+;` emits `;`.
+  - This must be applied by the system keyd daemon; the Sway XKB config intentionally does not implement the remap. See `keyboards/keyd/README.md` for installation and validation.
 - GPU/accelerators:
   - NVIDIA tooling is expected (`nvidia-smi` paths in scripts).
 - Services:
