@@ -1,5 +1,10 @@
 # Remote pi-intercom socket forward
 
+> Historical prototype instructions. Read [STABILIZATION.md](STABILIZATION.md)
+> and [CAPA.md](CAPA.md) first: installed versions/services have drifted, the
+> Desktop keeper needs repair, and real restart recovery is not yet verified.
+> Do not apply these commands wholesale or deploy automatic split cleanup.
+
 This prototype keeps the only pi-intercom broker on Desktop. A user service on
 Desktop creates an SSH reverse Unix-socket forward at Testbench's normal broker
 path, so Testbench Pi sessions can attach to the Desktop broker without running

@@ -45,6 +45,14 @@
     `machines/desktop/openclaw/INSTALL.md`; that file also records which of the
     two ollama profiles still needs to be identified and removed.
 
+## Cross-Machine Pi Intercom
+
+Before changing intercom, read `pi-intercom/STABILIZATION.md` and `pi-intercom/CAPA.md`.
+The stabilization record distinguishes the Desktop broker keeper from coordination
+sessions and monitors, records tested evidence, and defines clean-start/restart
+acceptance across Desktop, Z13, Testbench, and Mac. Restart reliability is not yet
+verified. Do not deploy the historical automatic split-cleanup script.
+
 ## Validation Notes
 - What to reload/restart after changes:
   - Sway config: `swaymsg reload`
