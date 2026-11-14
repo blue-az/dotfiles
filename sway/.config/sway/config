@@ -133,6 +133,10 @@ bindsym $mod+Shift+Right move right
 bindsym $mod+backslash split h
 bindsym $mod+minus split v
 
+# Scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
 # Fullscreen
 bindsym $mod+f fullscreen toggle
 
