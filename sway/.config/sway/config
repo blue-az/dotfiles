@@ -131,7 +131,7 @@ bindsym $mod+Shift+Right move right
 
 # Split orientation
 bindsym $mod+backslash split h
-bindsym $mod+minus split v
+bindsym $mod+Shift+backslash split v
 
 # Scratchpad
 bindsym $mod+Shift+minus move scratchpad
