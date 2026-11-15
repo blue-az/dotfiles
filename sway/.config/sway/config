@@ -130,12 +130,12 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # Split orientation
-bindsym $mod+backslash split h
+bindsym $mod+Control+backslash split h
 bindsym $mod+minus split v
 
 # Scratchpad
-bindsym $mod+Shift+minus move scratchpad
-bindsym $mod+Control+minus scratchpad show
+bindsym $mod+Shift+backslash move scratchpad
+bindsym $mod+backslash scratchpad show
 
 # Fullscreen
 bindsym $mod+f fullscreen toggle
