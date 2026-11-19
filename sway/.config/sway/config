@@ -78,6 +78,8 @@ bindsym Mod1+Return exec $term_cmd
 
 # Peek the smaller wallpaper overlay (HEADLESS MONITOR) on the focused output.
 bindsym --no-repeat $mod+t exec ~/.config/waybar/scripts/toggle-overlay-popup.sh
+# Compact TestBench-only readout, using the same Waybar overlay toggle pattern.
+bindsym --no-repeat $mod+y exec ~/.config/waybar/scripts/toggle-llm-readout.sh
 
 # Kill focused window
 bindsym $mod+Shift+q kill

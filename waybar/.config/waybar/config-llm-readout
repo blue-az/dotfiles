@@ -1,0 +1,16 @@
+{
+    "layer": "overlay",
+    "position": "top",
+    "margin-top": 40,
+    "exclusive": false,
+    "modules-left": [],
+    "modules-center": [],
+    "modules-right": ["custom/llm-readout"],
+
+    "custom/llm-readout": {
+        "exec": "~/.config/waybar/scripts/llm-parameter-readout.py",
+        "return-type": "json",
+        "interval": 2,
+        "format": "{}"
+    }
+}
