@@ -15,7 +15,7 @@ Environment=OLLAMA_MAX_LOADED_MODELS=1
 Environment=OLLAMA_FLASH_ATTENTION=1
 Environment=OLLAMA_KV_CACHE_TYPE=f16
 Environment=OLLAMA_CONTEXT_LENGTH=196608
-Environment=OLLAMA_KEEP_ALIVE=5m
+Environment=OLLAMA_KEEP_ALIVE=-1
 ExecStart=/home/eftb/.local/opt/ollama/bin/ollama serve
 Restart=on-failure
 RestartSec=3
