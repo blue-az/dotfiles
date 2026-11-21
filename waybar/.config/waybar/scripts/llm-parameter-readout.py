@@ -64,6 +64,19 @@ def endpoint_show(gpu: int, model_name: str) -> dict:
         return {}
 
 
+def default_instance_models() -> list[str]:
+    """List models resident on the un-pinned default Ollama instance (port 11442)."""
+    request = urllib.request.Request(
+        "http://127.0.0.1:11442/api/ps", headers={"Accept": "application/json"}
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=0.6) as response:
+            data = json.loads(response.read().decode("utf-8"))
+        return [m.get("name", "unnamed") for m in data.get("models", [])]
+    except (OSError, TimeoutError, ValueError, urllib.error.URLError):
+        return []
+
+
 def gpu_vram(gpu_idx: int) -> int:
     """Return VRAM used in MiB for a GPU on TestBench via nvidia-smi."""
     try:
@@ -126,7 +139,8 @@ def llama_server_models(gpu_idx: int) -> list[dict]:
 
 def seat_info(gpu: int, ollama_models: list[dict], ollama_error: str | None,
               ollama_show: dict, values: dict[str, str],
-              nvidia_vram: int, llama_models: list[dict]) -> tuple[str, str, str]:
+              nvidia_vram: int, llama_models: list[dict],
+              default_models: list[str]) -> tuple[str, str, str]:
     """Return (identity_line, detail_line, tooltip)."""
     tooltip_parts: list[str] = []
 
@@ -186,6 +200,11 @@ def seat_info(gpu: int, ollama_models: list[dict], ollama_error: str | None,
     identity = f"GPU{gpu}  No model resident · {ctx_display} profile context"
     detail = f"  {ctx_display}"
     tooltip_parts.append(f"GPU{gpu}: no model resident; {ctx_display} is the configured service default")
+    if default_models:
+        names = ", ".join(default_models)
+        detail = f"  \u26a0 default: {names}"
+        tooltip_parts.append(f"\u26a0 un-pinned default Ollama instance (11442) has: {names}")
+        tooltip_parts.append("  load through 11443 (gpu0) or 11444 (gpu1) instead")
     return identity, detail, "\n".join(tooltip_parts)
 
 
@@ -216,13 +235,15 @@ def main() -> None:
     tooltip_rows = ["TestBench Ollama + llama-server — read-only status"]
 
     # GPU0
+    default_models = default_instance_models()
     gpu0_models, gpu0_error = endpoint_ps(0)
     gpu0_show = {}
     gpu0_values = configured_values(0)
     gpu0_vram = gpu_vram(0)
     gpu0_llama = [m for m in llama_server_models(0) if m.get("device") != "CUDA1"]
     gpu0_identity, gpu0_detail, gpu0_tooltip = seat_info(
-        0, gpu0_models, gpu0_error, gpu0_show, gpu0_values, gpu0_vram, gpu0_llama
+        0, gpu0_models, gpu0_error, gpu0_show, gpu0_values, gpu0_vram, gpu0_llama,
+        default_models
     )
 
     # GPU1
@@ -232,7 +253,8 @@ def main() -> None:
     gpu1_vram = gpu_vram(1)
     gpu1_llama = [m for m in llama_server_models(0) if m.get("device") == "CUDA1"]
     gpu1_identity, gpu1_detail, gpu1_tooltip = seat_info(
-        1, gpu1_models, gpu1_error, gpu1_show, gpu1_values, gpu1_vram, gpu1_llama
+        1, gpu1_models, gpu1_error, gpu1_show, gpu1_values, gpu1_vram, gpu1_llama,
+        default_models
     )
 
     text_rows.append(gpu0_identity)
