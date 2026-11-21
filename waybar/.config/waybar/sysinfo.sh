@@ -18,8 +18,16 @@ DISK=$(df -h / | awk 'NR==2 {print $4}')
 RAM=$(free -h | awk '/^Mem:/ {gsub("i","",$3); gsub("i","",$2); print $3 " / " $2}')
 
 # CPU temp: Intel (Core 0) or AMD (Tctl) or Package id fallback
-CPU=$(awk '/^cpu / {printf "%.0f", ($2+$4)*100/($2+$4+$5)}' /proc/stat)
-CPU_TEMPC=$(sensors 2>/dev/null | awk '/^Tctl:/ {gsub(/[^0-9.]/, "", $2); printf "%.0f", $2; exit}')
+CPU_STATS=$(timeout 2 ssh -o BatchMode=yes -o ConnectTimeout=1 -o ConnectionAttempts=1 testbench 'awk "/^cpu / {printf \"%.0f \", (\$2+\$4)*100/(\$2+\$4+\$5)}" /proc/stat' 2>/dev/null || true)
+read -r CPU _ <<< "$CPU_STATS"
+CPU=${CPU:-0}
+CPU_TEMPC=$(timeout 2 ssh -o BatchMode=yes -o ConnectTimeout=1 -o ConnectionAttempts=1 testbench 'sensors' 2>/dev/null | awk '/^Package id 0:/ {gsub(/[^0-9.]/, "", $4); printf "%.0f", $4; exit}')
+if [ -z "$CPU_TEMPC" ]; then
+    CPU_TEMPC=$(sensors 2>/dev/null | awk '/^Tctl:/ {gsub(/[^0-9.]/, "", $2); printf "%.0f", $2; exit}')
+fi
+if [ -z "$CPU_TEMPC" ]; then
+    CPU_TEMPC=$(sensors 2>/dev/null | awk '/^Package id 0:/ {gsub(/[^0-9.]/, "", $4); printf "%.0f", $4; exit}')
+fi
 if [ -z "$CPU_TEMPC" ]; then
     CPU_TEMPC=$(sensors 2>/dev/null | awk '/^Core 0:/ {gsub(/\+|°C/, "", $3); printf "%.0f", $3; exit}')
 fi

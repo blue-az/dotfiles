@@ -1,5 +1,7 @@
 # Repository Guidelines
 
+This repository manages personal dotfiles and system configuration across multiple machines and operating systems. Top-level stow packages mirror paths under the home directory; `machines/` and `devices/` document host- and device-specific setup.
+
 ## Agent Terminology & Definitions
 - **BN = Bottlenecks**: In user prompts and documentation, **BN** stands for **Bottlenecks** (tracking system/workflow friction points, issue tracking, and bottleneck resolution). Always interpret "BN" as Bottlenecks.
 
